@@ -1,0 +1,14 @@
+# บังคับ line endings: ไฟล์ที่ Docker/Linux ใช้ต้องเป็น LF เสมอ (.sh โดน CRLF = bash พัง)
+* text=auto
+
+# ---- ต้องเป็น LF (รันใน Linux/Docker) ----
+*.sh text eol=lf
+Dockerfile text eol=lf
+docker-live-apache.conf text eol=lf
+docker-start.sh text eol=lf
+*.dockerignore text eol=lf
+docker-compose.yml text eol=lf
+
+# ---- ระบุให้ชัดว่าเป็น CRLF (Windows) ----
+*.bat text eol=crlf
+*.ps1 text eol=crlf

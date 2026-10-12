@@ -144,6 +144,61 @@ Override ได้เสมอ: ฝั่งกดบัตรตั้ง `wind
   `.htaccess` ส่ง `/api/*` ไปที่ `api/index.php` ให้อัตโนมัติ
   ฝั่งไลฟ์รัน Node บนพอร์ตของตัวเอง แล้วตั้ง `live_api_url`/`live_site_url` ให้ตรง
   (หรือทำ reverse proxy `/live/` → พอร์ต Node ถ้าอยากให้อยู่ path เดียวกัน)
-- **Render/Docker**: โฟลเดอร์ `live/` มี `Dockerfile`/`docker-compose.yml` ในตัว
-  ส่วน GOPASS เป็น PHP ธรรมดา รันได้กับ PHP 8.1+
+- **Render/Docker (แบบ 1 service)**: ใช้ `Dockerfile` ที่รากโฟลเดอร์ — คอนเทนเนอร์เดียว
+  รัน **Apache+PHP (GOPASS ที่ `/`)** และ **Node (เว็บไลฟ์ที่ `/live/`)** พร้อมกัน
+  (Apache proxy `/live/*` → พอร์ต 3000 ภายในคอนเทนเนอร์) — ดูวิธีเต็มในหัวข้อถัดไป
+- **แยก service** (ไม่ใช้ Dockerfile นี้): ฝั่งไลฟ์รัน `live/server/index.js` แยกบริการ
+  แล้วตั้ง `LIVE_API_URL`/`LIVE_SITE_URL` / `GOPASS_LIVE_URL` / `TDL_TICKET_URL` ให้ชี้หากัน
 - ไฟล์ลับ (`config.php`, `.env*`, `data/*`) ถูกบล็อกโดยตรงจาก web อยู่แล้ว
+
+---
+
+## Deploy บน Render — แบบ 1 service (`/live/` อยู่โดเมนเดียว)
+
+วิธีนี้ใช้ **`Dockerfile` ที่รากโฟลเดอร์** — คอนเทนเนอร์เดียวรันทั้งคู่:
+Apache+PHP รับหน้าเว็บกดบัตรที่ `/` และ proxy ทั้ง `/live/*` ไปยัง Node server
+(AREAONE-LIVE) ที่รันในคอนเทนเนอร์เดียวกัน (พอร์ต 3000) — **ได้ URL เดียวทั้งระบบ**
+
+### ขั้นตอน
+
+1. **Push repo นี้ขึ้น GitHub** (ทั้งโฟลเดอร์เป็นเนื้อหา repo — ไฟล์ลับถูก `.gitignore` ไว้แล้ว)
+2. Render → **New + → Web Service** → เลือก repo นี้
+3. Runtime: เลือก **Docker** (Render ใช้ `Dockerfile` รากให้อัตโนมัติ)
+   - Build ครั้งแรกอาจใช้เวลา 3–5 นาที (ลง Node + npm install)
+4. ตั้ง **Environment Variables**:
+   ```env
+   # ---- เว็บไลฟ์ (Node) — จำเป็น ----
+   DATABASE_URL=postgresql://...   # URI ของ Postgres (Render Managed Postgres / Neon / Supabase)
+   INTEGRATION_SECRET=<สุ่มสตริงยาว ๆ>
+
+   # ---- GOPASS (PHP) — จำเป็น ----
+   LIVE_API_URL=https://<ชื่อของคุณ>.onrender.com/live
+   LIVE_API_SECRET=<ค่าเดียวกันกับ INTEGRATION_SECRET>
+   LIVE_SITE_URL=https://<ชื่อของคุณ>.onrender.com/live
+   ADMIN_USER=admin                 # แอดมินแรกของเว็บกดบัตร
+   ADMIN_PASS=<รหัสผ่านยาว ๆ>
+
+   # ---- แอดมินหน้าไลฟ์ (ไม่บังคับ; ต่างชื่อจาก GOPASS) ----
+   ADMIN_USERNAME=admin
+   ADMIN_PASSWORD=<รหัสผ่านยาว ๆ>
+
+   # ---- ไม่บังคับ ----
+   DISCORD_BOT_TOKEN=MTIz...        # ส่งโค้ดเข้า Discord DM (บอทต้องอยู่ในเซิร์ฟเวอร์เดียวกับผู้ซื้อ)
+   ```
+5. **Deploy** → รอ build/deploy เสร็จ
+6. เปิด `https://<ชื่อ>.onrender.com/` (เว็บกดบัตร) และ `https://<ชื่อ>.onrender.com/live/` (เว็บดูไลฟ์)
+
+### โฟลว์เมื่อใช้งานจริง
+
+- ผู้ซื้อกดบัตร **LIVE** ที่ `/` → PHP เรียก `{LIVE_API_URL}/api/integration/codes`
+  (= `/live/api/integration/codes` → proxy ไป Node) → Node ออกโค้ด `AOL-...` + บันทึกใน Postgres
+- หน้าใบเสร็จ/ประวัติกดบัตรโชว์โค้ด + ลิงก์ `LIVE_SITE_URL` (`/live/`)
+- ผู้ซื้อกรอกโค้ดที่ `/live/`; ปุ่ม "กดบัตร" บนหน้าไลฟ์กลับมาที่ `/` โดยอัตโนมัติ (URL เดาอัตโนมัติ)
+
+### ถ้า `/live/` ยังขึ้น error
+
+- เปิด **Logs** ของ service ที่ Render — ถ้าขึ้น `initDb`/`postgres` fail
+  → แปลว่า `DATABASE_URL` ไม่ถูกต้อง (Node ไม่ start = proxy ตอบ error)
+- ถ้ากดบัตร LIVE แล้วไม่ออกโค้ด → เช็คว่า `LIVE_API_SECRET` ตรงกับ `INTEGRATION_SECRET`
+- Render Free Tier: Managed Postgres ฟรีมีอายุจำกัด — แนะนำ **Neon**
+  (Postgres ฟรี, ตั้ง `DATABASE_URL` แล้ว SSL ทำงานอัตโนมัติ)

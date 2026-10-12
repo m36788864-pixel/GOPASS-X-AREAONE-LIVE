@@ -10,7 +10,7 @@ self.addEventListener('fetch', e => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
-  if (url.pathname.startsWith('/api/') || url.pathname.includes('admin')) return;
+  if (url.pathname.includes('/api/') || url.pathname.includes('admin')) return;
   e.respondWith(
     fetch(req).then(res => {
       if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)) }

@@ -13,6 +13,8 @@
 # ---- Local tooling / scratch ----
 /.agent/
 /node_modules/
+/lib/node_modules/
+/live/node_modules/
 *.log
 *.tmp
 *.bak

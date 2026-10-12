@@ -37,6 +37,7 @@
     codePrefixes: ["AOL"]    // คำนำหน้า Access Code ที่ช่องกรอกจะเติมขีดให้อัตโนมัติ
   };
   const TDL_TICKET_URL = "";  // URL ของเว็บกดบัตร (GOPASS) — ว่าง = เดาอัตโนมัติตามที่เว็บรันอยู่ (เปิดไฟล์ตรง / localhost / โดเมนเดียวกัน); ตั้งเพื่อ override เช่น "https://tickets.example.com/"; ตั้ง "off" เพื่อซ่อนเมนูกดบัตร
+  const API_BASE = (function(){ try { return String(location.pathname || '/').substring(0, String(location.pathname || '/').lastIndexOf('/')); } catch(e){ return ''; } })();  // ฐานของ path (เช่น "/live") — directory ของหน้าปัจจุบัน; รวมกับ URL API ทั้งหมด เพื่อให้เว็บไลฟ์ทำงานได้เมื่อถูกเสิร์ฟใต้โฟลเดอร์ย่อยผ่าน proxy (รัน standalone ที่ / ได้เหมือนเดิม)
   const TDL_FAQ = {   // แก้คำถาม/คำตอบได้ที่นี่ (ว่าง [] = ซ่อนส่วนนี้)
     th: [
       { q: "Access Code คืออะไร และขอได้จากที่ไหน?", a: "Access Code คือรหัสสำหรับเข้าชมแต่ละรอบการแสดง ผู้จัดเป็นผู้ออกให้ หากยังไม่ได้รับโค้ด โปรดติดต่อผู้จัดตามช่องทางที่ระบุไว้ด้านล่างของหน้านี้" },
@@ -672,7 +673,7 @@ body.mtn-lock{overflow:hidden}
   <a class="btn" data-ticket-url href="/" target="_blank" rel="noopener" data-t-aria="nav.ticket" aria-label="กดบัตร"><span data-i="ticket" data-s="20"></span><span class="lb" data-t="nav.ticket">กดบัตร</span></a>
   <button class="tg langbtn" id="langBtn" onclick="TDLLang.set(TDLLang.get()==='th'?'en':'th')" data-t-title="nav.lang" title="เปลี่ยนเป็นภาษาอังกฤษ">EN</button>
   <button class="tg" id="themeBtn" onclick="toggleTheme()" data-t-title="nav.theme" title="สลับธีม" aria-label="สลับธีม"></button>
-  <button class="tg" onclick="window.open('/admin.html','_blank')" data-t-title="nav.admin" title="ผู้ดูแลระบบ" aria-label="ผู้ดูแลระบบ"><span data-i="sliders" data-s="19"></span></button>
+  <button class="tg" onclick="window.open('admin.html','_blank')" data-t-title="nav.admin" title="ผู้ดูแลระบบ" aria-label="ผู้ดูแลระบบ"><span data-i="sliders" data-s="19"></span></button>
 </nav>
 
 <!-- มือถือ: แถบบนเหลือแค่โลโก้ + แถบเครื่องมือลอยด้านล่างแบบ iOS -->
@@ -815,7 +816,7 @@ body.mtn-lock{overflow:hidden}
     <div class="srow"><div class="rl"><span data-i="globe" data-s="20"></span><span data-t="set.lang">ภาษา</span></div>
       <div class="seg2"><button type="button" data-lang-val="th" onclick="TDLLang.set('th')">ไทย</button><button type="button" data-lang-val="en" onclick="TDLLang.set('en')">English</button></div></div>
     <button type="button" class="srow link hidden" id="installRow" onclick="TDLFx.install()"><div class="rl"><span data-i="download" data-s="20"></span><span data-t="set.install">ติดตั้งเป็นแอป</span></div><span data-i="chev" data-s="18"></span></button>
-    <button type="button" class="srow link" onclick="window.open('/admin.html','_blank')"><div class="rl"><span data-i="sliders" data-s="20"></span><span data-t="set.admin">เข้าหน้าผู้ดูแลระบบ</span></div><span data-i="chev" data-s="18"></span></button>
+    <button type="button" class="srow link" onclick="window.open('admin.html','_blank')"><div class="rl"><span data-i="sliders" data-s="20"></span><span data-t="set.admin">เข้าหน้าผู้ดูแลระบบ</span></div><span data-i="chev" data-s="18"></span></button>
   </div>
 </div>
 
@@ -1068,7 +1069,7 @@ TDLLogo.apply();   /* ใส่โลโก้ทุกจุดที่มี 
   }
   async function refresh() {
     const now = Date.now(); if (now - lastRefresh < 8000) return; lastRefresh = now;
-    try { const r = await fetch('/api/security', { cache:'no-store', credentials:'same-origin' }); if (r.ok) { const data = await r.json(); enabled = !!data.enabled; if (!enabled) show(false); else if (detected) show(true); } } catch {}
+    try { const r = await fetch(API_BASE + '/api/security', { cache:'no-store', credentials:'same-origin' }); if (r.ok) { const data = await r.json(); enabled = !!data.enabled; if (!enabled) show(false); else if (detected) show(true); } } catch {}
   }
   document.addEventListener('keydown', e => {
     if (!enabled || bypassed()) return;
@@ -1144,7 +1145,7 @@ function setImg(el, src){ el.classList.add('skel'); el.onload=function(){this.cl
 async function api(url, options = {}) {
   const config = { method: options.method || 'GET', headers: {...(options.body !== undefined ? {'Content-Type':'application/json'} : {}), ...(options.headers||{})} };
   if (options.body !== undefined) config.body = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
-  const res = await fetch(url, config);
+  const res = await fetch(API_BASE + url, config);
   let data = {};
   try { data = await res.json() } catch {}
   if (res.status === 503 && data && data.maintenance) fx('maintOn', data);

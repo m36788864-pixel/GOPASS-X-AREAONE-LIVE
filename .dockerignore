@@ -2,3 +2,14 @@
 .gitignore
 README.md
 START-GOPASS-PHP.bat
+START-ALL.bat
+node_modules
+lib/node_modules
+live/node_modules
+.vscode
+*.log
+*.tmp
+**/.env
+!.env.example
+!.env.production.example
+Thumbs.db

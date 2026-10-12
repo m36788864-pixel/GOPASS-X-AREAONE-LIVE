@@ -368,7 +368,7 @@ textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px var(--redsoft)}
       <button data-act="view" data-id="security"><i data-i="shield"></i>Security & Protection</button>
     </nav>
     <div class="sidefoot">
-      <button onclick="location.href='/'"><i data-i="ext"></i>ดูหน้าเว็บ</button>
+      <button onclick="location.href='index.html'"><i data-i="ext"></i>ดูหน้าเว็บ</button>
       <button onclick="toggleTheme()"><i id="themeIcon" data-i="moon"></i><span id="themeLabel">โหมดสว่าง</span></button>
       <button onclick="doLogout()"><i data-i="out"></i>ออกจากระบบ</button>
     </div>
@@ -740,13 +740,14 @@ function extractYoutubeId(value){
 }
 
 /* ================= API ================= */
+const API_BASE = (function(){ try { return String(location.pathname || '/').substring(0, String(location.pathname || '/').lastIndexOf('/')); } catch(e){ return ''; } })();
 async function api(url, options = {}){
   const config = { method: options.method || 'GET', headers: {
     ...(options.body !== undefined ? {'Content-Type':'application/json'} : {}),
     ...(token ? {Authorization:'Bearer ' + token} : {}),
     ...(options.headers || {}) } };
   if (options.body !== undefined) config.body = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
-  const res = await fetch(url, config);
+  const res = await fetch(API_BASE + url, config);
   let data = {};
   try { data = await res.json() } catch {}
   if (res.status === 401) { sessionStorage.removeItem('tdlAdminToken'); token = ''; showLogin(); throw new Error(data.message || 'Session หมดอายุ') }
@@ -816,7 +817,7 @@ async function loadHealth(){
   try { const h=await api('/api/admin/healthz'); const fmt=n=>`${(Number(n||0)/1024/1024).toFixed(1)} MB`; $('healthState').textContent=h.database==='ok'?'ปกติ':'มีปัญหา'; $('healthBody').innerHTML=`ฐานข้อมูล: <b>${esc(h.database)}</b> · เปิดมา ${Math.floor(h.uptimeSeconds/3600)} ชม. ${Math.floor((h.uptimeSeconds%3600)/60)} นาที · RAM ${fmt(h.memory?.rss)} · Heap ${fmt(h.memory?.heapUsed)} · ผู้ชม ${Number(h.viewers||0)} คน${h.lastError?`<div style="margin-top:8px;color:var(--warn)">Error ล่าสุด: ${esc(h.lastError.message)} (${esc(h.lastError.at)})</div>`:''}`; }
   catch(e){$('healthState').textContent='ตรวจสอบไม่ได้';$('healthBody').textContent=e.message||'ไม่สามารถโหลดสถานะระบบได้'}
 }
-async function downloadReports(){try{const r=await fetch('/api/admin/reports.csv',{headers:{Authorization:'Bearer '+token}});if(!r.ok)throw new Error('ส่งออกรายงานไม่สำเร็จ');const blob=await r.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='areaone-live-reports.csv';a.click();URL.revokeObjectURL(url);toast('ส่งออกรายงานแล้ว')}catch(e){toast(e.message,'err')}}
+async function downloadReports(){try{const r=await fetch(API_BASE + '/api/admin/reports.csv',{headers:{Authorization:'Bearer '+token}});if(!r.ok)throw new Error('ส่งออกรายงานไม่สำเร็จ');const blob=await r.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='areaone-live-reports.csv';a.click();URL.revokeObjectURL(url);toast('ส่งออกรายงานแล้ว')}catch(e){toast(e.message,'err')}}
 async function cloneShow(id){const s=showById(id);if(!s)return;const next=prompt('กำหนด ID สำหรับรอบที่คัดลอก',s.id+'-COPY');if(!next)return;try{await api('/api/admin/shows/'+encodeURIComponent(id)+'/clone',{method:'POST',body:{id:next.trim()}});toast('คัดลอกรอบแล้ว');await Promise.all([loadShows(),loadStats()])}catch(e){toast(e.message,'err')}}
 async function endShow(id){const s=showById(id);if(!s||!await ask('จบรอบการแสดง?',`ระบบจะบันทึกรายงานและตั้งเวลาลบแชตหลังจบรอบ${s.autoRerun?' พร้อมเปลี่ยนเป็น RERUN':''}`,'จบรอบ'))return;try{await api('/api/admin/shows/'+encodeURIComponent(id)+'/end',{method:'POST'});toast('จบรอบและบันทึกรายงานแล้ว');await Promise.all([loadShows(),loadStats(),loadHealth()])}catch(e){toast(e.message,'err')}}
 

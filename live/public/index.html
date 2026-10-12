@@ -1,0 +1,2327 @@
+    <!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#0b0707">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AREAONE-LIVE">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>AREA ONE Live Streaming by ppw.emmy</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://www.youtube.com/iframe_api"></script>
+<!-- ============================================================
+     AREAONE-LIVE — ตั้งค่าโลโก้และ Footer (แก้ที่นี่ที่เดียว)
+     • ใส่ลิงก์รูปในเครื่องหมายคำพูด เช่น LOGO: "https://.../logo.png"
+     • เว้นว่าง "" = ใช้ไอคอนเริ่มต้นแทน / ซ่อนรายการนั้น
+     ============================================================ -->
+<script id="tdl-config">
+  const TDL_IMAGES = {
+    LOGO: "https://i.postimg.cc/3rzqsLgP/BANNER.png",          // โลโก้แนวนอน (แทนไอคอน+ชื่อ ที่มุมซ้ายบน) + ใช้เป็น favicon และค่าตั้งต้นของ footer
+    FOOTER_LOGO: "https://i.postimg.cc/3rzqsLgP/BANNER.png",   // โลโก้แนวนอนที่ footer (เว้นว่าง = ใช้ LOGO)
+    FAVICON: "https://i.postimg.cc/WpxyB9GT/SQU.png",       // ไอคอนแท็บเบราว์เซอร์ (เว้นว่าง = ใช้ APP_ICON แล้วค่อย LOGO)
+    APP_ICON: "https://i.postimg.cc/WpxyB9GT/SQU.png"       // ไอคอนแอป: รูปสี่เหลี่ยมจัตุรัส PNG ขนาด 512×512 ใช้เป็น favicon + ไอคอนตอนติดตั้งลงหน้าจอโฮม (เว้นว่าง = ใช้ไฟล์ในโฟลเดอร์ icons/)
+  };
+  const TDL_FX = {
+    timezone: "+07:00",      // เขตเวลาของวันที่/เวลาในระบบ (ไทย = +07:00)
+    liveWindowHours: 10,      // ถ้าไม่มีเวลาจบ ให้ถือว่ารอบนี้ออกอากาศนานกี่ชั่วโมง (ใช้กับป้าย LIVE NOW)
+    confetti: true,          // พลุเมื่อเข้าชมสำเร็จ
+    ambientGlow: true,       // แสงพื้นหลังเปลี่ยนตามสีโปสเตอร์
+    codePrefixes: ["AOL"]    // คำนำหน้า Access Code ที่ช่องกรอกจะเติมขีดให้อัตโนมัติ
+  };
+  const TDL_TICKET_URL = "";  // URL ของเว็บกดบัตร (GOPASS) — ว่าง = เดาอัตโนมัติตามที่เว็บรันอยู่ (เปิดไฟล์ตรง / localhost / โดเมนเดียวกัน); ตั้งเพื่อ override เช่น "https://tickets.example.com/"; ตั้ง "off" เพื่อซ่อนเมนูกดบัตร
+  const TDL_FAQ = {   // แก้คำถาม/คำตอบได้ที่นี่ (ว่าง [] = ซ่อนส่วนนี้)
+    th: [
+      { q: "Access Code คืออะไร และขอได้จากที่ไหน?", a: "Access Code คือรหัสสำหรับเข้าชมแต่ละรอบการแสดง ผู้จัดเป็นผู้ออกให้ หากยังไม่ได้รับโค้ด โปรดติดต่อผู้จัดตามช่องทางที่ระบุไว้ด้านล่างของหน้านี้" },
+      { q: "กรอกโค้ดแล้วเข้าไม่ได้ ต้องทำอย่างไร?", a: "ตรวจสอบว่าเลือกรอบการแสดงถูกต้อง และกรอกโค้ดครบตามรูปแบบ AOL-XXXX-XXXX-XXXX (พิมพ์เล็กหรือใหญ่ก็ได้) โค้ดบางชุดอาจใช้ได้เฉพาะบางรอบ หากยังเข้าไม่ได้ โปรดติดต่อผู้จัด" },
+      { q: "ทำไมเข้ามาแล้วไม่มีเสียง?", a: "ระบบเริ่มเล่นแบบปิดเสียงเพื่อให้เบราว์เซอร์เล่นอัตโนมัติได้ กดไอคอนลำโพงใต้วิดีโอเพื่อเปิดเสียง และเลื่อนแถบเพื่อปรับระดับเสียง" },
+      { q: "RERUN คืออะไร?", a: "RERUN คือรอบที่ถ่ายทอดซ้ำหรือย้อนดูได้ภายหลัง ในรอบนี้แชตจะปิดไว้ แต่สามารถย้อนหรือข้ามทีละ 10 วินาทีได้" },
+      { q: "ทำไมพิมพ์แชตไม่ได้?", a: "แชตเปิดเฉพาะรอบ LIVE เท่านั้น ข้อความจะแสดงด้วยชื่อเล่นที่คุณกรอกตอนเข้าชม" },
+      { q: "ดูบนอุปกรณ์ไหนได้บ้าง?", a: "ดูได้บนมือถือ แท็บเล็ต และคอมพิวเตอร์ผ่านเบราว์เซอร์ หากเครื่องรองรับ สามารถติดตั้งเป็นแอปได้จากเมนูตั้งค่า" },
+      { q: "ภาพกระตุกหรือค้าง แก้ไขอย่างไร?", a: "ลองตรวจสอบสัญญาณอินเทอร์เน็ต รีเฟรชหน้าเว็บ หรือสลับระหว่าง Wi-Fi กับเครือข่ายมือถือ หากยังไม่หาย โปรดติดต่อผู้จัดพร้อมแจ้งอุปกรณ์และเบราว์เซอร์ที่ใช้" }
+    ],
+    en: [
+      { q: "What is an Access Code and where do I get one?", a: "An Access Code lets you watch a specific show. It is issued by the organizer. If you haven’t received one, please contact the organizer using the details at the bottom of this page." },
+      { q: "I entered my code but can’t get in. What should I do?", a: "Make sure you picked the right show and entered the full code in the format AOL-XXXX-XXXX-XXXX (upper or lower case both work). Some codes only work for certain shows. If it still fails, please contact the organizer." },
+      { q: "Why is there no sound at first?", a: "The stream starts muted so your browser allows autoplay. Tap the speaker icon below the video to unmute and use the slider to adjust the volume." },
+      { q: "What is RERUN?", a: "RERUN is a replay of a past show. Chat is turned off for these shows, but you can skip back or forward in 10-second steps." },
+      { q: "Why can’t I type in chat?", a: "Chat is available during LIVE shows only. Your messages appear under the nickname you entered when joining." },
+      { q: "Which devices can I use?", a: "Phones, tablets and computers, right in your browser. If your device supports it, you can also install the site as an app from Settings." },
+      { q: "The video is lagging or freezing. What can I do?", a: "Check your internet connection, refresh the page, or switch between Wi-Fi and mobile data. If it keeps happening, contact the organizer and tell them your device and browser." }
+    ]
+  };
+  const TDL_FOOTER = {
+    brand: "AREAONE-LIVE",
+    tagline: "",
+    operator: "ดำเนินงานโดย AREA FEST COLLECTIVE",
+    operator_en: "Operated by AREA FEST COLLECTIVE",   // ข้อความภาษาอังกฤษ (เว้นว่าง = ใช้ข้อความไทย)
+    address: "โครงการ แบงค็อกแอเรีย อาคาร อรุณพระนคร ชั้น 8 (TDL LIVE) ถ. พระรามที่ 4 แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110",
+    address_en: "Bangkok Area Project, Arun Phra Nakhon Building, 8th Floor (TDL LIVE), Rama IV Rd., Khlong Toei, Khlong Toei District, Bangkok 10110",
+    phone: "062-383-6826",
+    email: "areaonelive.areacrop@gmail.com",
+    // ใส่ลิงก์ช่องทางโซเชียลที่นี่ (ว่าง = ไอคอนจะเป็นสีจาง กดไม่ได้)
+    social: { discord: "", instagram: "", youtube: "", facebook: "", website: "" },
+    copyright: "© 2026 AREAONE-LIVE PLATFORM"
+  };
+</script>
+
+<style>
+:root{
+  --bg:#0b0707;--bg2:#160c0c;--card:rgba(28,20,20,.78);--text:#fff;--sub:#a79d9d;
+  --line:rgba(255,255,255,.1);--input:rgba(0,0,0,.4);--chatmsg:rgba(255,255,255,.05);
+  --red:#e60000;--red2:#ff2a2a;--glow:rgba(230,0,0,.28);--gold:#ffcc00;
+  --display:"Noto Sans Thai",sans-serif;
+}
+[data-theme=light]{
+  --bg:#f4f1f0;--bg2:#e9e3e2;--card:rgba(255,255,255,.88);--text:#1c1414;--sub:#6b6262;
+  --line:rgba(0,0,0,.12);--input:#fff;--chatmsg:rgba(0,0,0,.05);--red:#d00000;--red2:#f01a1a;--glow:rgba(208,0,0,.18);
+}
+*{box-sizing:border-box;font-family:"Noto Sans Thai",sans-serif}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(ellipse 80% 50% at 50% -10%,var(--glow),transparent 70%),linear-gradient(180deg,var(--bg2),var(--bg) 60%);background-attachment:fixed}
+button{cursor:pointer;font:inherit;color:inherit}
+.hidden{display:none!important}
+
+/* loading */
+.bar{width:160px;height:3px;background:rgba(255,255,255,.1);overflow:hidden;border-radius:3px}
+.bar i{display:block;height:100%;width:40%;background:var(--red);animation:slide 1s ease-in-out infinite}
+@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(280%)}}
+
+/* header */
+
+main{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px) 40px}
+.view{animation:in .5s cubic-bezier(.16,1,.3,1)}
+@keyframes in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(20px,5vw,60px);align-items:center;padding:clamp(28px,6vw,70px) 0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;color:var(--red2);font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--red2);box-shadow:0 0 10px var(--red2);animation:pulse 1.5s infinite}
+@keyframes pulse{50%{opacity:.35;transform:scale(.8)}}
+.hero h1{font-weight:800;font-size:clamp(40px,6.6vw,84px);line-height:1.12;letter-spacing:-.03em;margin:16px 0 18px;text-wrap:balance}
+.hero p{color:var(--sub);font-size:16px;line-height:1.7;max-width:46ch;margin:0 0 26px}
+.cta{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:99px;padding:14px 28px;font-weight:700;letter-spacing:1px;color:#fff;
+  background:linear-gradient(135deg,var(--red),#a30000);box-shadow:0 10px 30px var(--glow);transition:.25s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 14px 40px var(--glow)}
+.cta.ghost{background:transparent;border:1px solid var(--line);box-shadow:none;color:var(--text);margin-left:8px}
+.poster-frame{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.45),0 0 60px var(--glow);transform:rotate(2deg);transition:.5s}
+.poster-frame:hover{transform:rotate(0) scale(1.02)}
+.poster-frame img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:#111}
+
+h2.sec{font-weight:700;font-size:24px;letter-spacing:-.01em;margin:56px 0 20px;display:flex;align-items:center;gap:14px;line-height:1.3}
+h2.sec::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* event grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.ecard{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;cursor:pointer;transition:.3s;backdrop-filter:blur(10px)}
+.ecard:hover{transform:translateY(-6px);border-color:var(--red);box-shadow:0 18px 40px var(--glow)}
+.ecard img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:#111}
+.ecard div{padding:14px 16px}
+.ecard strong{display:block;font-size:15px;margin-bottom:4px}
+.ecard small{color:var(--sub);font-size:12px}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.step b{font-size:38px;line-height:1.1;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,var(--red2),#ff8a5c);-webkit-background-clip:text;background-clip:text;color:transparent;display:block}
+.step h4{margin:6px 0 4px;font-size:16px}
+.step p{margin:0;color:var(--sub);font-size:13px;line-height:1.6}
+
+/* event page */
+.back{display:inline-block;margin:22px 0 6px;color:var(--sub);font-size:13px;letter-spacing:1px;cursor:pointer;background:none;border:0;padding:6px 0}
+.back:hover{color:var(--red2)}
+.event{display:grid;grid-template-columns:minmax(240px,380px) 1fr;gap:clamp(20px,4vw,48px);align-items:start;padding-top:10px}
+.event h1{font-weight:800;font-size:clamp(30px,4.6vw,56px);line-height:1.15;letter-spacing:-.025em;margin:0 0 8px}
+.event .meta{color:var(--sub);font-size:14px;margin-bottom:22px}
+.ticket{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px 16px 22px;margin-bottom:12px;position:relative;
+  animation:in .5s both;transition:.25s}
+.ticket::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:0 4px 4px 0;background:var(--red)}
+.ticket.rerun::before{background:#777}
+.ticket:hover{border-color:var(--red);transform:translateX(4px)}
+.ticket strong{font-size:17px}
+.ticket span.t{display:block;color:var(--sub);font-size:13px;margin-top:2px}
+.tag{font-size:10px;letter-spacing:1.5px;padding:3px 8px;border-radius:99px;margin-left:8px;vertical-align:2px;font-weight:700;background:rgba(255,0,0,.15);color:var(--red2);border:1px solid rgba(255,0,0,.3)}
+.tag.rerun{background:var(--chatmsg);color:var(--sub);border-color:var(--line)}
+.join{border:0;border-radius:99px;padding:10px 24px;font-weight:700;letter-spacing:1px;color:#fff;background:var(--red);transition:.2s}
+.join:hover{background:var(--red2);transform:scale(1.05)}
+.empty{color:var(--sub);text-align:center;padding:30px 0}
+
+/* login modal */
+.modal{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);display:grid;place-items:center;padding:20px;animation:in .3s}
+.dialog{width:min(400px,100%);background:var(--card);background-color:var(--bg2);border:1px solid var(--line);border-radius:22px;padding:30px 26px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 50px var(--glow)}
+.dialog .lock{font-size:38px}
+.dialog h3{font-weight:800;font-size:24px;letter-spacing:-.01em;margin:10px 0 4px;line-height:1.3}
+.dialog p{margin:0 0 18px;color:var(--sub);font-size:13px}
+.dialog input{width:100%;padding:13px 15px;margin-bottom:10px;border-radius:12px;border:1px solid var(--line);background:var(--input);color:var(--text);font-size:14px;outline:0;transition:.2s}
+.dialog input:focus{border-color:var(--red);box-shadow:0 0 0 3px var(--glow)}
+.dialog .cta{width:100%;justify-content:center;margin-top:4px}
+.dialog .cta:disabled{opacity:.6}
+.err{display:none;color:#ff5a5a;font-size:13px;margin-top:12px}
+.close{margin-top:14px;background:none;border:0;color:var(--sub);font-size:12px;letter-spacing:1px}
+.close:hover{color:var(--text)}
+
+/* watch */
+.wbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 0 14px}
+.wbar h2{margin:0;font-size:clamp(18px,3vw,26px);font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:700;letter-spacing:1.5px;color:#ff4d4d;background:rgba(255,0,0,.15);border:1px solid rgba(255,0,0,.3)}
+.badge.rerun{color:#aaa;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
+.badge.rerun .dot{background:#888;box-shadow:none;animation:none}
+.wgrid{display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start}
+.player{position:relative;aspect-ratio:16/9;background:#000;border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 40px var(--glow)}
+.player iframe,.player #player{position:absolute;inset:0;width:100%;height:100%}
+.block{position:absolute;inset:0;z-index:5}
+.cover{position:absolute;inset:0;z-index:8;background:#0a0808;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;transition:opacity .5s;color:#888;font-size:13px;letter-spacing:1px}
+.controls{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:8px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.cg{display:flex;align-items:center;gap:10px}
+.cbtn{background:var(--chatmsg);border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:15px;transition:.2s}
+.cbtn:hover,.cbtn.active{background:var(--red);border-color:var(--red)}
+.vol{width:90px;accent-color:var(--red)}
+.chat{position:relative;display:flex;flex-direction:column;height:clamp(380px,60vh,640px);background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;backdrop-filter:blur(10px)}
+.chat-h{padding:13px 16px;font-weight:700;font-size:13px;letter-spacing:1px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.chat-h small{font-weight:400;color:var(--sub)}
+.msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.msg{background:var(--chatmsg);border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.5;word-break:break-word;position:relative}
+.msg .u{color:var(--red2);font-weight:700;font-size:12px}
+.msg .tm{position:absolute;right:10px;top:8px;font-size:10px;color:var(--sub)}
+.pin{display:none;padding:10px 15px;background:rgba(255,204,0,.08);border-bottom:1px solid var(--line);font-size:12px}
+.pin b{color:var(--gold);display:block;margin-bottom:2px}
+.cin{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}
+.cin input{flex:1;padding:10px 14px;border-radius:99px;border:1px solid var(--line);background:var(--input);color:var(--text);outline:0;font-size:13px}
+.cin input:focus{border-color:var(--red)}
+.cin button{border:0;background:var(--red);color:#fff;border-radius:99px;padding:0 18px;font-weight:700}
+.chat-off{position:absolute;inset:0;z-index:10;background:var(--bg2);display:none;flex-direction:column;gap:8px;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--sub);font-size:13px}
+.chat-off i{font-size:32px;font-style:normal}
+
+
+
+/* ===== modern layer ===== */
+body{line-height:1.6;letter-spacing:0}
+[data-i]{display:inline-flex;align-items:center;justify-content:center;flex:none}
+.mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--red2),#8f0000);color:#fff;box-shadow:0 6px 18px var(--glow)}
+.mark svg{margin-left:2px}
+.eyebrow{letter-spacing:.14em;font-weight:600;padding:6px 12px;border-radius:99px;background:var(--glow);border:1px solid color-mix(in srgb,var(--red) 35%,transparent)}
+.hero p{font-size:17px;line-height:1.75}
+.cta{font-weight:600;letter-spacing:0;border-radius:14px;padding:14px 24px}
+.cta span[data-i]{transition:transform .2s}.cta:hover span[data-i]{transform:translateX(3px)}
+.poster-frame{border-radius:26px}
+.ecard{border-radius:22px}
+.ecard img{transition:transform .5s}.ecard:hover img{transform:scale(1.04)}
+.ecard{overflow:hidden}
+.ecard div{padding:16px 18px}
+.ecard strong{font-weight:700;font-size:16px}
+.step{border-radius:20px;padding:26px}
+.step h4{font-weight:700;margin:10px 0 6px}
+.back{display:inline-flex;align-items:center;gap:8px;letter-spacing:0;font-size:14px;font-weight:500}
+.ticket{border-radius:18px}
+.ticket strong{font-weight:700;display:flex;align-items:center;gap:8px}
+.ticket .tag{margin-left:0}
+.ln{display:inline-flex;align-items:center;gap:7px}
+.ticket>div{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.ticket span.t{margin-top:0;display:inline-flex}
+.ticket .tag{order:-1}
+.tag{letter-spacing:.1em}
+.join{display:inline-flex;align-items:center;gap:8px;letter-spacing:0;font-weight:600;border-radius:12px;padding:10px 18px}
+.join:hover{transform:none;box-shadow:0 8px 20px var(--glow)}
+.dialog{border-radius:26px;padding:34px 28px}
+.dialog .lock{width:60px;height:60px;border-radius:18px;margin:0 auto;display:grid;place-items:center;background:var(--glow);color:var(--red2)}
+.dialog input{border-radius:14px;padding:14px 16px}
+.dialog .cta{border-radius:14px}
+.badge{letter-spacing:.1em}
+.cbtn{border-radius:12px;width:40px;height:38px;display:inline-grid;place-items:center;padding:0;color:var(--text)}
+.controls,.chat,.player{border-radius:20px}
+.chat-h{font-weight:700;letter-spacing:0}
+.chh{display:inline-flex;align-items:center;gap:8px}
+.chat-h small{display:inline-flex;align-items:center;gap:5px}
+.msg{border-radius:14px}
+.cin button{display:grid;place-items:center;width:42px;padding:0;border-radius:12px}
+.cin input{border-radius:12px}
+.chat-off i{font-style:normal;color:var(--sub)}
+.pin b{display:flex;align-items:center;gap:6px}
+.cover{letter-spacing:0;font-size:14px}
+
+/* ===== TDL PAGE LOADER (ตัวโหลดสลับหน้า) ===== */
+.tdl-pt{display:grid;visibility:hidden;position:fixed;inset:0;z-index:9000;place-items:center;background:rgba(10,4,4,.5);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);opacity:0;pointer-events:none;transition:opacity .4s ease}
+.tdl-pt.tdl-boot,.tdl-pt.tdl-wipe,.tdl-pt.tdl-leave{visibility:visible}
+.tdl-pt.tdl-boot,.tdl-pt.tdl-wipe{opacity:1;pointer-events:auto}
+.tdl-pt.tdl-boot{background:#0a0606}
+.tdl-pt.tdl-leave{opacity:0;pointer-events:none}
+.tdl-pop{transform:scale(.6);opacity:0;transition:transform .45s cubic-bezier(.2,.9,.3,1.25),opacity .3s ease}
+.tdl-pt.tdl-boot .tdl-pop,.tdl-pt.tdl-wipe .tdl-pop{transform:none;opacity:1}
+.tdl-pt.tdl-leave .tdl-pop{transform:scale(.85);opacity:0}
+.tdl-pt:not(.tdl-boot):not(.tdl-wipe):not(.tdl-leave) .tdl-loader{display:none}
+.tdl-loader{--c1:#ff5a4d;--c2:#ffa24d;--c3:#e60000;--c4:#0a0202;--c5:#ff2a2a55;--t:2s;--size:1.2;
+  position:relative;width:100px;height:100px;border-radius:50%;transform:scale(var(--size));
+  box-shadow:0 0 25px 0 var(--c3),0 20px 50px 0 var(--c4);animation:tdl-colorize calc(var(--t) * 3) ease-in-out infinite}
+.tdl-loader::before{content:"";position:absolute;top:0;left:0;width:100px;height:100px;border-radius:50%;
+  border-top:solid 1px var(--c1);border-bottom:solid 1px var(--c2);background:linear-gradient(180deg,var(--c5),var(--c4));
+  box-shadow:inset 0 10px 10px 0 var(--c3),inset 0 -10px 10px 0 var(--c4)}
+.tdl-box{width:100px;height:100px;background:linear-gradient(180deg,var(--c1) 30%,var(--c2) 70%);mask:url(#tdl-clipping);-webkit-mask:url(#tdl-clipping)}
+.tdl-loader svg{position:absolute}
+.tdl-loader svg #tdl-clipping{filter:contrast(15);animation:tdl-roundness calc(var(--t) / 2) linear infinite}
+.tdl-loader svg #tdl-clipping polygon{filter:blur(7px)}
+.tdl-loader svg #tdl-clipping polygon:nth-child(1){transform-origin:75% 25%;transform:rotate(90deg)}
+.tdl-loader svg #tdl-clipping polygon:nth-child(2){transform-origin:50% 50%;animation:tdl-rot var(--t) linear infinite reverse}
+.tdl-loader svg #tdl-clipping polygon:nth-child(3){transform-origin:50% 60%;animation:tdl-rot var(--t) linear infinite;animation-delay:calc(var(--t) / -3)}
+.tdl-loader svg #tdl-clipping polygon:nth-child(4){transform-origin:40% 40%;animation:tdl-rot var(--t) linear infinite reverse}
+.tdl-loader svg #tdl-clipping polygon:nth-child(5){transform-origin:40% 40%;animation:tdl-rot var(--t) linear infinite reverse;animation-delay:calc(var(--t) / -2)}
+.tdl-loader svg #tdl-clipping polygon:nth-child(6){transform-origin:60% 40%;animation:tdl-rot var(--t) linear infinite}
+.tdl-loader svg #tdl-clipping polygon:nth-child(7){transform-origin:60% 40%;animation:tdl-rot var(--t) linear infinite;animation-delay:calc(var(--t) / -1.5)}
+@keyframes tdl-rot{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes tdl-roundness{0%{filter:contrast(15)}20%{filter:contrast(3)}40%{filter:contrast(3)}60%{filter:contrast(15)}100%{filter:contrast(15)}}
+@keyframes tdl-colorize{0%{filter:hue-rotate(0)}25%{filter:hue-rotate(-14deg)}50%{filter:hue-rotate(0)}75%{filter:hue-rotate(16deg)}100%{filter:hue-rotate(0)}}
+
+/* ===== TDL LOGO ===== */
+
+/* ===== TDL FOOTER ===== */
+body{display:flex;flex-direction:column}
+main{flex:1 0 auto;width:100%}
+.tdl-foot{margin-top:56px;border-top:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 72%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding:52px clamp(16px,4vw,40px) 40px;text-align:left;font-size:14px;letter-spacing:0;color:var(--text)}
+.tdl-foot-in{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.7fr .8fr 1fr;gap:40px}
+.tdl-fbrand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;letter-spacing:-.01em;line-height:1.2;margin-bottom:18px}
+.tdl-fbrand b{color:var(--red)}
+.tdl-fbrand.has-img img{height:44px;max-width:240px}
+.tdl-foot p{margin:0 0 12px;color:var(--sub);line-height:1.75;max-width:48ch}
+.tdl-foot p a{color:var(--text);text-decoration:none}
+.tdl-foot p a:hover{color:var(--red2)}
+.tdl-foot h4{margin:0 0 14px;font-size:14px;font-weight:700}
+.tdl-flinks{display:flex;flex-direction:column;gap:2px}
+.tdl-flinks a{display:inline-flex;align-items:center;gap:8px;padding:6px 0;color:var(--sub);text-decoration:none;transition:color .2s,transform .2s}
+.tdl-flinks a:hover{color:var(--text);transform:translateX(3px)}
+.tdl-flast h4{margin:0 0 2px;font-size:12px;font-weight:400;color:var(--sub)}
+.tdl-tel{display:block;margin-bottom:14px;color:var(--text);text-decoration:none;font-size:26px;font-weight:600;letter-spacing:-.01em;line-height:1.3;transition:color .2s}
+.tdl-tel:hover{color:var(--red2)}
+.tdl-soc{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tdl-soc a,.tdl-soc span{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;color:var(--sub);transition:.2s}
+.tdl-soc a:hover{color:#fff;background:var(--red);border-color:var(--red);transform:translateY(-2px);box-shadow:0 8px 20px var(--glow)}
+.tdl-soc span.off{opacity:.4;cursor:not-allowed}
+.tdl-flast small{color:var(--sub);font-size:12px}
+@media(max-width:820px){.tdl-foot-in{grid-template-columns:1fr;gap:30px}}
+
+/* ===== TOP NAV (แถบลอยแบบกระจกฝ้า) ===== */
+:root{--glass:rgba(26,18,18,.58);--w10:rgba(255,255,255,.1);--w14:rgba(255,255,255,.14);--w18:rgba(255,255,255,.18);--shadow:rgba(0,0,0,.4)}
+[data-theme=light]{--glass:rgba(255,255,255,.66);--w10:rgba(0,0,0,.07);--w14:rgba(0,0,0,.1);--w18:rgba(0,0,0,.12);--shadow:rgba(0,0,0,.14)}
+.tnav{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:4px;width:min(960px,calc(100% - 24px));height:58px;padding:0 8px 0 14px;border-radius:29px;background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);border:1px solid var(--w14);box-shadow:0 10px 30px var(--shadow)}
+.tlogo{display:flex;align-items:center;gap:10px;margin-right:8px;font-size:18px;font-weight:800;letter-spacing:-.01em;color:var(--text);text-decoration:none;flex:none;line-height:1;cursor:pointer}
+.tlogo b{color:var(--red)}
+.tnav a.btn{display:flex;align-items:center;height:40px;padding:0 11px;border-radius:20px;color:var(--sub);font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;transition:background-color .2s,color .2s}
+.tnav a.btn .lb{max-width:0;overflow:hidden;opacity:0;transition:max-width .3s ease,opacity .2s,margin .3s}
+.tnav a.btn:hover{background:var(--w10);color:var(--text)}
+.tnav a.btn.active{background:var(--w18);color:var(--text)}
+.tnav a.btn.active [data-i]{color:var(--red2)}
+.tnav .grow{margin-left:auto}
+.tnav .tg{display:grid;place-items:center;min-width:40px;height:40px;padding:0;border:0;border-radius:20px;background:transparent;color:var(--sub);transition:background-color .2s,color .2s}
+.tnav .tg:hover{background:var(--w10);color:var(--text)}
+.tnav a:focus-visible,.tnav .tg:focus-visible{outline:2px solid var(--red2);outline-offset:2px}
+.tnav a.btn:first-of-type{margin-left:0}
+.tnav .tg:first-of-type{margin-left:auto}
+@media(min-width:720px){.tnav a.btn:hover .lb,.tnav a.btn.active .lb{max-width:110px;opacity:1;margin-left:8px}}
+@media(max-width:480px){.tnav{padding:0 6px 0 10px}.tnav .tlogo .tword{display:none}.tnav a.btn{padding:0 9px}.tnav .tg{min-width:36px}}
+main{padding-top:96px}
+h2.sec{scroll-margin-top:100px}
+
+/* ===== LOGO (โลโก้แนวนอน แทนที่ไอคอน+ชื่อทั้งชุด) ===== */
+[data-logo].has-img img{display:block;width:auto;object-fit:contain;-webkit-user-drag:none;user-select:none}
+.tlogo.has-img{margin-right:10px}
+.tlogo.has-img img{height:34px;max-width:170px}
+@media(max-width:480px){.tlogo.has-img img{height:28px;max-width:110px}}
+
+/* ===== LANGUAGE BUTTON (คอม) ===== */
+.tnav .tg.langbtn{font-size:13px;font-weight:700;letter-spacing:.04em;padding:0 10px}
+
+/* ===== MOBILE: แถบบน = โลโก้, แถบล่าง = เครื่องมือลอยแบบ iOS ===== */
+.mtop,.mtab{display:none}
+.sheet-wrap{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;animation:tdlfade .25s}
+@keyframes tdlfade{from{opacity:0}}
+@keyframes tdlup{from{transform:translateY(100%)}}
+.sheet{width:min(520px,100%);background:var(--bg2);border:1px solid var(--line);border-bottom:0;border-radius:28px 28px 0 0;padding:10px 20px calc(22px + env(safe-area-inset-bottom,0px));box-shadow:0 -20px 60px rgba(0,0,0,.4);animation:tdlup .35s cubic-bezier(.16,1,.3,1)}
+.grab{width:40px;height:5px;border-radius:5px;background:var(--line);margin:0 auto 14px}
+.sh-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sh-h h3{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em}
+.sh-h .tg{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;border:0;background:var(--chatmsg);color:var(--text)}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:14px 4px;border:0;border-top:1px solid var(--line);background:transparent;color:var(--text);text-align:left;font-size:15px}
+.srow .rl{display:flex;align-items:center;gap:12px;font-weight:500}
+.srow .rl [data-i]{color:var(--red2)}
+.srow.link{cursor:pointer}
+.srow.link>[data-i]{color:var(--sub)}
+.seg2{display:flex;background:var(--chatmsg);border-radius:12px;padding:3px}
+.seg2 button{border:0;background:transparent;padding:8px 14px;border-radius:10px;font-size:13px;font-weight:600;color:var(--sub);transition:.2s}
+.seg2 button.active{background:var(--red);color:#fff;box-shadow:0 4px 12px var(--glow)}
+@media(min-width:721px){.sheet-wrap{align-items:center}.sheet{border-radius:28px;border-bottom:1px solid var(--line)}}
+@media(max-width:720px){
+  .tnav{display:none}
+  .mtop{display:flex;position:fixed;top:0;left:0;right:0;z-index:100;align-items:center;height:calc(54px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 18px 0;background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);border-bottom:1px solid var(--w10)}
+  .mtop .tlogo{margin:0}
+  .mtop .tlogo.has-img img{height:30px;max-width:170px}
+  .mtab{display:flex;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:100;width:min(420px,calc(100% - 24px));height:66px;padding:6px;gap:4px;border-radius:33px;background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);border:1px solid var(--w14);box-shadow:0 12px 34px var(--shadow)}
+  .mtab>*{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;border:0;background:transparent;border-radius:27px;color:var(--sub);font-size:10.5px;font-weight:600;text-decoration:none;transition:background-color .2s,color .2s;-webkit-tap-highlight-color:transparent}
+  .mtab>*:active{transform:scale(.96)}
+  .mtab>.active{background:var(--w14);color:var(--text)}
+  .mtab>.active [data-i]{color:var(--red2)}
+  .mtab .ml{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  main{padding-top:74px}
+  h2.sec{scroll-margin-top:70px}
+  .tdl-foot{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}
+}
+@media(max-width:820px){
+  .hero,.event,.wgrid{grid-template-columns:1fr}
+  .hero .poster-frame{max-width:340px;margin:0 auto;order:-1}
+  .steps{grid-template-columns:1fr}
+  .event .poster-frame{max-width:320px;transform:none}
+  .vol{width:60px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== FX LAYER (ลูกเล่น) — วางท้ายสุดเพื่อให้ชนะกฎก่อนหน้า ===== */
+:root{--ambrgb:230,0,0;--amba:.28}
+[data-theme=light]{--amba:.18}
+body{background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(var(--ambrgb),var(--amba)),transparent 70%),linear-gradient(180deg,var(--bg2),var(--bg) 60%);background-attachment:fixed}
+
+/* poster tilt + glare */
+.poster-frame,.poster-frame:hover,.event .poster-frame{transform:perspective(900px) rotate(var(--rot,2deg)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(var(--sc,1));transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s;will-change:transform;touch-action:pan-y}
+.event .poster-frame{--rot:0deg}
+.poster-frame.tilting{transition:transform .08s linear,box-shadow .5s}
+.poster-frame::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.3),transparent 55%);opacity:var(--go,0);transition:opacity .3s;mix-blend-mode:overlay}
+
+/* skeleton */
+@keyframes tdlsk{to{background-position:-200% 0}}
+.skel{background:linear-gradient(100deg,var(--chatmsg) 30%,var(--line) 50%,var(--chatmsg) 70%) 0 0/200% 100%;animation:tdlsk 1.2s linear infinite}
+.ecard.sk{cursor:default;pointer-events:none}
+.sk-img{aspect-ratio:3/4;width:100%}
+.sk-l{height:14px;border-radius:7px;margin:14px 16px 0}
+.sk-l.s{width:45%;margin:10px 16px 16px;height:11px}
+
+/* countdown chip / LIVE NOW */
+.cd{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 11px;border-radius:99px;background:var(--chatmsg);color:var(--sub);border:1px solid var(--line);font-variant-numeric:tabular-nums;letter-spacing:.02em;margin-top:6px;width:fit-content}
+.cd.live{background:var(--red);color:#fff;border-color:transparent;letter-spacing:.1em;animation:tdlglow 1.6s ease-in-out infinite}
+.cd.ended{opacity:.6}
+.cdpill{font-size:13px;padding:6px 14px;margin:0 0 14px}
+@keyframes tdlglow{0%,100%{box-shadow:0 0 0 0 rgba(230,0,0,.55)}50%{box-shadow:0 0 0 8px rgba(230,0,0,0)}}
+.ecard.is-live{border-color:var(--red);box-shadow:0 0 0 1px var(--red),0 14px 40px var(--glow)}
+.ticket .cd{margin-top:2px}
+.tk-act{display:flex;align-items:center;gap:8px;flex:none}
+.ibtn-s{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--sub);display:grid;place-items:center;transition:.2s}
+.ibtn-s:hover{color:var(--text);border-color:var(--red);background:var(--chatmsg)}
+.evact{display:flex;gap:10px;flex-wrap:wrap;margin:-10px 0 22px}
+.ghost-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--text);font-weight:600;font-size:14px;transition:.2s}
+.ghost-btn:hover{border-color:var(--red);background:var(--chatmsg)}
+
+/* watch page */
+.wgrid.theater{grid-template-columns:1fr}
+.wgrid.theater .chat{display:none}
+#theaterBtn{display:none}
+@media(min-width:900px){#theaterBtn{display:inline-grid}}
+.newmsg{position:absolute;left:50%;bottom:68px;transform:translateX(-50%);z-index:6;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:0;border-radius:99px;background:var(--red);color:#fff;font-size:12px;font-weight:700;box-shadow:0 8px 20px var(--glow);animation:in .25s}
+.block{touch-action:manipulation}
+.ripple{position:absolute;top:0;bottom:0;z-index:6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#fff;pointer-events:none;opacity:0}
+.ripple.l{left:0;width:34%;background:radial-gradient(ellipse at 20% 50%,rgba(255,255,255,.28),transparent 70%)}
+.ripple.r{right:0;width:34%;background:radial-gradient(ellipse at 80% 50%,rgba(255,255,255,.28),transparent 70%)}
+.ripple.c{left:50%;top:50%;bottom:auto;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:rgba(0,0,0,.5);justify-content:center}
+.ripple b{font-size:13px}
+.ripple.go{animation:tdlrip .6s ease-out}
+@keyframes tdlrip{0%{opacity:0;transform:scale(.85)}25%{opacity:1}100%{opacity:0;transform:scale(1.05)}}
+
+/* login shake */
+.dialog.shake{animation:tdlshake .45s}
+@keyframes tdlshake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+
+/* toast + confetti */
+.tdl-toasts{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9200;display:flex;flex-direction:column;gap:8px;align-items:center;width:min(92vw,420px);pointer-events:none}
+.tdl-toast{pointer-events:auto;padding:12px 18px;border-radius:14px;background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--w14);box-shadow:0 12px 30px var(--shadow);color:var(--text);font-size:14px;font-weight:500;text-align:center;animation:in .3s;transition:opacity .3s,transform .3s}
+.tdl-toast.err{border-color:var(--red);color:#ff7a7a}
+.tdl-toast.out{opacity:0;transform:translateY(8px)}
+.tdl-confetti{position:fixed;inset:0;width:100%;height:100%;z-index:9100;pointer-events:none}
+
+/* settings: 3-way seg + install row */
+.srow.hidden{display:none!important}
+.seg2 button{padding:8px 11px}
+
+/* mobile tab: sliding pill + hide on scroll */
+.mtab{transition:transform .38s cubic-bezier(.2,.8,.2,1)}
+.mtab.tab-hide{transform:translateX(-50%) translateY(calc(100% + 28px))}
+.mtab>*{position:relative;z-index:1}
+.mtab>.mind{position:absolute;top:6px;bottom:6px;left:0;width:0;flex:none;border-radius:27px;background:var(--w14);z-index:0;pointer-events:none;opacity:0;transition:transform .42s cubic-bezier(.3,1.25,.4,1),width .3s,opacity .2s}
+.mtab>.active{background:transparent}
+body.settings-open #mSetBtn{color:var(--text)}
+body.settings-open #mSetBtn [data-i]{color:var(--red2)}
+
+@media(max-width:720px){
+  .mtop{justify-content:center;height:calc(66px + env(safe-area-inset-top,0px))}
+  .mtop .tlogo{font-size:24px}
+  .mtop .tlogo.has-img img{height:44px;max-width:240px}
+  main{padding-top:88px}
+  h2.sec{scroll-margin-top:84px}
+  .hero{gap:18px;padding-top:6px}
+  .hero h1{font-size:clamp(28px,8.4vw,38px);line-height:1.18;margin:12px 0 12px}
+  .hero .poster-frame{max-width:250px}
+  .hero p{font-size:15px;margin-bottom:18px}
+  .tdl-toasts{bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+  .ticket{flex-wrap:wrap}
+}
+
+/* ===== FAQ ===== */
+.faq-list{max-width:860px}
+.faq{border:1px solid var(--line);background:var(--card);border-radius:18px;margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+.faq:hover{border-color:var(--w18)}
+.faq[open]{border-color:var(--red)}
+.faq summary{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;cursor:pointer;list-style:none;font-weight:600;font-size:15px;line-height:1.5}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary svg{flex:none;color:var(--sub);transition:transform .25s}
+.faq[open] summary svg{transform:rotate(90deg);color:var(--red2)}
+.faq-a{padding:0 18px 16px;color:var(--sub);font-size:14px;line-height:1.8}
+.faq-a p{margin:0}
+.faq[open] .faq-a{animation:in .3s}
+
+/* ===== ห้องรอ / ตารางรอบ / อีโมจิ / ประกาศ / จำนวนผู้ชม ===== */
+.wait{position:absolute;inset:0;z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;text-align:center;background:radial-gradient(ellipse at 50% 30%,rgba(var(--ambrgb),.35),transparent 70%),#0a0606;color:#fff}
+.wait .wt{font-size:14px;color:rgba(255,255,255,.7);font-weight:500}
+.wait .wc{font-size:clamp(34px,8vw,64px);font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.15}
+.wait .wn{font-size:13px;color:rgba(255,255,255,.6);max-width:36ch;line-height:1.6}
+.wait .cta{margin-top:6px;padding:11px 20px;font-size:14px}
+.vcnt{display:inline-flex;align-items:center;font-size:12px;font-weight:600;color:var(--sub);padding:5px 12px;border-radius:99px;border:1px solid var(--line);background:var(--chatmsg);font-variant-numeric:tabular-nums}
+#speedBtn{width:auto;min-width:50px;padding:0 9px;font-size:12px;font-weight:700}
+.sch{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px}
+.sch-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.sch-top strong{min-width:150px;text-align:center;font-size:16px;font-weight:700}
+.sch-top .chips{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.sch-nav{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--text);display:grid;place-items:center;transition:.2s}
+.sch-nav:hover{border-color:var(--red);background:var(--chatmsg)}
+.sch .chip{border:1px solid var(--line);background:transparent;border-radius:99px;padding:6px 13px;font-size:12px;font-weight:600;color:var(--sub)}
+.sch .chip.active{background:var(--red);border-color:var(--red);color:#fff}
+.sch-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.sch-w{text-align:center;font-size:11px;color:var(--sub);padding:4px 0;font-weight:600}
+.sch-d{aspect-ratio:1;max-height:64px;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--sub);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:14px;font-weight:500;cursor:default}
+.sch-d.has{background:var(--chatmsg);color:var(--text);cursor:pointer;font-weight:700}
+.sch-d.has:hover{border-color:var(--red)}
+.sch-d.today{border-color:var(--w18)}
+.sch-d.sel{background:var(--red);color:#fff;border-color:var(--red)}
+.sch-d .dots{display:flex;gap:3px;height:6px}
+.sch-d i{width:6px;height:6px;border-radius:50%;display:block}
+.sch-d .dl{background:var(--red2)}
+.sch-d .dr{background:var(--sub)}
+.sch-d.sel .dl,.sch-d.sel .dr{background:#fff}
+.sch-day{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.sch-it{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--chatmsg)}
+.sch-it>div{flex:1;min-width:0}
+.sch-it b{display:block;font-size:14px;line-height:1.4}
+.sch-it span:not(.tag){font-size:12px;color:var(--sub)}
+.emo-btn{width:38px;flex:none;border:0;background:transparent;color:var(--sub);display:grid;place-items:center;border-radius:99px;transition:.2s}
+.emo-btn:hover{color:var(--text);background:var(--chatmsg)}
+.emo{position:absolute;left:10px;right:10px;bottom:64px;z-index:7;display:grid;grid-template-columns:repeat(8,1fr);gap:2px;padding:8px;border-radius:16px;background:var(--bg2);border:1px solid var(--line);box-shadow:0 14px 40px rgba(0,0,0,.4);animation:in .2s}
+.emo-i{border:0;background:transparent;border-radius:10px;font-size:20px;line-height:1;padding:7px 0;cursor:pointer;transition:.15s}
+.emo-i:hover{background:var(--chatmsg);transform:scale(1.15)}
+.msg.is-admin{background:rgba(var(--ambrgb),.16);border:1px solid rgba(var(--ambrgb),.35)}
+.adm{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.06em;padding:1px 7px;border-radius:99px;background:var(--red);color:#fff;margin-left:4px;vertical-align:1px}
+.ann{position:fixed;left:50%;transform:translateX(-50%);top:calc(82px + env(safe-area-inset-top,0px));z-index:90;width:min(960px,calc(100% - 24px));display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:16px;background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);border:1px solid var(--w14);box-shadow:0 10px 30px var(--shadow);font-size:14px;line-height:1.5;animation:in .3s}
+.ann.warn{border-color:#ffb020}
+#annEventBar{top:calc(82px + env(safe-area-inset-top,0px) + 58px)}
+@media(max-width:560px){#annEventBar{top:calc(74px + env(safe-area-inset-top,0px) + 58px)}}
+.ann-dot{width:9px;height:9px;border-radius:50%;background:var(--red2);flex:none;animation:pulse 1.5s infinite}
+.ann.warn .ann-dot{background:#ffb020}
+.ann>span:nth-child(2){flex:1;min-width:0}
+.ann-link{color:var(--red2);font-weight:700;text-decoration:none;white-space:nowrap}
+.ann-x{width:30px;height:30px;border:0;border-radius:50%;background:transparent;color:var(--sub);display:grid;place-items:center;flex:none}
+.ann-x:hover{background:var(--chatmsg);color:var(--text)}
+body.has-ann main{padding-top:calc(96px + 62px)}
+@media(max-width:820px){
+  .wgrid{display:block}
+  .wgrid>div:first-child{position:sticky;top:calc(72px + env(safe-area-inset-top,0px));z-index:30;background:var(--bg);padding-bottom:8px;margin-bottom:12px}
+  .sch-top strong{min-width:0;flex:1}
+  .sch-top .chips{margin-left:0;width:100%}
+}
+@media(max-width:720px){
+  .ann{top:calc(74px + env(safe-area-inset-top,0px))}
+  body.has-ann main{padding-top:calc(88px + 62px)}
+  .emo{grid-template-columns:repeat(7,1fr)}
+}
+
+/* ===== โหมดปรับปรุงระบบ ===== */
+#mtnAdminModal{z-index:10000!important;position:fixed;inset:0}
+.mtn{position:fixed;inset:0;z-index:9300;display:grid;place-items:center;padding:24px;overflow:auto;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(var(--ambrgb),.35),transparent 70%),var(--bg)}
+.mtn-card{width:min(520px,100%);display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.mtn-logo{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px}
+.mtn-logo b{color:var(--red)}
+.mtn-logo.has-img img{height:54px;max-width:280px}
+.mtn-ico{color:var(--red2);animation:tdlspin 8s linear infinite}
+@keyframes tdlspin{to{transform:rotate(360deg)}}
+.mtn h1{margin:6px 0 0;font-size:clamp(26px,5vw,38px);font-weight:800;line-height:1.25;letter-spacing:-.02em}
+.mtn p{margin:0;color:var(--sub);font-size:17px;line-height:1.6}
+.mtn-note{max-width:100%;white-space:pre-line;padding:0;border:0;background:transparent;line-height:1.75;font-size:15px;word-break:break-word}
+.mtn .cta{margin-top:6px}
+.mtn-countdown{width:100%;margin:12px 0 2px;animation:mtnAppear .65s ease both}
+.mtn-countdown-label{font-size:13px;color:var(--sub);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.mtn-countdown-units{display:flex;justify-content:center;gap:clamp(7px,2vw,14px);flex-wrap:wrap}
+.mtn-unit{min-width:68px;padding:13px 10px;border:1px solid rgba(var(--ambrgb),.34);border-radius:14px;background:linear-gradient(160deg,rgba(var(--ambrgb),.14),rgba(255,255,255,.025));box-shadow:0 8px 30px rgba(var(--ambrgb),.08);}
+.mtn-digit{display:block;font-variant-numeric:tabular-nums;font-size:clamp(27px,6vw,38px);font-weight:850;line-height:1.05;letter-spacing:-.04em;color:var(--text)}
+.mtn-unit small{display:block;margin-top:7px;font-size:10px;letter-spacing:.1em;color:var(--sub);text-transform:uppercase}
+.mtn-countdown[data-animation="flip"] .mtn-digit{animation:mtnFlip .35s ease}
+.mtn-countdown[data-animation="roll"] .mtn-digit{animation:mtnRoll .35s ease}
+.mtn-countdown[data-animation="fade"] .mtn-digit{animation:mtnFade .35s ease}
+.mtn-countdown-date{margin-top:12px;font-size:12px;color:var(--sub)}
+@keyframes mtnAppear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes mtnFlip{0%{transform:rotateX(70deg);opacity:.35}100%{transform:rotateX(0);opacity:1}}
+@keyframes mtnRoll{0%{transform:translateY(-7px);opacity:.3}100%{transform:translateY(0);opacity:1}}
+@keyframes mtnFade{0%{opacity:.25}100%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.mtn-countdown,.mtn-digit{animation:none!important}}
+/* quality selector, mobile fullscreen fallback and browser recommendation */
+#qualitySelect{max-width:110px;color:var(--text);background:var(--card);border:1px solid var(--line);cursor:pointer}
+.player.pseudo-fullscreen{position:fixed!important;inset:0!important;z-index:9998!important;width:100vw!important;height:100dvh!important;max-height:none!important;aspect-ratio:auto!important;border-radius:0!important;background:#000!important}
+.player.pseudo-fullscreen iframe,.player.pseudo-fullscreen #player{width:100%!important;height:100%!important}
+body.player-fullscreen-fallback{overflow:hidden!important}
+#browserTip{position:fixed;inset:0;z-index:9800;background:rgba(0,0,0,.78);backdrop-filter:blur(12px);display:grid;place-items:center;padding:20px}
+#browserTip.hidden{display:none!important}
+#browserTip .bt-card{width:min(440px,100%);background:var(--bg2);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:0 24px 80px #0008;text-align:center}
+#browserTip h2{margin:10px 0;font-size:23px}
+#browserTip p{color:var(--sub);line-height:1.65;font-size:14px}
+#browserTip .bt-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px}
+@media(max-width:560px){#qualitySelect{max-width:92px;font-size:12px;padding:6px}.controls .cg{gap:5px}}
+body.mtn-lock{overflow:hidden}
+/* DevTools security overlay: reuse the exact Maintenance screen layout and styling. */
+#securityScreen{z-index:2147483000;color:var(--text)}
+#securityScreen.hidden{display:none!important}
+#securityScreen .mtn-ico{animation:tdlspin 8s linear infinite}
+
+/* ===== ตัวเล่นผิดพลาด (เช่น Error 153) ===== */
+.cover #loadingText{max-width:36ch;text-align:center;line-height:1.7;padding:0 18px;font-size:14px}
+.cover.err .bar{display:none}
+.cover.err #loadingText{color:#f0dede}
+.err-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.err-actions .cta{padding:10px 20px;font-size:14px}
+.err-actions .ghost-btn{color:#fff;border-color:rgba(255,255,255,.4);text-decoration:none}
+</style>
+</head>
+<body>
+
+<!-- ตัวโหลดสลับหน้า (TDL Page Loader) -->
+<div class="tdl-pt tdl-boot" id="tdlPt" aria-hidden="true">
+  <div class="tdl-pop"><div class="tdl-loader">
+    <svg width="100" height="100" viewBox="0 0 100 100">
+      <defs>
+        <mask id="tdl-clipping">
+          <polygon points="0,0 100,0 100,100 0,100" fill="black"></polygon>
+          <polygon points="25,25 75,25 50,75" fill="white"></polygon>
+          <polygon points="50,25 75,75 25,75" fill="white"></polygon>
+          <polygon points="35,35 65,35 50,65" fill="white"></polygon>
+          <polygon points="35,35 65,35 50,65" fill="white"></polygon>
+          <polygon points="35,35 65,35 50,65" fill="white"></polygon>
+          <polygon points="35,35 65,35 50,65" fill="white"></polygon>
+        </mask>
+      </defs>
+    </svg>
+    <div class="tdl-box"></div>
+  </div></div>
+</div>
+
+<!-- โหมดปรับปรุงระบบ (แอดมินเปิดจากหน้า admin) -->
+<div id="mtnScreen" class="mtn hidden" role="alert">
+  <div class="mtn-card">
+    <div class="mtn-logo" data-logo="LOGO"><span class="mark" data-i="play" data-s="15"></span><span>AREAONE-<b>LIVE</b></span></div>
+    <div class="mtn-ico" data-i="gear" data-s="48"></div>
+    <h1 data-t="mtn.title">เรากำลังปรับปรุงเว็บไซต์ใหม่</h1>
+    <p data-t="mtn.sub">โปรดมาอีกครั้งภายหลัง</p>
+    <div id="mtnNote" class="mtn-note hidden"></div>
+    <div id="mtnCountdown" class="mtn-countdown hidden" aria-live="polite">
+      <div class="mtn-countdown-label" id="mtnCountdownLabel">เว็บไซต์จะกลับมาเปิดใน</div>
+      <div class="mtn-countdown-units" id="mtnCountdownUnits"></div>
+      <div class="mtn-countdown-date" id="mtnCountdownDate"></div>
+    </div>
+    <button type="button" class="cta" onclick="TDLFx.maintCheck(true)" data-t="mtn.retry">ตรวจสอบอีกครั้ง</button>
+    <button type="button" class="close" onclick="openMtnAdmin()">ADMIN ACCESS</button>
+  </div>
+</div>
+<div id="securityScreen" class="mtn hidden" role="alertdialog" aria-live="assertive" aria-label="Security Error">
+  <div class="mtn-card">
+    <div class="mtn-logo" data-logo="LOGO"><span class="mark" data-i="play" data-s="15"></span><span>AREAONE-<b>LIVE</b></span></div>
+    <div class="mtn-ico" data-i="gear" data-s="48" aria-hidden="true"></div>
+    <h1>ตรวจพบการเปิด Developer Tools</h1>
+    <p>ระบบตรวจพบการเปิด Developer Tools (F12) โปรดปิดเครื่องมือดังกล่าวเพื่อกลับมาใช้งานเว็บไซต์ตามปกติ</p>
+  </div>
+</div>
+<div id="mtnAdminModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="mtnAdminTitle" onclick="if(event.target===this)closeMtnAdmin()">
+  <div class="dialog">
+    <div class="lock" data-i="lock" data-s="24"></div>
+    <h3 id="mtnAdminTitle">ADMIN ACCESS</h3>
+    <p>เข้าสู่ระบบแอดมินเพื่อทดสอบเว็บไซต์ระหว่างปรับปรุง</p>
+    <input id="mtnAdminUser" type="text" placeholder="Username" autocomplete="username" maxlength="100">
+    <input id="mtnAdminPass" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')submitMtnAdmin()">
+    <div id="mtnAdminError" class="err" role="alert"></div>
+    <button id="mtnAdminSubmit" type="button" class="cta" onclick="submitMtnAdmin()">ยืนยันและเข้าเว็บไซต์</button>
+    <button type="button" class="close" onclick="closeMtnAdmin()">ยกเลิก</button>
+  </div>
+</div>
+<button id="mtnPreviewExit" type="button" class="cta hidden" style="position:fixed;right:16px;top:16px;z-index:9500;box-shadow:0 8px 30px rgba(0,0,0,.35)" onclick="exitMtnPreview()">ออกจากโหมดทดสอบ</button>
+<div id="browserTip" class="hidden" role="dialog" aria-modal="true" aria-labelledby="browserTipTitle">
+  <div class="bt-card"><div class="mtn-ico" data-i="external" data-s="34"></div><h2 id="browserTipTitle">เปิดในเบราว์เซอร์เพื่อประสบการณ์ที่ดีที่สุด</h2><p>คุณเปิดเว็บไซต์จากเบราว์เซอร์ภายในแอปอยู่ ตัวเล่นวิดีโออาจทำงานไม่สมบูรณ์ แนะนำให้เปิดลิงก์นี้ใน Safari หรือ Chrome</p><div class="bt-actions"><button class="cta" type="button" onclick="copyCurrentLink()">คัดลอกลิงก์</button><button class="close" type="button" onclick="dismissBrowserTip()">ดูต่อในแอป</button></div><p style="font-size:12px;margin-bottom:0">หากไม่มีปุ่มเปิดในเบราว์เซอร์ ให้กดเมนู ⋯ ของแอปแล้วเลือก “เปิดในเบราว์เซอร์”</p></div>
+</div>
+<div id="annBar" class="ann hidden" role="status"><span class="ann-dot"></span><span id="annText"></span><a id="annLink" class="ann-link hidden" target="_blank" rel="noopener noreferrer"></a><button type="button" class="ann-x" onclick="TDLFx.annClose('global')" data-t-title="ann.close" title="ปิดประกาศรวม"><span data-i="x" data-s="16"></span></button></div>
+<div id="annEventBar" class="ann hidden" role="status"><span class="ann-dot"></span><span id="annEventText"></span><a id="annEventLink" class="ann-link hidden" target="_blank" rel="noopener noreferrer"></a><button type="button" class="ann-x" onclick="TDLFx.annClose('event')" data-t-title="ann.close" title="ปิดประกาศอีเวนต์"><span data-i="x" data-s="16"></span></button></div>
+<nav class="tnav" data-t-aria="nav.main" aria-label="เมนูหลัก">
+  <a class="tlogo" href="#/" data-logo="LOGO" onclick="return navHome()" aria-label="AREAONE-LIVE">
+    <span class="mark" data-i="play" data-s="15"></span><span class="tword">AREAONE-<b>LIVE</b></span>
+  </a>
+  <a class="btn active" data-nav="home" href="#/" onclick="return navHome()" data-t-aria="nav.home" aria-label="หน้าหลัก"><span data-i="home" data-s="20"></span><span class="lb" data-t="nav.home">หน้าหลัก</span></a>
+  <a class="btn" data-nav="events" href="#events" onclick="return scrollTo2('events')" data-t-aria="nav.events" aria-label="อีเว้นต์"><span data-i="cal" data-s="20"></span><span class="lb" data-t="nav.events">อีเว้นต์</span></a>
+  <a class="btn" data-nav="howto" href="#howto" onclick="return scrollTo2('howto')" data-t-aria="nav.howto" aria-label="วิธีเข้าชม"><span data-i="help" data-s="20"></span><span class="lb" data-t="nav.howto">วิธีเข้าชม</span></a>
+  <a class="btn" data-ticket-url href="/" target="_blank" rel="noopener" data-t-aria="nav.ticket" aria-label="กดบัตร"><span data-i="ticket" data-s="20"></span><span class="lb" data-t="nav.ticket">กดบัตร</span></a>
+  <button class="tg langbtn" id="langBtn" onclick="TDLLang.set(TDLLang.get()==='th'?'en':'th')" data-t-title="nav.lang" title="เปลี่ยนเป็นภาษาอังกฤษ">EN</button>
+  <button class="tg" id="themeBtn" onclick="toggleTheme()" data-t-title="nav.theme" title="สลับธีม" aria-label="สลับธีม"></button>
+  <button class="tg" onclick="window.open('/admin.html','_blank')" data-t-title="nav.admin" title="ผู้ดูแลระบบ" aria-label="ผู้ดูแลระบบ"><span data-i="sliders" data-s="19"></span></button>
+</nav>
+
+<!-- มือถือ: แถบบนเหลือแค่โลโก้ + แถบเครื่องมือลอยด้านล่างแบบ iOS -->
+<header class="mtop">
+  <a class="tlogo" href="#/" data-logo="LOGO" onclick="return navHome()" aria-label="AREAONE-LIVE">
+    <span class="mark" data-i="play" data-s="15"></span><span class="tword">AREAONE-<b>LIVE</b></span>
+  </a>
+</header>
+<nav class="mtab" data-t-aria="nav.main" aria-label="เมนูหลัก">
+  <span class="mind" aria-hidden="true"></span>
+  <a class="active" data-nav="home" href="#/" onclick="return navHome()"><span data-i="home" data-s="22"></span><span class="ml" data-t="nav.home">หน้าหลัก</span></a>
+  <a data-nav="events" href="#events" onclick="return scrollTo2('events')"><span data-i="cal" data-s="22"></span><span class="ml" data-t="nav.events">อีเว้นต์</span></a>
+  <a data-nav="howto" href="#howto" onclick="return scrollTo2('howto')"><span data-i="help" data-s="22"></span><span class="ml" data-t="nav.howto">วิธีเข้าชม</span></a>
+  <a data-ticket-url href="/" target="_blank" rel="noopener" style="color:var(--red2)"><span data-i="ticket" data-s="22"></span><span class="ml" data-t="nav.ticket">กดบัตร</span></a>
+  <button type="button" id="mSetBtn" onclick="openSettings()"><span data-i="gear" data-s="22"></span><span class="ml" data-t="nav.settings">ตั้งค่า</span></button>
+</nav>
+
+<main>
+  <!-- HOME -->
+  <section id="homeView" class="view">
+    <div class="hero">
+      <div>
+        <span class="eyebrow"><i class="dot"></i> LIVE STREAMING PLATFORM</span>
+        <h1 id="heroTitle">AREAONE-LIVE</h1>
+        <div class="cd cdpill hidden" id="heroCd" data-cdg="" data-mode="full"></div>
+        <p id="heroSub" data-t="hero.sub">ดูไลฟ์สตรีมมิ่งแบบส่วนตัว ด้วย Access Code ของคุณ พร้อมแชตสดกับผู้ชมคนอื่นระหว่างรอบการแสดง</p>
+        <button class="cta" id="heroCta" onclick="scrollTo2('events')"><span data-t="hero.cta">ดูอีเว้นต์ทั้งหมด</span><span data-i="arrowR"></span></button>
+      </div>
+      <div class="poster-frame"><img id="heroPoster" alt="Poster"></div>
+    </div>
+
+    <h2 class="sec" id="events" data-t="sec.events">อีเว้นต์ทั้งหมด</h2>
+    <div id="eventGrid" class="grid"><div class="ecard sk"><div class="sk-img skel"></div><div class="sk-l skel"></div><div class="sk-l s skel"></div></div><div class="ecard sk"><div class="sk-img skel"></div><div class="sk-l skel"></div><div class="sk-l s skel"></div></div><div class="ecard sk"><div class="sk-img skel"></div><div class="sk-l skel"></div><div class="sk-l s skel"></div></div><div class="ecard sk"><div class="sk-img skel"></div><div class="sk-l skel"></div><div class="sk-l s skel"></div></div></div>
+
+    <div id="schSec" class="hidden">
+      <h2 class="sec" id="schedule" data-t="sec.schedule">ตารางรอบ</h2>
+      <div class="sch">
+        <div class="sch-top">
+          <button type="button" class="sch-nav" data-sch="prev" data-t-title="sch.prev" title="เดือนก่อนหน้า"><span data-i="arrowL" data-s="18"></span></button>
+          <strong id="schMonth"></strong>
+          <button type="button" class="sch-nav" data-sch="next" data-t-title="sch.next" title="เดือนถัดไป"><span data-i="arrowR" data-s="18"></span></button>
+          <div class="chips" id="schChips"><button type="button" class="chip active" data-sf="all" data-t="sch.all">ทั้งหมด</button><button type="button" class="chip" data-sf="L">LIVE</button><button type="button" class="chip" data-sf="R">RERUN</button></div>
+        </div>
+        <div class="sch-grid" id="schGrid"></div>
+        <div class="sch-day" id="schDay"></div>
+      </div>
+    </div>
+
+    <h2 class="sec" id="howto" data-t="sec.howto">วิธีเข้าชม</h2>
+    <div class="steps">
+      <div class="step"><b>01</b><h4 data-t="s1.t">เลือกอีเว้นต์และรอบ</h4><p data-t="s1.p">เปิดหน้าอีเว้นต์ที่ต้องการ แล้วกดปุ่ม "เข้าชม" ที่รอบการแสดง</p></div>
+      <div class="step"><b>02</b><h4 data-t="s2.t">กรอก Access Code</h4><p data-t="s2.p">ใส่ชื่อเล่นและโค้ดที่ได้รับ ระบบจะจำไว้ให้ในครั้งถัดไป</p></div>
+      <div class="step"><b>03</b><h4 data-t="s3.t">เข้าชมและแชต</h4><p data-t="s3.p">รับชมสดพร้อมแชต หรือย้อนดูรอบ RERUN ได้ตามสะดวก</p></div>
+    </div>
+
+    <div id="faqSec">
+      <h2 class="sec" id="faq" data-t="sec.faq">คำถามที่พบบ่อย</h2>
+      <div id="faqList" class="faq-list"></div>
+    </div>
+  </section>
+
+  <!-- EVENT -->
+  <section id="eventView" class="view hidden">
+    <button class="back" onclick="location.hash='#/'"><span data-i="arrowL" data-s="16"></span><span data-t="back">กลับหน้าหลัก</span></button>
+    <div class="event">
+      <div class="poster-frame"><img id="evPoster" alt="Poster"></div>
+      <div>
+        <h1 id="evTitle">EVENT</h1>
+        <div class="meta" id="evMeta"></div>
+        <div class="evact"><button type="button" class="ghost-btn" onclick="TDLFx.share()"><span data-i="share" data-s="17"></span><span data-t="share">แชร์</span></button></div>
+        <div id="evRounds"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WATCH -->
+  <section id="watchView" class="view hidden">
+    <div class="wbar">
+      <h2 id="watchTitle">LIVE STREAMING</h2>
+      <div class="cg">
+        <span id="viewerCnt" class="vcnt hidden"></span>
+        <span id="badge" class="badge"><i class="dot" id="liveDot"></i><span id="badgeText">LIVE</span></span>
+        <button class="cbtn" onclick="logout()" data-t-title="watch.logout" title="ออกจากระบบ"><span data-i="logout" data-s="16"></span></button>
+      </div>
+    </div>
+    <div class="wgrid" id="wgrid">
+      <div>
+        <div id="playerContainer" class="player">
+          <div id="loadingCover" class="cover"><div class="bar"><i></i></div><div id="loadingText">กำลังเชื่อมต่อสตรีม...</div><div id="errActions" class="err-actions hidden"><button type="button" class="cta" onclick="resetPlayer()" data-t="watch.retry">ลองใหม่</button><a id="errYt" class="ghost-btn" target="_blank" rel="noopener noreferrer" data-t="watch.openYt">เปิดใน YouTube</a></div></div>
+          <div class="block" oncontextmenu="return false;"></div>
+          <div id="waitRoom" class="wait hidden"><div class="wt" data-t="wait.title">รอบนี้จะเริ่มใน</div><div class="wc" id="waitClock">00:00:00</div><div class="wn" data-t="wait.note">ระบบจะเริ่มเล่นให้อัตโนมัติเมื่อถึงเวลา ระหว่างนี้คุยในแชตได้เลย</div><button type="button" class="cta" onclick="TDLFx.skipWait()" data-t="wait.skip">เข้าไปรอในไลฟ์เลย</button></div>
+          <div id="player"></div>
+        </div>
+        <div class="controls">
+          <div class="cg">
+            <button id="muteBtn" class="cbtn" onclick="toggleMute()" data-t-title="watch.mute" title="เปิด/ปิดเสียง"><span data-i="vol" data-s="17"></span></button>
+            <input type="range" id="volSlider" class="vol" min="0" max="100" value="100" oninput="onVolumeChange(this.value)">
+            <div id="seekBtns" class="cg hidden">
+              <button class="cbtn" onclick="seek(-10)" data-t-title="watch.back10" title="ย้อน 10 วินาที"><span data-i="rew" data-s="17"></span></button>
+              <button class="cbtn" onclick="seek(10)" data-t-title="watch.fwd10" title="ข้าม 10 วินาที"><span data-i="fwd" data-s="17"></span></button>
+              <button class="cbtn" id="speedBtn" onclick="TDLFx.cycleSpeed()" data-t-title="speed.title" title="ความเร็วในการเล่น">1x</button>
+            </div>
+            <button id="ccBtn" class="cbtn" onclick="toggleCaptions()" data-t-title="watch.cc" title="คำบรรยาย"><span data-i="cc" data-s="17"></span></button>
+            <select id="qualitySelect" class="cbtn" aria-label="คุณภาพวิดีโอ" title="คุณภาพวิดีโอ" onchange="setPlayerQuality(this.value)"><option value="auto">Auto</option><option value="hd720">720p</option><option value="hd1080">1080p</option><option value="hd1440">1440p</option><option value="hd2160">4K</option></select>
+            <button class="cbtn" type="button" onclick="resetPlayer()" title="รีเซ็ตตัวเล่น" aria-label="รีเซ็ตตัวเล่น"><span data-i="refresh" data-s="17"></span></button>
+          </div>
+          <div class="cg">
+            <button class="cbtn" id="theaterBtn" onclick="TDLFx.toggleTheater()" data-t-title="watch.theater" title="โหมดโรงภาพยนตร์"><span data-i="theater" data-s="17"></span></button>
+            <button class="cbtn" onclick="goFullscreen()" data-t-title="watch.full" title="เต็มจอ"><span data-i="max" data-s="17"></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="chat">
+        <div id="chatDisabledOverlay" class="chat-off"><i data-i="chatoff" data-s="30"></i><span data-t="chat.off">โหมดแชตสำหรับไลฟ์สตรีมมิ่งเท่านั้น</span></div>
+        <div id="pinnedMessage" class="pin"><b><span data-i="pin" data-s="13"></span> <span data-t="chat.pinned">ปักหมุด</span></b><div id="pinnedText"></div></div>
+        <div class="chat-h"><span class="chh"><span data-i="chat" data-s="16"></span><span data-t="chat.title">แชตสด</span></span><small id="chatUserDisplay"></small></div>
+        <div id="chatMessages" class="msgs"><div class="empty" data-t="chat.loading">กำลังโหลดข้อความ...</div></div>
+        <button type="button" id="newMsgBtn" class="newmsg hidden" onclick="TDLFx.chatToBottom()"><span id="newMsgTxt" data-t="chat.new">ข้อความใหม่</span><span data-i="down" data-s="14"></span></button>
+        <div id="emoPanel" class="emo hidden"></div>
+        <div class="cin">
+          <button type="button" class="emo-btn" id="emoBtn" onclick="TDLFx.toggleEmoji()" data-t-title="chat.emoji" title="อีโมจิ"><span data-i="smile" data-s="19"></span></button>
+          <input id="chatInput" type="text" placeholder="พิมพ์ข้อความ..." data-t-ph="chat.ph" maxlength="150" onkeydown="if(event.key==='Enter')sendChat()">
+          <button onclick="sendChat()" data-t-title="chat.send" title="ส่ง" aria-label="ส่ง"><span data-i="send" data-s="16"></span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tdl-foot" id="tdlFoot"></footer>
+
+
+<!-- SETTINGS SHEET (มือถือ) -->
+<div id="settingsModal" class="sheet-wrap hidden" onclick="if(event.target===this)closeSettings()">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="stTitle">
+    <div class="grab"></div>
+    <div class="sh-h"><h3 id="stTitle" data-t="set.title">ตั้งค่า</h3><button class="tg" onclick="closeSettings()" data-t-title="set.close" title="ปิด"><span data-i="x" data-s="20"></span></button></div>
+    <div class="srow"><div class="rl"><span data-i="moon" data-s="20"></span><span data-t="set.theme">โหมดสี</span></div>
+      <div class="seg2"><button type="button" data-theme-val="system" onclick="setTheme('system')" data-t="set.system">ตามระบบ</button><button type="button" data-theme-val="dark" onclick="setTheme('dark')" data-t="set.dark">มืด</button><button type="button" data-theme-val="light" onclick="setTheme('light')" data-t="set.light">สว่าง</button></div></div>
+    <div class="srow"><div class="rl"><span data-i="globe" data-s="20"></span><span data-t="set.lang">ภาษา</span></div>
+      <div class="seg2"><button type="button" data-lang-val="th" onclick="TDLLang.set('th')">ไทย</button><button type="button" data-lang-val="en" onclick="TDLLang.set('en')">English</button></div></div>
+    <button type="button" class="srow link hidden" id="installRow" onclick="TDLFx.install()"><div class="rl"><span data-i="download" data-s="20"></span><span data-t="set.install">ติดตั้งเป็นแอป</span></div><span data-i="chev" data-s="18"></span></button>
+    <button type="button" class="srow link" onclick="window.open('/admin.html','_blank')"><div class="rl"><span data-i="sliders" data-s="20"></span><span data-t="set.admin">เข้าหน้าผู้ดูแลระบบ</span></div><span data-i="chev" data-s="18"></span></button>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal hidden" onclick="if(event.target===this)closeLogin()">
+  <div class="dialog">
+    <div class="lock" data-i="lock" data-s="24"></div>
+    <h3 id="loginTitle">AREAONE-LIVE</h3>
+    <p data-t="login.sub">กรอกชื่อเล่นและ Access Code เพื่อเข้าชม</p>
+    <input id="nickname" type="text" placeholder="ชื่อเล่นของคุณ (Nickname)" data-t-ph="login.nick" maxlength="20" autocomplete="off">
+    <input id="code" type="text" placeholder="AOL-XXXX-XXXX-XXXX" autocomplete="off" onkeydown="if(event.key==='Enter')verify()">
+    <button id="enterButton" class="cta" onclick="verify()" data-t="login.enter">เข้าสู่ไลฟ์</button>
+    <div id="error" class="err">Access Code ไม่ถูกต้อง</div>
+    <button class="close" onclick="closeLogin()" data-t="login.cancel">ยกเลิก</button>
+  </div>
+</div>
+
+<script>
+/* ===== TDL MODULES: ภาษา / ตัวโหลดสลับหน้า / ระบบโลโก้ / footer (แยกจากระบบหลัก) ===== */
+/* ===== TDL LANGUAGE (ไทย / English) — เฉพาะเว็บ TDL ===== */
+const TDLLang = (() => {
+  const KEY = 'tdlLang';
+  const D = {
+    th: {
+      'nav.main':'เมนูหลัก','nav.home':'หน้าหลัก','nav.events':'อีเว้นต์','nav.howto':'วิธีเข้าชม','nav.settings':'ตั้งค่า','nav.theme':'สลับธีม','nav.admin':'ผู้ดูแลระบบ','nav.lang':'เปลี่ยนเป็นภาษาอังกฤษ','nav.ticket':'กดบัตร',
+      'hero.sub':'ดูไลฟ์สตรีมมิ่งแบบส่วนตัว ด้วย Access Code ของคุณ พร้อมแชตสดกับผู้ชมคนอื่นระหว่างรอบการแสดง',
+      'hero.subN':v=>`เปิดให้ชม ${v.n} รอบ — เลือกรอบที่ต้องการแล้วเข้าชมด้วย Access Code ของคุณ`,
+      'hero.cta':'ดูอีเว้นต์ทั้งหมด','hero.pick':'เลือกรอบการแสดง',
+      'sec.events':'อีเว้นต์ทั้งหมด','sec.howto':'วิธีเข้าชม',
+      's1.t':'เลือกอีเว้นต์และรอบ','s1.p':'เปิดหน้าอีเว้นต์ที่ต้องการ แล้วกดปุ่ม "เข้าชม" ที่รอบการแสดง',
+      's2.t':'กรอก Access Code','s2.p':'ใส่ชื่อเล่นและโค้ดที่ได้รับ ระบบจะจำไว้ให้ในครั้งถัดไป',
+      's3.t':'เข้าชมและแชต','s3.p':'รับชมสดพร้อมแชต หรือย้อนดูรอบ RERUN ได้ตามสะดวก',
+      'home.noEvents':'ยังไม่มีอีเว้นต์ที่เปิดใช้งาน','home.loadError':'เกิดข้อผิดพลาดในการดึงข้อมูลอีเว้นต์',
+      'count.shows':v=>`${v.n} รอบ`,'count.showsFull':v=>`${v.n} รอบการแสดง`,
+      'back':'กลับหน้าหลัก','join':'เข้าชม',
+      'login.sub':'กรอกชื่อเล่นและ Access Code เพื่อเข้าชม','login.nick':'ชื่อเล่นของคุณ (Nickname)','login.enter':'เข้าสู่ไลฟ์','login.cancel':'ยกเลิก',
+      'login.needCode':'กรุณากรอก Access Code','login.invalid':'Access Code ไม่ถูกต้อง','login.checking':'กำลังตรวจสอบ...',
+      'watch.connecting':'กำลังเชื่อมต่อสตรีม...','watch.unavailable':'ไม่สามารถเล่นสตรีมได้','watch.noVideo':'ยังไม่มีวิดีโอสำหรับรอบนี้',
+      'watch.logout':'ออกจากระบบ','watch.mute':'เปิด/ปิดเสียง','watch.back10':'ย้อน 10 วินาที','watch.fwd10':'ข้าม 10 วินาที','watch.cc':'คำบรรยาย','watch.full':'เต็มจอ',
+      'chat.title':'แชตสด','chat.off':'โหมดแชตสำหรับไลฟ์สตรีมมิ่งเท่านั้น','chat.pinned':'ปักหมุด','chat.loading':'กำลังโหลดข้อความ...','chat.ph':'พิมพ์ข้อความ...','chat.send':'ส่ง','chat.empty':'ยังไม่มีข้อความ พิมพ์คุยคนแรกเลย!',
+      'foot.menu':'เมนู','foot.phone':'โทร','foot.tel':'โทร','foot.email':'อีเมล','foot.noLink':'ยังไม่ได้ตั้งลิงก์',
+      'wait.title':'รอบนี้จะเริ่มใน','wait.note':'ระบบจะเริ่มเล่นให้อัตโนมัติเมื่อถึงเวลา ระหว่างนี้คุยในแชตได้เลย','wait.skip':'เข้าไปรอในไลฟ์เลย',
+      'deep.filled':'กรอกโค้ดให้แล้ว เลือกรอบที่ต้องการเพื่อเข้าชม','resume.at':v=>`เล่นต่อจากนาทีที่ ${v.t}`,'speed.title':'ความเร็วในการเล่น',
+      'sec.schedule':'ตารางรอบ','sch.all':'ทั้งหมด','sch.none':'ไม่มีรอบในวันนี้','sch.view':'ดูรอบนี้','sch.prev':'เดือนก่อนหน้า','sch.next':'เดือนถัดไป',
+      'chat.emoji':'อีโมจิ','chat.slow':v=>`ส่งได้อีกครั้งใน ${v.s} วินาที`,'chat.admin':'แอดมิน','watch.viewers':v=>`${v.n} คนกำลังดู`,'ann.close':'ปิดประกาศ',
+      'watch.err153':'ตัวเล่นวิดีโอโหลดไม่สำเร็จ (รหัส 153) ลองกด "ลองใหม่" หรือเปิดเว็บนี้ใน Safari / Chrome แทนการเปิดในแอป','watch.errEmbed':v=>`วิดีโอนี้ไม่อนุญาตให้เล่นบนเว็บนี้ (รหัส ${v.c}) โปรดติดต่อผู้จัด`,'watch.retry':'ลองใหม่','watch.openYt':'เปิดใน YouTube',
+      'mtn.title':'เรากำลังปรับปรุงเว็บไซต์ใหม่','mtn.sub':'โปรดมาอีกครั้งภายหลัง','mtn.retry':'ตรวจสอบอีกครั้ง','mtn.still':'ยังอยู่ระหว่างปรับปรุง',
+      'sec.faq':'คำถามที่พบบ่อย','set.system':'ตามระบบ','set.install':'ติดตั้งเป็นแอป','set.installIos':'แตะปุ่มแชร์ แล้วเลือก "เพิ่มไปยังหน้าจอโฮม"',
+      'watch.theater':'โหมดโรงภาพยนตร์','chat.new':'ข้อความใหม่','chat.sendFail':'ส่งข้อความไม่สำเร็จ',
+      'cd.starts':v=>`เริ่มใน ${v.t}`,'cd.live':'LIVE NOW','cd.ended':'จบรอบแล้ว','cd.day':v=>`${v.n} วัน`,
+      'cal.add':'เพิ่มลงปฏิทิน','share':'แชร์','toast.copied':'คัดลอกลิงก์แล้ว','toast.ics':'บันทึกไฟล์ปฏิทินแล้ว',
+      'set.title':'ตั้งค่า','set.close':'ปิด','set.theme':'โหมดสี','set.dark':'มืด','set.light':'สว่าง','set.lang':'ภาษา','set.admin':'เข้าหน้าผู้ดูแลระบบ'
+    },
+    en: {
+      'nav.main':'Main menu','nav.home':'Home','nav.events':'Events','nav.howto':'How to watch','nav.settings':'Settings','nav.theme':'Toggle theme','nav.admin':'Admin','nav.lang':'Switch to Thai','nav.ticket':'Get Tickets',
+      'hero.sub':'Watch private live streams with your Access Code, and chat live with other viewers during the show.',
+      'hero.subN':v=>`${v.n} show${v.n===1?'':'s'} available — pick one and join with your Access Code.`,
+      'hero.cta':'View all events','hero.pick':'Choose a show',
+      'sec.events':'All events','sec.howto':'How to watch',
+      's1.t':'Choose an event and a show','s1.p':'Open the event page, then press "Join" on the show you want.',
+      's2.t':'Enter your Access Code','s2.p':'Enter a nickname and the code you received. We’ll remember it for next time.',
+      's3.t':'Watch and chat','s3.p':'Watch live with chat, or catch up on RERUN shows whenever you like.',
+      'home.noEvents':'No events are open yet.','home.loadError':'Couldn’t load events. Please try again.',
+      'count.shows':v=>`${v.n} show${v.n===1?'':'s'}`,'count.showsFull':v=>`${v.n} show${v.n===1?'':'s'}`,
+      'back':'Back to home','join':'Join',
+      'login.sub':'Enter a nickname and your Access Code to watch','login.nick':'Your nickname','login.enter':'Enter stream','login.cancel':'Cancel',
+      'login.needCode':'Please enter your Access Code','login.invalid':'Invalid Access Code','login.checking':'Checking...',
+      'watch.connecting':'Connecting to stream...','watch.unavailable':'Stream unavailable','watch.noVideo':'No video for this show yet',
+      'watch.logout':'Sign out','watch.mute':'Mute / unmute','watch.back10':'Back 10 seconds','watch.fwd10':'Forward 10 seconds','watch.cc':'Captions','watch.full':'Fullscreen',
+      'chat.title':'Live chat','chat.off':'Chat is available during live streams only','chat.pinned':'Pinned','chat.loading':'Loading messages...','chat.ph':'Type a message...','chat.send':'Send','chat.empty':'No messages yet — say hi first!',
+      'foot.menu':'Menu','foot.phone':'Phone','foot.tel':'Tel','foot.email':'Email','foot.noLink':'link not set',
+      'wait.title':'This show starts in','wait.note':'Playback starts automatically — feel free to chat while you wait.','wait.skip':'Go to the stream now',
+      'deep.filled':'Code filled in — pick a show to watch.','resume.at':v=>`Resuming from ${v.t}`,'speed.title':'Playback speed',
+      'sec.schedule':'Schedule','sch.all':'All','sch.none':'No shows on this day','sch.view':'View','sch.prev':'Previous month','sch.next':'Next month',
+      'chat.emoji':'Emoji','chat.slow':v=>`You can send again in ${v.s}s`,'chat.admin':'Admin','watch.viewers':v=>`${v.n} watching`,'ann.close':'Dismiss',
+      'watch.err153':'The video player failed to load (code 153). Try again, or open this site in Safari / Chrome instead of an in-app browser.','watch.errEmbed':v=>`This video can’t be played on this site (code ${v.c}). Please contact the organizer.`,'watch.retry':'Try again','watch.openYt':'Open on YouTube',
+      'mtn.title':'We’re updating the website','mtn.sub':'Please come back later.','mtn.retry':'Check again','mtn.still':'Still under maintenance',
+      'sec.faq':'FAQ','set.system':'Auto','set.install':'Install app','set.installIos':'Tap the Share button, then "Add to Home Screen"',
+      'watch.theater':'Theater mode','chat.new':'New messages','chat.sendFail':'Couldn’t send your message',
+      'cd.starts':v=>`Starts in ${v.t}`,'cd.live':'LIVE NOW','cd.ended':'Ended','cd.day':v=>`${v.n}d`,
+      'cal.add':'Add to calendar','share':'Share','toast.copied':'Link copied','toast.ics':'Calendar file saved',
+      'set.title':'Settings','set.close':'Close','set.theme':'Appearance','set.dark':'Dark','set.light':'Light','set.lang':'Language','set.admin':'Open admin dashboard'
+    }
+  };
+  let lang = 'th';
+  try { if (localStorage.getItem(KEY) === 'en') lang = 'en' } catch {}
+  const subs = [];
+  function t(key, vars){
+    let v = D[lang][key]; if (v === undefined) v = D.th[key]; if (v === undefined) return key;
+    return typeof v === 'function' ? v(vars || {}) : v;
+  }
+  function apply(root = document){
+    root.querySelectorAll('[data-t]').forEach(el => { el.textContent = t(el.dataset.t) });
+    root.querySelectorAll('[data-t-ph]').forEach(el => { el.placeholder = t(el.dataset.tPh) });
+    root.querySelectorAll('[data-t-title]').forEach(el => { const v = t(el.dataset.tTitle); el.title = v; el.setAttribute('aria-label', v) });
+    root.querySelectorAll('[data-t-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.tAria)));
+    document.documentElement.lang = lang;
+  }
+  function set(l){
+    lang = l === 'en' ? 'en' : 'th';
+    try { localStorage.setItem(KEY, lang) } catch {}
+    apply(); subs.forEach(f => f(lang));
+  }
+  return { t, apply, set, get: () => lang, keys: () => ({ th: Object.keys(D.th), en: Object.keys(D.en) }), onChange: f => subs.push(f) };
+})();
+const tr = (k, v) => TDLLang.t(k, v);
+
+const TDLLoader = (() => {
+  const el = document.getElementById('tdlPt');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timer = null;
+  const set = c => { if (el) el.className = 'tdl-pt' + (c ? ' ' + c : '') };
+  function wipe(fn){
+    if (reduce || !el) { fn(); return }
+    clearTimeout(timer);
+    set('tdl-wipe');
+    timer = setTimeout(() => { fn(); set('tdl-leave'); timer = setTimeout(() => set(''), 550) }, 750);
+  }
+  function finishBoot(){ if (reduce || !el) { set(''); return } set('tdl-leave'); setTimeout(() => set(''), 550) }
+  return { wipe, finishBoot };
+})();
+
+const TDLLogo = (() => {
+  const imgs = (typeof TDL_IMAGES !== 'undefined') ? TDL_IMAGES : {};
+  const brand = (typeof TDL_FOOTER !== 'undefined' && TDL_FOOTER.brand) || 'AREAONE-LIVE';
+  const ok = u => typeof u === 'string' && u.trim() !== '' && !/^https?:\/\/$/i.test(u.trim());
+  const pick = key => ok(imgs[key]) ? imgs[key].trim() : (ok(imgs.LOGO) ? imgs.LOGO.trim() : '');
+  function apply(root = document){
+    root.querySelectorAll('[data-logo]').forEach(el => {
+      if (el.classList.contains('has-img')) return;
+      const url = pick(el.dataset.logo); if (!url) return;
+      const img = new Image(); img.alt = brand; img.draggable = false;
+      img.onload = () => { el.classList.add('has-img'); el.replaceChildren(img) };
+      img.src = url;
+    });
+  }
+  const first = (...keys) => { for (const k of keys) if (ok(imgs[k])) return imgs[k].trim(); return '' };
+  function dynamicManifest(icon){
+    try {
+      const l = document.querySelector('link[rel="manifest"]'); if (!l) return;
+      const abs = new URL(icon, location.href).href;
+      const type = /\.svg(\?|$)/i.test(abs) ? 'image/svg+xml' : /\.webp(\?|$)/i.test(abs) ? 'image/webp' : /\.jpe?g(\?|$)/i.test(abs) ? 'image/jpeg' : 'image/png';
+      const base = new URL('./', location.href).href;
+      const man = { name: brand, short_name: brand, description: brand + ' — private live streaming platform', start_url: base, scope: base, display: 'standalone', background_color: '#0b0707', theme_color: '#0b0707', lang: 'th',
+        icons: [{ src: abs, sizes: '192x192', type, purpose: 'any' }, { src: abs, sizes: '512x512', type, purpose: 'any' }] };
+      l.href = URL.createObjectURL(new Blob([JSON.stringify(man)], { type: 'application/manifest+json' }));
+    } catch {}
+  }
+  function favicon(){
+    const u = first('FAVICON', 'APP_ICON', 'LOGO');
+    const l = document.querySelector('link[rel~="icon"]'); if (u && l) l.href = u;
+    const app = first('APP_ICON');
+    if (app) { const a = document.querySelector('link[rel="apple-touch-icon"]'); if (a) a.href = app; dynamicManifest(app) }
+  }
+  return { apply, favicon };
+})();
+
+const TDLFooter = (() => {
+  const cfg = (typeof TDL_FOOTER !== 'undefined') ? TDL_FOOTER : {};
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const has = v => typeof v === 'string' && v.trim() !== '';
+  const url = v => has(v) && /^https?:\/\//i.test(v.trim()) && v.trim().length > 8;
+  const svg = (p, s = 18, extra = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"') =>
+    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" ${extra} aria-hidden="true">${p}</svg>`;
+  const P = {
+    instagram:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/>',
+    youtube:'<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor"/>',
+    facebook:'<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/>',
+    website:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'
+  };
+  const DISCORD = 'M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z';
+  const L = k => (TDLLang.get() === 'en' && has(cfg[k + '_en'])) ? cfg[k + '_en'] : cfg[k];
+  const NAMES = { discord:'Discord', instagram:'Instagram', youtube:'YouTube', facebook:'Facebook', website:'เว็บไซต์' };
+  const ALWAYS = ['discord', 'instagram', 'youtube'];   /* แสดงเสมอ แม้ยังไม่ใส่ลิงก์ */
+  const icon = k => k === 'discord' ? svg(`<path d="${DISCORD}"/>`, 18, 'fill="currentColor"') : svg(P[k] || P.website, 18);
+  function render(){
+    const el = document.getElementById('tdlFoot'); if (!el) return;
+    const brand = cfg.brand || 'AREAONE-LIVE';
+    const bm = brand.trim().match(/^(.*?)([\s-])([^\s-]+)$/);
+    const brandHtml = bm ? `${esc(bm[1])}${esc(bm[2])}<b>${esc(bm[3])}</b>` : esc(brand);
+    const play = svg('<path d="M7 4.5v15a.5.5 0 0 0 .77.42l12-7.5a.5.5 0 0 0 0-.84l-12-7.5A.5.5 0 0 0 7 4.5z"/>', 15, 'fill="currentColor"');
+    const tel = has(cfg.phone) ? cfg.phone.replace(/[^+\d]/g, '') : '';
+
+    const contact = [];
+    if (has(cfg.phone)) contact.push(`${TDLLang.t('foot.tel')} : <a href="tel:${esc(tel)}">${esc(cfg.phone)}</a>`);
+    if (has(cfg.email)) contact.push(`${TDLLang.t('foot.email')} : <a href="mailto:${esc(cfg.email.trim())}">${esc(cfg.email)}</a>`);
+
+    const social = cfg.social || {};
+    const keys = [...ALWAYS, ...Object.keys(social).filter(k => !ALWAYS.includes(k) && url(social[k]))];
+    const soc = keys.map(k => url(social[k])
+      ? `<a href="${esc(social[k].trim())}" target="_blank" rel="noopener noreferrer" aria-label="${NAMES[k] || esc(k)}" title="${NAMES[k] || esc(k)}">${icon(k)}</a>`
+      : `<span class="off" title="${NAMES[k] || esc(k)} (${TDLLang.t('foot.noLink')})" aria-label="${NAMES[k] || esc(k)}">${icon(k)}</span>`).join('');
+    const copy = has(cfg.copyright) ? cfg.copyright : `© ${new Date().getFullYear()} ${brand}`;
+
+    el.innerHTML = `
+      <div class="tdl-foot-in">
+        <div>
+          <div class="tdl-fbrand" data-logo="FOOTER_LOGO"><span class="mark">${play}</span><span>${brandHtml}</span></div>
+          ${has(cfg.tagline) ? `<p>${esc(cfg.tagline)}</p>` : ''}
+          ${has(L('operator')) ? `<p>${esc(L('operator'))}</p>` : ''}
+          ${has(L('address')) ? `<p>${esc(L('address'))}</p>` : ''}
+          ${contact.length ? `<p>${contact.join('<br>')}</p>` : ''}
+        </div>
+        <div>
+          <h4>${TDLLang.t('foot.menu')}</h4>
+          <div class="tdl-flinks">
+            <a href="#/" onclick="return navHome()">${TDLLang.t('nav.home')}</a>
+            <a href="#events" onclick="return scrollTo2('events')">${TDLLang.t('sec.events')}</a>
+            <a href="#schedule" onclick="return scrollTo2('schedule')">${TDLLang.t('sec.schedule')}</a>
+            <a href="#howto" onclick="return scrollTo2('howto')">${TDLLang.t('sec.howto')}</a>
+            <a href="#faq" onclick="return scrollTo2('faq')">${TDLLang.t('sec.faq')}</a>
+          </div>
+        </div>
+        <div class="tdl-flast">
+          ${has(cfg.phone) ? `<h4>${TDLLang.t('foot.phone')}</h4><a class="tdl-tel" href="tel:${esc(tel)}">${esc(cfg.phone)}</a>` : ''}
+          <div class="tdl-soc">${soc}</div>
+          <small>${esc(copy)}</small>
+        </div>
+      </div>`;
+    TDLLogo.apply(el);
+  }
+  return { render };
+})();
+
+TDLLang.apply();
+TDLLogo.favicon();
+TDLFooter.render();
+TDLLogo.apply();   /* ใส่โลโก้ทุกจุดที่มี data-logo (แถบบน + footer) */
+</script>
+<script>
+/* ================= DEVTOOLS SECURITY OVERLAY ================= */
+(() => {
+  const BYPASS_KEY = 'aolSecurityLocalBypass';
+  const overlay = document.getElementById('securityScreen');
+  let enabled = false, detected = false, lastRefresh = 0, detectedAt = 0;
+  const bypassed = () => { try { return localStorage.getItem(BYPASS_KEY) === '1' } catch { return false } };
+  function show(value) {
+    detected = !!value;
+    if (detected) detectedAt = Date.now();
+    const locked = detected && enabled && !bypassed();
+    if (overlay) overlay.classList.toggle('hidden', !locked);
+    /* Let the player subsystem destroy/rebuild the iframe, not merely cover it. */
+    window.__aolSecurityLocked = locked;
+    window.dispatchEvent(new CustomEvent('aol-security-lock', { detail: { locked } }));
+  }
+  function viewportSuggestsTools() {
+    const w = Math.abs((window.outerWidth || 0) - (window.innerWidth || 0));
+    const h = Math.abs((window.outerHeight || 0) - (window.innerHeight || 0));
+    return w > 180 || h > 180;
+  }
+  async function refresh() {
+    const now = Date.now(); if (now - lastRefresh < 8000) return; lastRefresh = now;
+    try { const r = await fetch('/api/security', { cache:'no-store', credentials:'same-origin' }); if (r.ok) { const data = await r.json(); enabled = !!data.enabled; if (!enabled) show(false); else if (detected) show(true); } } catch {}
+  }
+  document.addEventListener('keydown', e => {
+    if (!enabled || bypassed()) return;
+    const k = String(e.key || '').toLowerCase();
+    if (k === 'f12' || (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(k)) || (e.metaKey && e.altKey && ['i','j','c'].includes(k))) show(true);
+  }, true);
+  window.addEventListener('resize', () => { if (enabled && !bypassed()) { if (viewportSuggestsTools()) show(true); else if (detected && Date.now() - detectedAt > 2500) show(false); } });
+  window.addEventListener('storage', e => { if (e.key === BYPASS_KEY) show(detected); });
+  setInterval(() => {
+    refresh();
+    if (!enabled || bypassed()) { if (detected) show(false); return; }
+    if (viewportSuggestsTools()) show(true); else if (detected && Date.now() - detectedAt > 2500) show(false);
+  }, 1200);
+  refresh();
+})();
+</script>
+<script>
+/* ================= ICONS ================= */
+const I = {
+  refresh:'<path d="M21 12a9 9 0 0 1-15.5 6.3L3 16M3 12a9 9 0 0 1 15.5-6.3L21 8M21 3v5h-5M3 21v-5h5"/>',
+  play:'<path d="M7 4.5v15a.5.5 0 0 0 .77.42l12-7.5a.5.5 0 0 0 0-.84l-12-7.5A.5.5 0 0 0 7 4.5z" fill="currentColor" stroke="none"/>',
+  smile:'<circle cx="12" cy="12" r="9"/><path d="M8 14a4.5 4.5 0 0 0 8 0M9 9.5h.01M15 9.5h.01"/>',
+  share:'<path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v14"/>',
+  down:'<path d="M12 5v14M6 13l6 6 6-6"/>',
+  theater:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M15 5v14"/>',
+  download:'<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+  calplus:'<rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M12 13v5M9.5 15.5h5"/>',
+  pause:'<path d="M8 5v14M16 5v14"/>',
+  gear:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  chev:'<path d="m9 6 6 6-6 6"/>',
+  home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4M12 17.5h.01"/>',
+  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  lock:'<rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  vol:'<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/>',
+  mute:'<path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6M16 9l6 6"/>',
+  rew:'<path d="M11 19 2 12l9-7zM22 19l-9-7 9-7z"/>',
+  fwd:'<path d="m13 19 9-7-9-7zM2 19l9-7-9-7z"/>',
+  cc:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 12.5h3M7 15.5h6M14 12.5h3"/>',
+  max:'<path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>',
+  logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  chat:'<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.2A8 8 0 1 1 21 12z"/>',
+  chatoff:'<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.2A8 8 0 0 1 17 5.2M3 3l18 18"/>',
+  pin:'<path d="M12 17v5M9 3h6l-1 7 3 3v2H7v-2l3-3z"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  send:'<path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/>',
+  arrowR:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  arrowL:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  cal:'<rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  ticket:'<path d="M3 9V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 6v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-6z"/><path d="M13 5v2M13 11v2M13 17v2"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'
+};
+const ic = (n, s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
+function paintIcons(root = document){ root.querySelectorAll('[data-i]').forEach(el => { el.innerHTML = ic(el.dataset.i, el.dataset.s || 18) }) }
+
+/* ================= STATE ================= */
+const fx = (name, ...a) => (typeof TDLFx !== 'undefined' && TDLFx[name]) ? TDLFx[name](...a) : undefined;
+let shows = [], groups = [], selectedShow = null, ytPlayer = null;
+let currentVolume = 100, chatInterval = null, isCaptionsOn = false;
+let youtubeReady = false, pendingVideoId = null;
+let lastChatSig = '', lastChatCount = 0;
+const $ = id => document.getElementById(id);
+const FALLBACK = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800"><rect width="100%" height="100%" fill="#1a1010"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#777" font-family="sans-serif" font-size="30">NO POSTER</text></svg>');
+
+function escapeHtml(s){return String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
+function setImg(el, src){ el.classList.add('skel'); el.onload=function(){this.classList.remove('skel')}; el.onerror=function(){this.onerror=null;this.src=FALLBACK}; el.src = src || FALLBACK }
+
+/* ================= API ================= */
+async function api(url, options = {}) {
+  const config = { method: options.method || 'GET', headers: {...(options.body !== undefined ? {'Content-Type':'application/json'} : {}), ...(options.headers||{})} };
+  if (options.body !== undefined) config.body = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+  const res = await fetch(url, config);
+  let data = {};
+  try { data = await res.json() } catch {}
+  if (res.status === 503 && data && data.maintenance) fx('maintOn', data);
+  if (!res.ok) { const err = new Error(data.message || `Request failed (${res.status})`); err.status = res.status; err.retryAfter = data.retryAfter; throw err }
+  return data;
+}
+
+/* ================= MAINTENANCE ADMIN PREVIEW ================= */
+async function exitMtnPreview(){
+  const button = $('mtnPreviewExit');
+  if (button) { button.disabled = true; button.textContent = 'กำลังออก...'; }
+  try {
+    await api('/api/admin/maintenance-preview/exit', { method: 'POST' });
+    location.reload();
+  } catch (e) {
+    if (button) { button.disabled = false; button.textContent = 'ออกจากโหมดทดสอบ'; }
+    alert('ออกจากโหมดทดสอบไม่สำเร็จ กรุณาลองอีกครั้ง');
+  }
+}
+function openMtnAdmin(){
+  const modal = $('mtnAdminModal');
+  if (!modal) return;
+  $('mtnAdminError').textContent = '';
+  modal.classList.remove('hidden');
+  setTimeout(() => $('mtnAdminUser')?.focus(), 30);
+}
+function closeMtnAdmin(){ $('mtnAdminModal')?.classList.add('hidden') }
+async function submitMtnAdmin(){
+  const username = $('mtnAdminUser').value.trim();
+  const password = $('mtnAdminPass').value;
+  const error = $('mtnAdminError'), button = $('mtnAdminSubmit');
+  error.textContent = '';
+  if (!username || !password) { error.textContent = 'กรุณากรอก Username และ Password'; return }
+  button.disabled = true; button.textContent = 'กำลังตรวจสอบ...';
+  try {
+    const loginRes = await api('/api/admin/login', { method: 'POST', body: { username, password } });
+    await api('/api/admin/maintenance-preview', { method: 'POST', headers: { Authorization: `Bearer ${loginRes.token}` } });
+    closeMtnAdmin();
+    const screen = $('mtnScreen');
+    if (screen) screen.classList.add('hidden');
+    document.body.classList.remove('mtn-lock');
+    location.reload();
+  } catch (e) {
+    error.textContent = e.message || 'เข้าสู่ระบบไม่สำเร็จ';
+  } finally {
+    button.disabled = false; button.textContent = 'ยืนยันและเข้าเว็บไซต์';
+    $('mtnAdminPass').value = '';
+  }
+}
+
+/* ================= THEME ================= */
+const mqLight = window.matchMedia ? matchMedia('(prefers-color-scheme: light)') : null;
+const themePref = () => localStorage.getItem('theme') || 'dark';
+const effTheme = p => p === 'system' ? ((mqLight && mqLight.matches) ? 'light' : 'dark') : (p === 'light' ? 'light' : 'dark');
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('themeBtn').innerHTML = ic(t === 'dark' ? 'moon' : 'sun', 18);
+  const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = t === 'dark' ? '#0b0707' : '#f4f1f0';
+  syncSettingsUi();
+}
+function setTheme(p){ localStorage.setItem('theme', p); applyTheme(effTheme(p)) }
+function toggleTheme(){ setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark') }
+if (mqLight && mqLight.addEventListener) mqLight.addEventListener('change', () => { if (themePref() === 'system') applyTheme(effTheme('system')) });
+/* ตั้งค่า (มือถือ): โหมดสี / ภาษา / ติดตั้งแอป / เข้าหน้า admin */
+function syncSettingsUi(){
+  const pref = themePref(), lg = TDLLang.get();
+  document.querySelectorAll('[data-theme-val]').forEach(b => b.classList.toggle('active', b.dataset.themeVal === pref));
+  document.querySelectorAll('[data-lang-val]').forEach(b => b.classList.toggle('active', b.dataset.langVal === lg));
+  const lb = $('langBtn'); if (lb) { lb.textContent = lg === 'th' ? 'EN' : 'TH'; lb.title = tr('nav.lang'); lb.setAttribute('aria-label', tr('nav.lang')) }
+}
+function openSettings(){ syncSettingsUi(); fx('showInstall'); document.body.classList.add('settings-open'); $('settingsModal').classList.remove('hidden'); fx('moveInd') }
+function closeSettings(){ $('settingsModal').classList.add('hidden'); document.body.classList.remove('settings-open'); fx('moveInd') }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSettings() });
+applyTheme(effTheme(themePref()));
+
+/* ================= YOUTUBE ================= */
+/* ===== Browser-in-app hint ===== */
+function isInAppBrowser(){
+  const ua = navigator.userAgent || '';
+  return /Instagram|FBAN|FBAV|FB_IAB|Discord|Line\//i.test(ua) || (/TikTok/i.test(ua) && !/Safari/i.test(ua));
+}
+function showBrowserTip(){
+  if (!isInAppBrowser()) return;
+  try { if (sessionStorage.getItem('aolBrowserTipDismissed') === '1') return } catch {}
+  $('browserTip')?.classList.remove('hidden');
+}
+function dismissBrowserTip(){ $('browserTip')?.classList.add('hidden'); try { sessionStorage.setItem('aolBrowserTipDismissed','1') } catch {} }
+async function copyCurrentLink(){
+  try { await navigator.clipboard.writeText(location.href); fx('toast','คัดลอกลิงก์แล้ว') }
+  catch { const t=document.createElement('textarea');t.value=location.href;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();try{document.execCommand('copy');fx('toast','คัดลอกลิงก์แล้ว')}catch{fx('toast','กรุณาคัดลอกลิงก์จากแถบที่อยู่','err')}t.remove() }
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', showBrowserTip, {once:true}); else showBrowserTip();
+
+function setPlayerQuality(level){
+  const allowed = ['auto','hd720','hd1080','hd1440','hd2160'];
+  if (!allowed.includes(level)) level='auto';
+  try { localStorage.setItem('aolPlayerQuality',level) } catch {}
+  if (!ytPlayer) return;
+  try {
+    if (level === 'auto') ytPlayer.setPlaybackQuality('default');
+    else ytPlayer.setPlaybackQuality(level);
+    /* YouTube may ignore manual quality requests and choose quality automatically. */
+  } catch {}
+}
+function applySavedQuality(){
+  const sel=$('qualitySelect'); if(!sel)return;
+  let q='auto'; try{q=localStorage.getItem('aolPlayerQuality')||'auto'}catch{}
+  if (![...sel.options].some(o=>o.value===q))q='auto';
+  sel.value=q; setPlayerQuality(q);
+}
+
+window.onYouTubeIframeAPIReady = function(){ youtubeReady = true; if (pendingVideoId) createYoutubePlayer(pendingVideoId) };
+
+function extractYoutubeId(value){
+  if (!value) return '';
+  const str = String(value).trim();
+  if (/^[a-zA-Z0-9_-]{11}$/.test(str)) return str;
+  try {
+    const url = new URL(str);
+    if (url.hostname.includes('youtu.be')) return url.pathname.replace('/','').slice(0,11);
+    if (url.searchParams.has('v')) return url.searchParams.get('v').slice(0,11);
+    const parts = url.pathname.split('/').filter(Boolean), i = parts.indexOf('embed');
+    if (i !== -1 && parts[i+1]) return parts[i+1].slice(0,11);
+  } catch {}
+  const m = str.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
+
+function showPlayerError(code){
+  const c = $('loadingCover'); c.style.display = 'flex'; c.style.opacity = '1'; c.classList.add('err');
+  const n = Number(code);
+  $('loadingText').textContent = n === 153 ? tr('watch.err153') : [101, 150, 152].includes(n) ? tr('watch.errEmbed', {c: n}) : tr('watch.unavailable') + (n ? ' (' + n + ')' : '');
+  if (pendingVideoId) $('errYt').href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(pendingVideoId);
+  $('errActions').classList.remove('hidden');
+}
+function resetPlayer(){
+  const vid = pendingVideoId || extractYoutubeId(selectedShow && selectedShow.youtube);
+  if (!vid) return;
+  const c = $('loadingCover'); c.classList.remove('err'); c.style.display = 'flex'; c.style.opacity = '1';
+  $('errActions').classList.add('hidden'); $('loadingText').textContent = tr('watch.connecting');
+  createYoutubePlayer(vid);
+}
+function createYoutubePlayer(videoId){
+  if (!videoId) return;
+  pendingVideoId = videoId;
+  if (window.__aolSecurityLocked) return;
+  if (!youtubeReady || !window.YT || !window.YT.Player) return;
+  const box = $('playerContainer');
+  if (ytPlayer) { try { ytPlayer.destroy() } catch {} ytPlayer = null }
+  const old = $('player'); if (old) old.remove();
+  let savedQuality='auto'; try{savedQuality=localStorage.getItem('aolPlayerQuality')||'auto'}catch{}
+  const vars = {autoplay:1,mute:1,controls:0,modestbranding:1,rel:0,playsinline:1,enablejsapi:1,cc_load_policy:1,iv_load_policy:3};
+  if(savedQuality!=='auto') vars.vq=savedQuality;
+  if (/^https?:$/.test(location.protocol)) vars.origin = location.origin;
+  /* สร้าง iframe เองพร้อม referrerpolicy — YouTube ต้องเห็น Referer ไม่งั้นขึ้น Error 153 */
+  const frame = document.createElement('iframe');
+  frame.id = 'player';
+  frame.src = 'https://www.youtube.com/embed/' + encodeURIComponent(videoId) + '?' + new URLSearchParams(vars).toString();
+  frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+  frame.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
+  frame.setAttribute('allowfullscreen', '');
+  frame.setAttribute('frameborder', '0');
+  frame.setAttribute('title', 'Live stream');
+  box.appendChild(frame);
+  const cov = $('loadingCover'); cov.classList.remove('err'); $('errActions').classList.add('hidden');
+  ytPlayer = new YT.Player(frame, {
+    events:{
+      onReady:e=>{ e.target.setVolume(currentVolume); e.target.mute(); e.target.playVideo(); applySavedQuality(); hideCover(); fx('playerReady') },
+      onStateChange:e=>{ if (e.data === YT.PlayerState.PLAYING) hideCover() },
+      onError:e=>{ console.error('YouTube Player Error:', e.data); showPlayerError(e.data) }
+    }
+  });
+}
+function hideCover(){ const c=$('loadingCover'); c.style.opacity='0'; setTimeout(()=>c.style.display='none',500) }
+
+/* ================= ROUTER ================= */
+/* #/  = home | #/event/<ชื่ออีเว้นต์> = หน้าอีเว้นต์ | #/watch = หน้าดูไลฟ์ */
+function goto(h){ location.hash = h; return false }
+function scrollTo2(id){
+  if (!$('homeView').classList.contains('hidden')) $(id).scrollIntoView({behavior:'smooth'});
+  else { location.hash = '#/'; setTimeout(()=>$(id).scrollIntoView({behavior:'smooth'}),950) }
+  return false;
+}
+let curView = null, pendingView = null;
+function paintView(view){
+  ['homeView','eventView','watchView'].forEach(v => {
+    const el = $(v), on = v === view;
+    el.classList.toggle('hidden', !on);
+    if (on) { el.style.animation='none'; el.offsetHeight; el.style.animation='' }
+  });
+  window.scrollTo(0,0);
+}
+/* สลับหน้า: ผ่านตัวโหลดสลับหน้า (TDLLoader) ยกเว้นหน้าแรกสุดและหน้าเดิม */
+function show(view, prep){
+  const run = () => { pendingView = null; paintView(view); curView = view; paintNav(); if (prep) prep() };
+  if (curView === null || curView === view) return run();
+  if (pendingView === view) return;
+  pendingView = view;
+  TDLLoader.wipe(run);
+}
+function navHome(){
+  if (curView === 'homeView') window.scrollTo({top:0,behavior:'smooth'}); else location.hash = '#/';
+  return false;
+}
+/* ไฮไลต์เมนูบนแถบนำทางตามหน้า/ตำแหน่งที่เลื่อน */
+function paintNav(){
+  let key = 'home';
+  if (curView === 'eventView' || curView === 'watchView') key = 'events';
+  else if (curView === 'homeView') {
+    const y = window.scrollY + 160, top = id => { const el = $(id); return el ? el.getBoundingClientRect().top + window.scrollY : Infinity };
+    if (top('howto') <= y || top('faq') <= y) key = 'howto'; else if (top('events') <= y) key = 'events';
+  }
+  document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === key));
+  if (key !== _navKey) { _navKey = key; fx('moveInd') }
+}
+let _navKey = '';
+window.addEventListener('scroll', paintNav, {passive:true});
+function route(){
+  const h = location.hash || '#/';
+  if (h !== '#/watch') stopWatch();
+  if (h.startsWith('#/event/')) {
+    const g = groups.find(g => g.key === decodeURIComponent(h.slice(8)));
+    if (g) return show('eventView', () => renderEvent(g));
+  }
+  if (h === '#/watch' && selectedShow) return show('watchView');
+  if (h === '#/watch') { location.hash = '#/'; return }
+  show('homeView');
+}
+window.addEventListener('hashchange', route);
+
+/* ================= RENDER ================= */
+function groupShows(){
+  const map = new Map();
+  shows.forEach(s => { const k = s.name || 'EVENT'; if (!map.has(k)) map.set(k, {key:k, poster:s.poster, rounds:[]}); map.get(k).rounds.push(s) });
+  groups = [...map.values()];
+}
+function featuredGroup(){
+  const now = Date.now();
+  return groups.find(g => g.rounds.some(r => (fx('stateOf', r, now) || {}).kind === 'live')) || groups[0];
+}
+function renderHome(){
+  groupShows();
+  const grid = $('eventGrid');
+  if (!groups.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">${tr('home.noEvents')}</div>`;
+    setImg($('heroPoster'), '');
+    $('heroCd').classList.add('hidden');
+    return;
+  }
+  const f = featuredGroup();
+  $('heroTitle').textContent = f.key;
+  setImg($('heroPoster'), f.poster);
+  fx('ambient', f.poster);
+  $('heroCd').dataset.cdg = f.key;
+  $('heroSub').textContent = tr('hero.subN', {n: f.rounds.length});
+  $('heroCta').innerHTML = '<span>' + tr('hero.pick') + '</span>' + ic('arrowR');
+  $('heroCta').onclick = () => goto('#/event/' + encodeURIComponent(f.key));
+  grid.innerHTML = '';
+  groups.forEach(g => {
+    const live = g.rounds.some(r => r.type !== 'R');
+    const card = document.createElement('div');
+    card.className = 'ecard';
+    card.innerHTML = `<img alt=""><div><strong>${escapeHtml(g.key)}</strong><small>${tr('count.shows', {n: g.rounds.length})} · ${live ? 'LIVE' : 'RERUN'}</small><span class="cd hidden" data-cdg="${escapeHtml(g.key)}"></span></div>`;
+    setImg(card.querySelector('img'), g.poster);
+    card.onclick = () => goto('#/event/' + encodeURIComponent(g.key));
+    grid.appendChild(card);
+  });
+  fx('tick'); fx('schRender');
+}
+function renderEvent(g){
+  $('evTitle').textContent = g.key;
+  setImg($('evPoster'), g.poster);
+  fx('ambient', g.poster);
+  $('evMeta').textContent = tr('count.showsFull', {n: g.rounds.length});
+  const box = $('evRounds'); box.innerHTML = '';
+  g.rounds.forEach((s, i) => {
+    const re = s.type === 'R';
+    const timed = !re && fx('hasWindow', s);
+    const row = document.createElement('div');
+    row.className = 'ticket' + (re ? ' rerun' : '');
+    row.style.animationDelay = (i * 70) + 'ms';
+    row.innerHTML = `<div><strong class="ln">${ic('cal',16)}${escapeHtml(s.date || '')}</strong><span class="tag ${re?'rerun':''}">${re?'RERUN':'LIVE'}</span><span class="t ln">${ic('clock',14)}${escapeHtml(s.time || '')}</span>${timed ? `<span class="cd hidden" data-cd="${escapeHtml(String(s.id))}"></span>` : ''}</div><div class="tk-act">${timed ? `<button type="button" class="ibtn-s cal" title="${escapeHtml(tr('cal.add'))}" aria-label="${escapeHtml(tr('cal.add'))}">${ic('calplus',18)}</button>` : ''}${s.purchaseUrl && /^https?:\/\//i.test(s.purchaseUrl) ? `<a class="join" href="${escapeHtml(s.purchaseUrl)}" target="_blank" rel="noopener noreferrer"><span>ซื้อบัตร</span>${ic('arrowR',16)}</a>` : ''}<button class="join" type="button"><span>${tr('join')}</span>${ic('arrowR',16)}</button></div>`;
+    row.querySelector('.join').onclick = () => openLogin(s.id);
+    const cal = row.querySelector('.cal'); if (cal) cal.onclick = () => fx('ics', s);
+    box.appendChild(row);
+  });
+  fx('tick');
+}
+
+/* รหัสเครื่อง (สุ่มครั้งเดียว เก็บในเครื่องผู้ชม) — ใช้ให้หลังบ้านจำกัดจำนวนเครื่องต่อโค้ดได้ */
+function deviceId(){
+  try { let v = localStorage.getItem('tdlDeviceId'); if (!v) { v = 'd' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('tdlDeviceId', v) } return v } catch { return 'anon' }
+}
+
+/* ================= LOGIN ================= */
+function openLogin(id){
+  selectedShow = shows.find(s => String(s.id) === String(id));
+  if (!selectedShow) return;
+  $('loginTitle').textContent = selectedShow.name || 'AREAONE-LIVE';
+  $('error').style.display = 'none';
+  $('loginModal').classList.remove('hidden');
+  setTimeout(() => $('nickname').focus(), 50);
+}
+function closeLogin(){ $('loginModal').classList.add('hidden'); if (location.hash !== '#/watch') selectedShow = null }
+
+async function verify(isAuto = false){
+  if (!selectedShow) return;
+  const nick = $('nickname').value.trim() || 'Viewer';
+  const code = $('code').value.trim().toUpperCase();
+  const btn = $('enterButton'), error = $('error');
+  if (!code) { error.textContent = tr('login.needCode'); error.style.display = 'block'; return }
+  if (!isAuto) { btn.disabled = true; btn.textContent = tr('login.checking') }
+  error.style.display = 'none';
+  try {
+    const result = await api('/api/verify-code', {method:'POST', body:{showId:String(selectedShow.id), code, deviceId: deviceId()}});
+    const ok = result === true || result?.success === true || result?.status === 'success' || result?.ok === true;
+    if (!ok) throw new Error(result?.message || tr('login.invalid'));
+    if (result && result.youtube) selectedShow.youtube = result.youtube;
+    localStorage.setItem('savedCode', code);
+    localStorage.setItem('savedShowId', String(selectedShow.id));
+    localStorage.setItem('savedNick', nick);
+    $('loginModal').classList.add('hidden');
+    if (!isAuto) fx('confetti');
+    openLive(nick);
+  } catch (err) {
+    error.textContent = err.message || tr('login.invalid');
+    error.style.display = 'block';
+    if (!isAuto) fx('shake');
+    if (isAuto) { localStorage.removeItem('savedCode'); localStorage.removeItem('savedShowId'); selectedShow = null; $('loginModal').classList.add('hidden'); location.hash = '#/' }
+  } finally { btn.disabled = false; btn.textContent = tr('login.enter') }
+}
+function checkSavedSession(){
+  const code = localStorage.getItem('savedCode'), id = localStorage.getItem('savedShowId');
+  if (!code || !id) return;
+  selectedShow = shows.find(s => String(s.id) === String(id));
+  if (!selectedShow) return;
+  $('nickname').value = localStorage.getItem('savedNick') || 'Viewer';
+  $('code').value = code;
+  verify(true);
+}
+
+/* ================= WATCH ================= */
+function openLive(nickname){
+  location.hash = '#/watch';
+  show('watchView', () => {
+    if (!selectedShow) return;
+    $('watchTitle').textContent = selectedShow.name || 'LIVE STREAMING'; fx('annPoll');
+    $('chatUserDisplay').innerHTML = ic('user', 13) + ' ' + escapeHtml(nickname);
+    const rerun = selectedShow.type === 'R';
+    $('seekBtns').classList.toggle('hidden', !rerun);
+    $('chatDisabledOverlay').style.display = rerun ? 'flex' : 'none';
+    $('badge').classList.toggle('rerun', rerun);
+    $('badgeText').textContent = rerun ? 'RERUN' : 'LIVE';
+    const cover = $('loadingCover');
+    cover.style.display = 'flex'; cover.style.opacity = '1';
+    $('loadingText').textContent = tr('watch.connecting');
+    isCaptionsOn = false; $('ccBtn').classList.remove('active');
+    const vid = extractYoutubeId(selectedShow.youtube);
+    if (!vid) $('loadingText').textContent = tr('watch.noVideo');
+    else if (!(!rerun && fx('waitFor', selectedShow, () => createYoutubePlayer(vid)))) createYoutubePlayer(vid);
+    lastChatSig = ''; lastChatCount = 0; fx('hideNew'); fx('wake', true); fx('setViewers', null); fx('presence', !rerun);
+    if (chatInterval) { clearInterval(chatInterval); chatInterval = null }
+    if (!rerun) { loadChat(); chatInterval = setInterval(loadChat, 3000) }
+  });
+}
+
+function stopWatch(){
+  fx('wake', false); fx('waitStop'); fx('watchStop'); fx('presence', false);
+  if (chatInterval) { clearInterval(chatInterval); chatInterval = null }
+  if (ytPlayer) { try { ytPlayer.destroy() } catch {} ytPlayer = null }
+  pendingVideoId = null;
+  const p = $('player'); if (p) p.innerHTML = '';
+}
+
+/* ================= DEVTOOLS PLAYER LOCK =================
+   When the security overlay activates, destroy the actual YouTube iframe/player.
+   When the overlay clears, rebuild it only if the viewer is still on the watch page.
+*/
+let securityRestoreVideoId = null;
+let securityPlayerRemoved = false;
+window.addEventListener('aol-security-lock', event => {
+  const locked = !!(event && event.detail && event.detail.locked);
+  const watchView = $('watchView');
+  const isWatching = !!(watchView && !watchView.classList.contains('hidden'));
+  if (locked) {
+    if (isWatching) {
+      securityRestoreVideoId = pendingVideoId || extractYoutubeId(selectedShow && selectedShow.youtube);
+      securityPlayerRemoved = !!securityRestoreVideoId;
+    }
+    if (ytPlayer) { try { ytPlayer.destroy(); } catch {} ytPlayer = null; }
+    const iframe = $('player');
+    if (iframe) iframe.remove();
+    const cover = $('loadingCover');
+    if (cover) { cover.style.display = 'flex'; cover.style.opacity = '1'; }
+    return;
+  }
+  if (!securityPlayerRemoved) return;
+  securityPlayerRemoved = false;
+  const restoreId = securityRestoreVideoId;
+  securityRestoreVideoId = null;
+  if (!restoreId || !isWatching || window.__aolSecurityLocked) return;
+  const cover = $('loadingCover');
+  if (cover) {
+    cover.classList.remove('err');
+    cover.style.display = 'flex';
+    cover.style.opacity = '1';
+    $('loadingText').textContent = tr('watch.connecting');
+    $('errActions').classList.add('hidden');
+  }
+  /* Recreate the player after the browser has finished removing the overlay. */
+  setTimeout(() => {
+    if (!window.__aolSecurityLocked && $('watchView') && !$('watchView').classList.contains('hidden')) createYoutubePlayer(restoreId);
+  }, 80);
+});
+function logout(){
+  ['savedCode','savedShowId','savedNick'].forEach(k => localStorage.removeItem(k));
+  $('chatInput').value = '';
+  selectedShow = null;
+  location.hash = '#/';
+}
+
+/* ================= PLAYER CONTROLS ================= */
+function toggleMute(){
+  if (!ytPlayer || typeof ytPlayer.isMuted !== 'function') return;
+  if (ytPlayer.isMuted()) { ytPlayer.unMute(); ytPlayer.setVolume(currentVolume || 100); $('muteBtn').innerHTML=ic('vol',17); $('volSlider').value = currentVolume || 100 }
+  else { ytPlayer.mute(); $('muteBtn').innerHTML=ic('mute',17); $('volSlider').value = 0 }
+}
+function onVolumeChange(v){
+  currentVolume = Number(v);
+  if (!ytPlayer) return;
+  if (typeof ytPlayer.setVolume === 'function') ytPlayer.setVolume(currentVolume);
+  if (currentVolume <= 0) { ytPlayer.mute?.(); $('muteBtn').innerHTML=ic('mute',17) } else { ytPlayer.unMute?.(); $('muteBtn').innerHTML=ic('vol',17) }
+}
+function seek(s){
+  if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function' || typeof ytPlayer.seekTo !== 'function') return;
+  ytPlayer.seekTo(Math.max(0, ytPlayer.getCurrentTime() + s), true);
+}
+function toggleCaptions(){
+  if (!ytPlayer) return;
+  try {
+    if (isCaptionsOn) { ytPlayer.unloadModule?.('captions'); isCaptionsOn = false; $('ccBtn').classList.remove('active') }
+    else { ytPlayer.loadModule?.('captions'); isCaptionsOn = true; $('ccBtn').classList.add('active') }
+  } catch {}
+}
+function goFullscreen(){
+  const el = $('playerContainer');
+  if (!el) return;
+  const pseudo = el.classList.contains('pseudo-fullscreen');
+  if (document.fullscreenElement || pseudo) {
+    if (document.fullscreenElement) { (document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen)?.call(document); }
+    el.classList.remove('pseudo-fullscreen'); document.body.classList.remove('player-fullscreen-fallback');
+    return;
+  }
+  const request = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if (request) {
+    try {
+      const result = request.call(el);
+      if (result && typeof result.catch === 'function') result.catch(() => usePseudoFullscreen(el));
+      setTimeout(() => { if (!document.fullscreenElement && !el.classList.contains('pseudo-fullscreen')) usePseudoFullscreen(el); }, 350);
+    } catch { usePseudoFullscreen(el); }
+  } else usePseudoFullscreen(el);
+}
+function usePseudoFullscreen(el){
+  el.classList.add('pseudo-fullscreen'); document.body.classList.add('player-fullscreen-fallback');
+  try { if (screen.orientation?.lock) screen.orientation.lock('landscape').catch(()=>{}); } catch {}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const el=$('playerContainer');if(el?.classList.contains('pseudo-fullscreen')){el.classList.remove('pseudo-fullscreen');document.body.classList.remove('player-fullscreen-fallback')}}});
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement){const el=$('playerContainer');if(el?.classList.contains('pseudo-fullscreen')){el.classList.remove('pseudo-fullscreen');document.body.classList.remove('player-fullscreen-fallback')}}});
+
+/* ================= CHAT ================= */
+async function sendChat(){
+  if (!selectedShow || selectedShow.type === 'R') return;
+  const input = $('chatInput'), text = input.value.trim();
+  if (!text) return;
+  const wait = fx('slowLeft') || 0;
+  if (wait > 0) { fx('toast', tr('chat.slow', {s: wait})); return }
+  input.value = ''; fx('emojiClose');
+  try {
+    await api('/api/chat', {method:'POST', body:{showId:String(selectedShow.id), user:localStorage.getItem('savedNick') || 'Viewer', text, sid: fx('sid')}});
+    fx('markSent');
+    await loadChat();
+  } catch (e) {
+    console.error('ส่งข้อความไม่สำเร็จ:', e);
+    if (!input.value) input.value = text;
+    let message = (e && e.message && !/^Request failed/.test(e.message)) ? e.message : tr('chat.sendFail');
+    if (e?.status === 403 && /ถูกระงับ|ถูกแบน|แบน/i.test(message)) message = 'คุณถูกระงับ';
+    else if (e?.status === 400 && /ไม่เหมาะสม|ต้องห้าม|คำที่ไม่อนุญาต/i.test(message)) message = 'มีข้อความไม่เหมาะสม';
+    else if (e?.status === 429) message = 'โปรดรออีกครั้ง ' + Math.max(1, Number(e.retryAfter)||5) + ' วิ';
+    fx('toast', message, 'err');
+  }
+}
+async function loadChat(){
+  if (!selectedShow || selectedShow.type === 'R') return;
+  try {
+    const r = await api('/api/chat/' + encodeURIComponent(String(selectedShow.id)));
+    const msgs = r.messages || [], pinned = r.pinned;
+    if (r.settings && r.settings.slowModeSec !== undefined) fx('setSlow', Number(r.settings.slowModeSec) || 0);
+    if (r.viewers !== undefined && r.viewers !== null) fx('setViewers', r.viewers);
+    if (pinned) { $('pinnedText').innerHTML = `<span class="u" style="color:var(--red2);font-weight:700">${escapeHtml(pinned.user)}</span> : ${escapeHtml(pinned.text)}`; $('pinnedMessage').style.display = 'block' }
+    else $('pinnedMessage').style.display = 'none';
+    const box = $('chatMessages');
+    if (!msgs.length) { box.innerHTML = `<div class="empty">${tr('chat.empty')}</div>`; lastChatSig = ''; lastChatCount = 0; return }
+    const sig = msgs.map(m => (m.id ?? '') + '\u0002' + (m.user ?? '') + '\u0002' + (m.text ?? '')).join('\u0001');
+    if (sig === lastChatSig) return;
+    const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+    const added = msgs.length - lastChatCount, first = lastChatCount === 0;
+    box.innerHTML = msgs.map(m => { const adm = m.role === 'admin' || m.admin === true || m.isAdmin === true; return `<div class="msg${adm ? ' is-admin' : ''}"><span class="tm">${escapeHtml(m.time || m.createdAt || '')}</span><div class="u">${escapeHtml(m.user || 'Viewer')}${adm ? ` <span class="adm">${tr('chat.admin')}</span>` : ''}</div><div>${escapeHtml(m.text || '')}</div></div>` }).join('');
+    if (nearBottom || first) { box.scrollTop = box.scrollHeight; fx('hideNew') }
+    else if (added > 0) fx('showNew', added);
+    lastChatSig = sig; lastChatCount = msgs.length;
+  } catch (e) { console.error('โหลดแชตไม่สำเร็จ:', e) }
+}
+
+/* ================= FAQ ================= */
+function renderFaq(){
+  const box = $('faqList'); if (!box) return;
+  const src = (typeof TDL_FAQ !== 'undefined' && TDL_FAQ) ? TDL_FAQ : {};
+  const list = src[TDLLang.get()] || src.th || [];
+  box.innerHTML = list.map(it => `<details class="faq" name="faq"><summary><span>${escapeHtml(it.q)}</span>${ic('chev', 18)}</summary><div class="faq-a"><p>${escapeHtml(it.a).replace(/\n/g, '<br>')}</p></div></details>`).join('');
+  $('faqSec').classList.toggle('hidden', !list.length);
+}
+
+/* ================= LANGUAGE CHANGE ================= */
+TDLLang.onChange(() => {
+  TDLFooter.render();
+  if (groups.length) renderHome();
+  const h = location.hash;
+  if (h.startsWith('#/event/')) { const g = groups.find(g => g.key === decodeURIComponent(h.slice(8))); if (g) renderEvent(g) }
+  syncSettingsUi();
+  renderFaq();
+  fx('tick'); fx('schRender'); fx('langChanged');
+});
+
+/* ================= INIT ================= */
+paintIcons();
+/* ลิงก์ "กดบัตร" กลับเว็บ tickets — TDL_TICKET_URL: override ตรง ๆ / "off" = ซ่อน / ว่าง = เดาอัตโนมัติ */
+(function(){
+  const override = (typeof TDL_TICKET_URL !== 'undefined') ? String(TDL_TICKET_URL).trim() : '';
+  let url = '';
+  if (override === 'off') {
+    url = '';
+  } else if (override !== '') {
+    url = override;
+  } else if (typeof location !== 'undefined' && location.protocol === 'file:') {
+    url = '../index.html';                       // เปิด live/index.html ตรงจากโฟลเดอร์
+  } else if (typeof location !== 'undefined' && ['localhost','127.0.0.1','::1'].indexOf(location.hostname) !== -1) {
+    url = 'http://127.0.0.1:8080/';              // รันครบชุด: Node (ไลฟ์) + PHP (กดบัตร)
+  } else {
+    url = '/';                                   // โดเมนจริง: เว็บกดบัตรอยู่ root เดียวกัน
+  }
+  document.querySelectorAll('[data-ticket-url]').forEach(el => {
+    if (url) el.href = url; else el.remove();
+  });
+})();
+TDLLang.apply();
+renderFaq();
+applyTheme(effTheme(themePref()));
+window.addEventListener('load', async () => {
+  const t0 = Date.now();
+  try {
+    const data = await api('/api/shows');
+    shows = Array.isArray(data) ? data : (data.shows || []);
+    renderHome();
+    checkSavedSession();
+    route();
+    fx('deepLink');
+  } catch (e) {
+    console.error('โหลดรายการไม่สำเร็จ:', e);
+    fx('toast', tr('home.loadError'), 'err');
+    $('eventGrid').innerHTML = `<div class="empty" style="grid-column:1/-1;color:#ff5a5a">${tr('home.loadError')}</div>`;
+  }
+  setTimeout(() => TDLLoader.finishBoot(), Math.max(0, 1200 - (Date.now() - t0)));
+});
+</script>
+<script>
+/* ===== TDL FX: ลูกเล่นหน้าเว็บ TDL (โมดูลของตัวเอง) ===== */
+/*TDLTime:start*/
+const TDLTime = (() => {
+  const cfg = (typeof TDL_FX !== 'undefined') ? TDL_FX : {};
+  const tz = String(cfg.timezone || '+07:00');
+  const offMin = (() => { const m = tz.match(/^([+-])(\d{1,2}):?(\d{2})?$/); return m ? (m[1] === '-' ? -1 : 1) * (+m[2] * 60 + +(m[3] || 0)) : 420 })();
+  const durH = Number(cfg.liveWindowHours) > 0 ? Number(cfg.liveWindowHours) : 3;
+  const PREFIXES = (Array.isArray(cfg.codePrefixes) && cfg.codePrefixes.length ? cfg.codePrefixes : ['AOL']).map(x => String(x).toUpperCase().replace(/[^A-Z0-9]/g, '')).filter(Boolean).sort((a, b) => b.length - a.length);
+  const THD = '๐๑๒๓๔๕๖๗๘๙';
+  const MONTHS = [
+    ['มกราคม','ม.ค.','january','jan'], ['กุมภาพันธ์','ก.พ.','february','feb'], ['มีนาคม','มี.ค.','march','mar'],
+    ['เมษายน','เม.ย.','april','apr'], ['พฤษภาคม','พ.ค.','may'], ['มิถุนายน','มิ.ย.','june','jun'],
+    ['กรกฎาคม','ก.ค.','july','jul'], ['สิงหาคม','ส.ค.','august','aug'], ['กันยายน','ก.ย.','september','sept','sep'],
+    ['ตุลาคม','ต.ค.','october','oct'], ['พฤศจิกายน','พ.ย.','november','nov'], ['ธันวาคม','ธ.ค.','december','dec']
+  ];
+  const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const pat = x => esc(x).replace(/\\\./g, '\\.?');
+  const entries = [];
+  MONTHS.forEach((names, i) => names.forEach(n => entries.push({ idx: i + 1, src: pat(n) })));
+  entries.sort((a, b) => b.src.length - a.src.length);
+  const MONTH_SRC = '(' + entries.map(e => e.src).join('|') + ')';
+  const monthOf = tok => { const t = tok.toLowerCase(); const e = entries.find(e => new RegExp('^' + e.src + '$', 'i').test(t)); return e ? e.idx : 0 };
+  const norm = raw => String(raw ?? '').replace(/[๐-๙]/g, c => THD.indexOf(c)).toLowerCase();
+
+  function parseDate(raw){
+    const s = norm(raw); if (!s) return null;
+    let y, m, d, mm;
+    if ((mm = s.match(/(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/))) { y = +mm[1]; m = +mm[2]; d = +mm[3] }
+    else if ((mm = s.match(/(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})/))) { d = +mm[1]; m = +mm[2]; y = +mm[3]; if (y < 100) y += 2000 }
+    else if ((mm = s.match(new RegExp('(\\d{1,2})\\s*(?:st|nd|rd|th)?\\s*(?:of\\s+)?' + MONTH_SRC + '\\s*,?\\s*(\\d{4})?')))) { d = +mm[1]; m = monthOf(mm[2]); y = mm[3] ? +mm[3] : undefined }
+    else if ((mm = s.match(new RegExp(MONTH_SRC + '\\s*(\\d{1,2})(?:st|nd|rd|th)?\\s*,?\\s*(\\d{4})?')))) { m = monthOf(mm[1]); d = +mm[2]; y = mm[3] ? +mm[3] : undefined }
+    else return null;
+    if (y === undefined) y = new Date().getFullYear();
+    if (y > 2400) y -= 543;
+    if (!(m >= 1 && m <= 12 && d >= 1 && d <= 31)) return null;
+    return { y, m, d };
+  }
+  function parseTimes(raw){
+    const s = norm(raw); if (!s) return [];
+    const found = [];
+    let mm; const r1 = /(\d{1,2})\s*[:.]\s*(\d{2})\s*(am|pm)?/g, r2 = /(\d{1,2})\s*(am|pm)\b/g;
+    const spans = [];
+    while ((mm = r1.exec(s))) { found.push({ i: mm.index, h: +mm[1], mi: +mm[2], ap: mm[3] }); spans.push([mm.index, mm.index + mm[0].length]) }
+    while ((mm = r2.exec(s))) { if (spans.some(([a, b]) => mm.index >= a && mm.index < b)) continue; found.push({ i: mm.index, h: +mm[1], mi: 0, ap: mm[2] }) }
+    found.sort((a, b) => a.i - b.i);
+    return found.map(f => {
+      let h = f.h; if (f.ap === 'pm' && h < 12) h += 12; if (f.ap === 'am' && h === 12) h = 0;
+      return (h < 24 && f.mi < 60) ? { h, mi: f.mi } : null;
+    }).filter(Boolean);
+  }
+  const at = (d, t) => Date.UTC(d.y, d.m - 1, d.d, t.h, t.mi) - offMin * 60000;
+  function windowOf(show){
+    if (!show) return null;
+    if (show._w !== undefined) return show._w || null;
+    let w = null;
+    try {
+      const d = parseDate(show.date);
+      let times = parseTimes(show.time); if (!times.length && /:/.test(String(show.date || ''))) times = parseTimes(show.date);
+      if (d && times.length) {
+        const start = at(d, times[0]);
+        let end = times[1] ? at(d, times[1]) : start + durH * 3600000;
+        if (end <= start) end += 86400000;
+        w = { start, end };
+      }
+    } catch {}
+    show._w = w || false;
+    return w;
+  }
+  function stateOf(show, now = Date.now()){
+    if (!show || show.type === 'R') return { kind: 'none' };
+    const w = windowOf(show); if (!w) return { kind: 'none' };
+    if (now < w.start) return { kind: 'soon', start: w.start, end: w.end };
+    if (now < w.end) return { kind: 'live', start: w.start, end: w.end };
+    return { kind: 'ended', start: w.start, end: w.end };
+  }
+  const pad = n => String(n).padStart(2, '0');
+  function parts(ms){ const s = Math.max(0, Math.floor(ms / 1000)); return { d: Math.floor(s / 86400), t: `${pad(Math.floor(s % 86400 / 3600))}:${pad(Math.floor(s % 3600 / 60))}:${pad(s % 60)}` } }
+  function formatCode(raw){
+    const up = String(raw ?? '').toUpperCase().replace(/[\s_\u2010-\u2015]+/g, '-').replace(/-{2,}/g, '-');
+    const alnum = up.replace(/[^A-Z0-9]/g, '');
+    const pre = PREFIXES.find(x => alnum.startsWith(x));
+    if (pre) {
+      const rest = alnum.slice(pre.length);
+      if (rest.length <= 12) { const g = rest.match(/.{1,4}/g) || []; return pre + (g.length ? '-' + g.join('-') : '') }
+    }
+    return up;
+  }
+  return { parseDate, parseTimes, windowOf, stateOf, parts, formatCode };
+})();
+/*TDLTime:end*/
+
+const TDLFx = (() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cfg = (typeof TDL_FX !== 'undefined') ? TDL_FX : {};
+  const el = id => document.getElementById(id);
+  const isMobile = () => window.innerWidth <= 720;
+
+  /* ---------- toast ---------- */
+  let toastBox = null;
+  function toast(msg, type = '', ms = 2800){
+    if (!toastBox) { toastBox = document.createElement('div'); toastBox.className = 'tdl-toasts'; toastBox.setAttribute('role', 'status'); document.body.appendChild(toastBox) }
+    const t = document.createElement('div'); t.className = 'tdl-toast ' + type; t.textContent = msg; toastBox.appendChild(t);
+    setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 320) }, ms);
+  }
+
+  /* ---------- confetti / shake ---------- */
+  function confetti(){
+    if (reduce || cfg.confetti === false) return;
+    const cv = document.createElement('canvas'); cv.className = 'tdl-confetti'; document.body.appendChild(cv);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2), W = cv.width = innerWidth * dpr, H = cv.height = innerHeight * dpr, ctx = cv.getContext('2d');
+    const cols = ['#ff2a2a', '#ff6a3d', '#ffcc00', '#ffffff', '#ff8fa3'];
+    const P = Array.from({ length: 140 }, () => ({ x: W / 2 + (Math.random() - .5) * W * .3, y: H * .55, vx: (Math.random() - .5) * 16 * dpr, vy: (-Math.random() * 16 - 6) * dpr, g: .45 * dpr, s: (4 + Math.random() * 6) * dpr, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[(Math.random() * cols.length) | 0] }));
+    let f = 0;
+    (function step(){
+      ctx.clearRect(0, 0, W, H); f++;
+      P.forEach(p => { p.vy += p.g; p.vx *= .992; p.x += p.vx; p.y += p.vy; p.r += p.vr; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.globalAlpha = Math.max(0, 1 - f / 110); ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 3, p.s, p.s * .6); ctx.restore() });
+      if (f < 120) requestAnimationFrame(step); else cv.remove();
+    })();
+  }
+  function shake(){
+    const d = document.querySelector('#loginModal .dialog'); if (!d || reduce) return;
+    d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake');
+    setTimeout(() => d.classList.remove('shake'), 500);
+  }
+
+  /* ---------- poster tilt ---------- */
+  function resetTilt(f){ f.classList.remove('tilting'); ['--rx', '--ry', '--go', '--sc'].forEach(k => f.style.removeProperty(k)); f.style.removeProperty('--rot') }
+  function initTilt(){
+    if (reduce) return;
+    document.addEventListener('pointermove', e => {
+      const f = e.target.closest && e.target.closest('.poster-frame'); if (!f) return;
+      const r = f.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      f.classList.add('tilting');
+      f.style.setProperty('--ry', ((px - .5) * 16).toFixed(2) + 'deg'); f.style.setProperty('--rx', ((.5 - py) * 16).toFixed(2) + 'deg');
+      f.style.setProperty('--gx', (px * 100).toFixed(1) + '%'); f.style.setProperty('--gy', (py * 100).toFixed(1) + '%'); f.style.setProperty('--go', 1);
+      if (f.closest('.hero')) { f.style.setProperty('--rot', '0deg'); f.style.setProperty('--sc', 1.03) }
+    });
+    document.addEventListener('pointerout', e => { const f = e.target.closest && e.target.closest('.poster-frame'); if (f && !f.contains(e.relatedTarget)) resetTilt(f) });
+    ['pointerup', 'pointercancel'].forEach(ev => document.addEventListener(ev, e => { const f = e.target.closest && e.target.closest('.poster-frame'); if (f && e.pointerType !== 'mouse') setTimeout(() => resetTilt(f), 500) }));
+  }
+
+  /* ---------- ambient glow from poster ---------- */
+  function ambient(url){
+    if (cfg.ambientGlow === false) return;
+    const root = document.documentElement;
+    if (!url) { root.style.removeProperty('--ambrgb'); return }
+    const img = new Image(); img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const c = document.createElement('canvas'); c.width = 24; c.height = 32;
+        const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(img, 0, 0, 24, 32);
+        const d = x.getImageData(0, 0, 24, 32).data; let r = 0, g = 0, b = 0, w = 0;
+        for (let i = 0; i < d.length; i += 4) {
+          const R = d[i], G = d[i + 1], B = d[i + 2], mx = Math.max(R, G, B), mn = Math.min(R, G, B);
+          const sat = mx ? (mx - mn) / mx : 0, lum = (mx + mn) / 510;
+          if (sat < .35 || lum < .2 || lum > .85) continue;
+          const wt = sat * sat; r += R * wt; g += G * wt; b += B * wt; w += wt;
+        }
+        if (w > 0) root.style.setProperty('--ambrgb', `${Math.round(r / w)},${Math.round(g / w)},${Math.round(b / w)}`); else root.style.removeProperty('--ambrgb');
+      } catch { root.style.removeProperty('--ambrgb') }
+    };
+    img.onerror = () => root.style.removeProperty('--ambrgb');
+    img.src = url;
+  }
+
+  /* ---------- countdown / LIVE NOW ---------- */
+  const fmtFull = ms => { const p = TDLTime.parts(ms); return p.d > 0 ? `${tr('cd.day', { n: p.d })} ${p.t}` : p.t };
+  const fmtShort = ms => { const p = TDLTime.parts(ms); return p.d > 0 ? tr('cd.day', { n: p.d }) : p.t };
+  function groupState(g, now){
+    let live = false, next = Infinity;
+    g.rounds.forEach(r => { const st = TDLTime.stateOf(r, now); if (st.kind === 'live') live = true; else if (st.kind === 'soon') next = Math.min(next, st.start) });
+    return live ? { kind: 'live' } : (next < Infinity ? { kind: 'soon', start: next } : { kind: 'none' });
+  }
+  function setChip(node, st, mode, now){
+    if (st.kind === 'none') { node.classList.add('hidden'); const c0 = node.closest('.ecard'); if (c0) c0.classList.remove('is-live'); return }
+    node.classList.remove('hidden');
+    const live = st.kind === 'live', ended = st.kind === 'ended';
+    node.classList.toggle('live', live); node.classList.toggle('ended', ended);
+    node.textContent = live ? tr('cd.live') : ended ? tr('cd.ended') : tr('cd.starts', { t: (mode === 'full' ? fmtFull : fmtShort)(st.start - now) });
+    const card = node.closest('.ecard'); if (card) card.classList.toggle('is-live', live);
+  }
+  function tick(){
+    if (document.hidden) return;
+    const now = Date.now();
+    document.querySelectorAll('[data-cd]').forEach(n => { const s = shows.find(x => String(x.id) === n.dataset.cd); if (s) setChip(n, TDLTime.stateOf(s, now), 'full', now) });
+    document.querySelectorAll('[data-cdg]').forEach(n => { const g = groups.find(x => x.key === n.dataset.cdg); if (!g) { n.classList.add('hidden'); return } setChip(n, groupState(g, now), n.dataset.mode || 'short', now) });
+  }
+
+  /* ---------- calendar (.ics) / share ---------- */
+  function ics(show){
+    const w = TDLTime.windowOf(show); if (!w) return;
+    const p2 = n => String(n).padStart(2, '0');
+    const f = ms => { const d = new Date(ms); return d.getUTCFullYear() + p2(d.getUTCMonth() + 1) + p2(d.getUTCDate()) + 'T' + p2(d.getUTCHours()) + p2(d.getUTCMinutes()) + p2(d.getUTCSeconds()) + 'Z' };
+    const e = x => String(x || '').replace(/\\/g, '\\\\').replace(/[,;]/g, '\\$&').replace(/\n/g, '\\n');
+    const url = location.href.split('#')[0] + '#/event/' + encodeURIComponent(show.name || '');
+    const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//AREAONE-LIVE//TH', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
+      'UID:tdl-' + show.id + '-' + w.start + '@tdl-live', 'DTSTAMP:' + f(Date.now()), 'DTSTART:' + f(w.start), 'DTEND:' + f(w.end),
+      'SUMMARY:' + e(show.name), 'DESCRIPTION:' + e('AREAONE-LIVE — ' + url), 'URL:' + url,
+      'BEGIN:VALARM', 'TRIGGER:-PT30M', 'ACTION:DISPLAY', 'DESCRIPTION:' + e(show.name), 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'];
+    const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'AREAONE-LIVE-' + String(show.name || 'event').replace(/[^\w\u0E00-\u0E7F-]+/g, '-').slice(0, 40) + '.ics';
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove() }, 600);
+    toast(tr('toast.ics'));
+  }
+  async function share(){
+    const h = location.hash, key = h.startsWith('#/event/') ? decodeURIComponent(h.slice(8)) : '';
+    const url = location.href.split('#')[0] + (key ? '#/event/' + encodeURIComponent(key) : '');
+    try { if (navigator.share) { await navigator.share({ title: key || 'AREAONE-LIVE', text: key || 'AREAONE-LIVE', url }); return } } catch (e) { if (e && e.name === 'AbortError') return }
+    try { await navigator.clipboard.writeText(url); toast(tr('toast.copied')) } catch { toast(url) }
+  }
+
+  /* ---------- bottom tab bar: sliding pill + hide on scroll ---------- */
+  function moveInd(){
+    const bar = document.querySelector('.mtab'), ind = bar && bar.querySelector('.mind'); if (!bar || !ind) return;
+    const act = document.body.classList.contains('settings-open') ? el('mSetBtn') : bar.querySelector('[data-nav].active');
+    if (!act || !act.offsetWidth) { ind.style.opacity = 0; return }
+    ind.style.opacity = 1; ind.style.width = act.offsetWidth + 'px'; ind.style.transform = `translateX(${act.offsetLeft}px)`;
+  }
+  function initTab(){
+    let lastY = window.scrollY;
+    window.addEventListener('scroll', () => {
+      if (!isMobile()) return;
+      const bar = document.querySelector('.mtab'); if (!bar) return;
+      const y = window.scrollY, d = y - lastY; if (Math.abs(d) < 8) return;
+      const nearEnd = innerHeight + y >= document.documentElement.scrollHeight - 60;
+      bar.classList.toggle('tab-hide', d > 0 && y > 120 && !nearEnd && !document.body.classList.contains('settings-open'));
+      lastY = y;
+    }, { passive: true });
+    window.addEventListener('resize', moveInd);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveInd);
+    setTimeout(moveInd, 60);
+  }
+
+  /* ---------- watch page ---------- */
+  let wl = null, wantWake = false;
+  async function wake(on){
+    wantWake = !!on;
+    try {
+      if (on) { if ('wakeLock' in navigator && !wl) { wl = await navigator.wakeLock.request('screen'); wl.addEventListener('release', () => { wl = null }) } }
+      else if (wl) { await wl.release(); wl = null }
+    } catch {}
+  }
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && wantWake && !wl) wake(true) });
+
+  let unread = 0;
+  function showNew(n){
+    unread += n || 1; const b = el('newMsgBtn'); if (!b) return;
+    el('newMsgTxt').textContent = tr('chat.new') + (unread > 1 ? ` (${unread})` : ''); b.classList.remove('hidden');
+  }
+  function hideNew(){ unread = 0; const b = el('newMsgBtn'); if (b) b.classList.add('hidden') }
+  function chatToBottom(){ const b = el('chatMessages'); if (b) b.scrollTo({ top: b.scrollHeight, behavior: reduce ? 'auto' : 'smooth' }); hideNew() }
+  function toggleTheater(){ const g = el('wgrid'); if (g) g.classList.toggle('theater'); const b = el('theaterBtn'); if (b) b.classList.toggle('active', g.classList.contains('theater')) }
+
+  const isRerun = () => typeof selectedShow !== 'undefined' && selectedShow && selectedShow.type === 'R';
+  function togglePlay(flash){
+    if (typeof ytPlayer === 'undefined' || !ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
+    const playing = ytPlayer.getPlayerState() === 1;
+    if (playing) ytPlayer.pauseVideo(); else ytPlayer.playVideo();
+    if (flash) ripple(0, playing ? 'pause' : 'play');
+  }
+  function ripple(side, icon){
+    const box = el('playerContainer'); if (!box) return;
+    const cls = side < 0 ? 'l' : side > 0 ? 'r' : 'c';
+    let n = box.querySelector('.ripple.' + cls);
+    if (!n) { n = document.createElement('div'); n.className = 'ripple ' + cls; box.appendChild(n) }
+    n.innerHTML = ic(icon || (side < 0 ? 'rew' : 'fwd'), 30) + (side ? '<b>10</b>' : '');
+    n.classList.remove('go'); void n.offsetWidth; n.classList.add('go');
+  }
+  function initPlayerGestures(){
+    const blk = document.querySelector('#playerContainer .block'); if (!blk) return;
+    blk.style.touchAction = 'manipulation';
+    let last = 0, lastSide = 9, timer = null;
+    blk.addEventListener('pointerup', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (!isRerun()) return;
+      const r = blk.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, side = x < .35 ? -1 : x > .65 ? 1 : 0, now = Date.now();
+      if (now - last < 320 && side === lastSide) {
+        clearTimeout(timer); last = 0;
+        if (side) { seek(side * 10); ripple(side) } else goFullscreen();
+        return;
+      }
+      last = now; lastSide = side; clearTimeout(timer); timer = setTimeout(() => togglePlay(true), 330);
+    });
+  }
+  function initKeys(){
+    document.addEventListener('keydown', e => {
+      if (typeof curView === 'undefined' || curView !== 'watchView') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const a = document.activeElement, tag = a && a.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (a && a.isContentEditable)) return;
+      const k = e.key; let used = true;
+      if (k === ' ' || k === 'k' || k === 'K') togglePlay(true);
+      else if (k === 'm' || k === 'M') toggleMute();
+      else if (k === 'f' || k === 'F') goFullscreen();
+      else if (k === 'c' || k === 'C') toggleCaptions();
+      else if (k === 't' || k === 'T') toggleTheater();
+      else if (k === 'ArrowLeft' && isRerun()) { seek(-10); ripple(-1) }
+      else if (k === 'ArrowRight' && isRerun()) { seek(10); ripple(1) }
+      else if (k === 'ArrowUp') { const v = Math.min(100, (currentVolume || 0) + 10); el('volSlider').value = v; onVolumeChange(v) }
+      else if (k === 'ArrowDown') { const v = Math.max(0, (currentVolume || 0) - 10); el('volSlider').value = v; onVolumeChange(v) }
+      else used = false;
+      if (used) e.preventDefault();
+    });
+  }
+
+  /* ---------- access code input ---------- */
+  function initCode(){
+    const c = el('code'); if (!c) return;
+    c.setAttribute('autocapitalize', 'characters'); c.setAttribute('spellcheck', 'false'); c.setAttribute('autocorrect', 'off');
+    c.addEventListener('input', () => {
+      const atEnd = c.selectionStart === c.value.length, nv = TDLTime.formatCode(c.value);
+      if (nv !== c.value) { c.value = nv; if (atEnd) c.setSelectionRange(nv.length, nv.length) }
+    });
+  }
+
+  /* ---------- install (PWA) ---------- */
+  let deferred = null;
+  const standalone = () => (matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  const iOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  function showInstall(){ const r = el('installRow'); if (r) r.classList.toggle('hidden', standalone() || !(deferred || iOS())) }
+  async function install(){
+    if (deferred) { deferred.prompt(); try { await deferred.userChoice } catch {} deferred = null; showInstall() }
+    else if (iOS()) toast(tr('set.installIos'), '', 7000);
+  }
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; showInstall() });
+  window.addEventListener('appinstalled', () => { deferred = null; showInstall() });
+  function registerSW(){
+    if (!('serviceWorker' in navigator)) return;
+    if (!(location.protocol === 'https:' || location.hostname === 'localhost')) return;
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
+
+  /* ---------- init ---------- */
+  initTilt(); initTab(); initCode(); initKeys(); registerSW();
+  initPlayerGestures(); showInstall();
+  setInterval(tick, 1000);
+  document.addEventListener('visibilitychange', tick);
+
+
+  /* ===== ห้องรอก่อนเริ่ม ===== */
+  let waitTimer = null, waitGo = null;
+  function stopWait(){ clearInterval(waitTimer); waitTimer = null; waitGo = null; const w = el('waitRoom'); if (w) w.classList.add('hidden') }
+  function goNow(){
+    const go = waitGo; stopWait();
+    const cover = el('loadingCover'); if (cover) { cover.style.display = 'flex'; cover.style.opacity = '1' }
+    if (go) go();
+  }
+  function waitFor(show, go){
+    stopWait();
+    const st = TDLTime.stateOf(show);
+    if (!st || st.kind !== 'soon' || st.start - Date.now() < 3000) return false;
+    const w = el('waitRoom'); if (!w) return false;
+    const cover = el('loadingCover'); if (cover) cover.style.display = 'none';
+    w.classList.remove('hidden'); waitGo = go;
+    const upd = () => { const ms = st.start - Date.now(); if (ms <= 0) { goNow(); return } el('waitClock').textContent = fmtFull(ms) };
+    upd(); waitTimer = setInterval(upd, 500);
+    return true;
+  }
+
+  /* ===== ลิงก์/QR: ?code=...&show=... ===== */
+  function deepLink(){
+    let p; try { p = new URLSearchParams(location.search) } catch { return }
+    const code = (p.get('code') || '').trim(), sid = (p.get('show') || '').trim();
+    if (!code && !sid) return;
+    if (typeof selectedShow !== 'undefined' && selectedShow) return;
+    try { const u = new URL(location.href); u.searchParams.delete('code'); u.searchParams.delete('show'); history.replaceState(null, '', u.pathname + u.search + u.hash) } catch {}
+    const c = el('code'); if (code && c) c.value = TDLTime.formatCode(code);
+    const sh = sid ? shows.find(x => String(x.id) === sid) : null;
+    if (sh) { location.hash = '#/event/' + encodeURIComponent(sh.name || 'EVENT'); setTimeout(() => openLogin(sh.id), reduce ? 50 : 1000) }
+    else if (code) { toast(tr('deep.filled')); scrollTo2('events') }
+  }
+
+  /* ===== RERUN: เล่นต่อจากเดิม + ความเร็ว ===== */
+  const RATES = [1, 1.25, 1.5, 2, 0.75];
+  let posTimer = null;
+  const fmtClock = sec => { sec = Math.max(0, Math.floor(sec)); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s2 = sec % 60; return h ? `${h}:${String(m).padStart(2, '0')}:${String(s2).padStart(2, '0')}` : `${m}:${String(s2).padStart(2, '0')}` };
+  function updateSpeedBtn(r){ const b = el('speedBtn'); if (b) b.textContent = (r === 1 ? '1' : String(r)) + 'x' }
+  function stopPos(){ clearInterval(posTimer); posTimer = null }
+  function playerReady(){
+    stopPos();
+    if (!isRerun()) return;
+    let sp = 1; try { sp = Number(localStorage.getItem('tdlSpeed')) || 1 } catch {}
+    try { ytPlayer.setPlaybackRate(sp) } catch {}
+    updateSpeedBtn(sp);
+    const key = 'tdlPos:' + selectedShow.id; let saved = 0;
+    try { saved = Number(localStorage.getItem(key)) || 0 } catch {}
+    try { const dur = ytPlayer.getDuration() || 0; if (saved > 10 && (!dur || saved < dur - 20)) { ytPlayer.seekTo(saved, true); toast(tr('resume.at', { t: fmtClock(saved) })) } } catch {}
+    posTimer = setInterval(() => {
+      try {
+        if (ytPlayer.getPlayerState() !== 1) return;
+        const t = ytPlayer.getCurrentTime(), d = ytPlayer.getDuration() || 0;
+        if (d && t > d - 15) localStorage.removeItem(key); else localStorage.setItem(key, String(Math.floor(t)));
+      } catch {}
+    }, 5000);
+  }
+  function cycleSpeed(){
+    if (typeof ytPlayer === 'undefined' || !ytPlayer || !ytPlayer.setPlaybackRate) return;
+    let cur = 1; try { cur = ytPlayer.getPlaybackRate() || 1 } catch {}
+    const next = RATES[(RATES.indexOf(cur) + 1) % RATES.length] || 1;
+    try { ytPlayer.setPlaybackRate(next); localStorage.setItem('tdlSpeed', String(next)) } catch {}
+    updateSpeedBtn(next);
+  }
+  function watchStop(){ stopPos(); emojiClose() }
+
+  /* ===== แชต: อีโมจิ / โหมดจำกัดความถี่ / จำนวนผู้ชม / presence ===== */
+  const EMOJIS = ['😀','😂','🤣','😆','🥹','😍','🥰','😘','😎','🤩','🥳','😭','😢','😱','😡','👍','👏','🙌','🙏','👀','🔥','✨','⭐','🎉','🎤','🎶','🎸','🥁','💃','🕺','👑','🌈','💯','❤️','💖','💜','💙','💚','💛','🫶'];
+  function emojiClose(){ const p = el('emoPanel'); if (p) p.classList.add('hidden') }
+  function toggleEmoji(){
+    const p = el('emoPanel'); if (!p) return;
+    if (!p.dataset.ready) {
+      p.innerHTML = EMOJIS.map(e => `<button type="button" class="emo-i" data-emo="${e}">${e}</button>`).join(''); p.dataset.ready = '1';
+      p.addEventListener('click', ev => {
+        const b = ev.target.closest('[data-emo]'); if (!b) return;
+        const inp = el('chatInput'), st = inp.selectionStart ?? inp.value.length, en = inp.selectionEnd ?? st;
+        const room = (inp.maxLength > 0 ? inp.maxLength : 9999) - inp.value.length + (en - st);
+        if (b.dataset.emo.length > room) return;
+        inp.value = inp.value.slice(0, st) + b.dataset.emo + inp.value.slice(en);
+        const pos = st + b.dataset.emo.length; inp.focus(); try { inp.setSelectionRange(pos, pos) } catch {}
+      });
+    }
+    p.classList.toggle('hidden');
+  }
+  document.addEventListener('click', e => { const p = el('emoPanel'); if (p && !p.classList.contains('hidden') && !e.target.closest('#emoPanel') && !e.target.closest('#emoBtn')) p.classList.add('hidden') });
+
+  let slowSec = 0, lastSent = 0;
+  const setSlow = n => { slowSec = Math.max(0, Number(n) || 0) };
+  const markSent = () => { lastSent = Date.now() };
+  const slowLeft = () => slowSec > 0 ? Math.max(0, Math.ceil((lastSent + slowSec * 1000 - Date.now()) / 1000)) : 0;
+  let viewers = null;
+  function setViewers(n){
+    viewers = (n === null || n === undefined) ? null : Number(n);
+    const v = el('viewerCnt'); if (!v) return;
+    if (viewers === null || isNaN(viewers) || viewers < 0) { v.classList.add('hidden'); return }
+    v.textContent = tr('watch.viewers', { n: viewers.toLocaleString() }); v.classList.remove('hidden');
+  }
+  function langChanged(){ setViewers(viewers) }
+  let presTimer = null, presOff = (cfg.presence === false);
+  const sid = (() => { try { let v = sessionStorage.getItem('tdlSid'); if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); sessionStorage.setItem('tdlSid', v) } return v } catch { return 'anon' } })();
+  async function pingPresence(){
+    if (presOff || typeof selectedShow === 'undefined' || !selectedShow) return;
+    try {
+      const r = await api('/api/presence', { method: 'POST', body: { showId: String(selectedShow.id), sid } });
+      if (r && r.viewers !== undefined) setViewers(r.viewers);
+    } catch (e) { if (e && (e.status === 404 || e.status === 405 || e.status === 501)) { presOff = true; clearInterval(presTimer) } }
+  }
+  function presence(on){
+    clearInterval(presTimer); presTimer = null;
+    if (on && !presOff) { pingPresence(); presTimer = setInterval(pingPresence, 20000) }
+  }
+
+  /* ===== แถบประกาศรวม + เฉพาะอีเวนต์ ===== */
+  let annTimer = null, annOff = (cfg.announcement === false), annKeys = {global:'',event:''};
+  const hash = str => { let h = 0; for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0; return String(h) };
+  function annHide(scope){
+    const scopes = scope ? [scope] : ['global','event'];
+    scopes.forEach(k=>{ const b=el(k==='global'?'annBar':'annEventBar'); if(b)b.classList.add('hidden') });
+    const any = !el('annBar')?.classList.contains('hidden') || !el('annEventBar')?.classList.contains('hidden');
+    document.body.classList.toggle('has-ann', any);
+  }
+  function annClose(scope='global'){
+    const k = scope==='event'?'event':'global';
+    try { sessionStorage.setItem('tdlAnnX:'+k, annKeys[k]) } catch {}
+    annHide(k);
+  }
+  function paintAnnouncement(scope, data){
+    const isEvent = scope==='event', bar=el(isEvent?'annEventBar':'annBar');
+    if(!bar)return;
+    const text=data&&data.enabled&&data.text?String(data.text).trim():'';
+    if(!text){bar.classList.add('hidden');return}
+    const key=hash(text+'|'+(data.link||'')); annKeys[scope]=key;
+    let dismissed='';try{dismissed=sessionStorage.getItem('tdlAnnX:'+scope)||''}catch{}
+    if(dismissed===key){bar.classList.add('hidden');return}
+    bar.classList.toggle('warn',data.level==='warn');
+    el(isEvent?'annEventText':'annText').textContent=text;
+    const a=el(isEvent?'annEventLink':'annLink');
+    if(data.link&&/^https?:\/\//i.test(data.link)){a.href=data.link;a.textContent=data.linkText||'→';a.classList.remove('hidden')}else a.classList.add('hidden');
+    bar.classList.remove('hidden');
+  }
+  async function annPoll(){
+    if(annOff)return;
+    try{
+      const annShowId=selectedShow&&selectedShow.id?String(selectedShow.id):'';
+      const r=await api('/api/announcement'+(annShowId?'?showId='+encodeURIComponent(annShowId):''));
+      paintAnnouncement('global',r.global||((r.items||[]).find(x=>x.scope==='global'))||{enabled:false});
+      paintAnnouncement('event',r.event||((r.items||[]).find(x=>x.scope==='event'))||{enabled:false});
+      const any=!el('annBar')?.classList.contains('hidden')||!el('annEventBar')?.classList.contains('hidden');
+      document.body.classList.toggle('has-ann',any);
+      const globalVisible=!el('annBar')?.classList.contains('hidden');
+      el('annEventBar').style.top=globalVisible?'calc(82px + env(safe-area-inset-top,0px) + 58px)':'calc(82px + env(safe-area-inset-top,0px))';
+    }catch(e){if(e&&(e.status===404||e.status===405||e.status===501)){annOff=true;clearInterval(annTimer);annHide()}}
+  }
+  function annStart(){if(annOff)return;annPoll();annTimer=setInterval(annPoll,15000)}
+
+  /* ===== ตารางรอบแบบปฏิทิน ===== */
+  const sch = { y: null, m: null, f: 'all', sel: null };
+  const esc2 = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  function schItems(){
+    return shows.map(s => ({ s, d: TDLTime.parseDate(s.date) })).filter(x => x.d && (sch.f === 'all' || (sch.f === 'R') === (x.s.type === 'R')));
+  }
+  function schRender(){
+    const sec = el('schSec'); if (!sec || typeof shows === 'undefined') return;
+    const all = shows.map(s => ({ s, d: TDLTime.parseDate(s.date) })).filter(x => x.d);
+    sec.classList.toggle('hidden', !all.length); if (!all.length) return;
+    const loc = TDLLang.get() === 'en' ? 'en-US' : 'th-TH-u-ca-gregory';
+    const today = new Date(); const ty = today.getFullYear(), tm = today.getMonth() + 1, td = today.getDate();
+    if (sch.y === null) {
+      const upcoming = all.map(x => x.d).filter(d => Date.UTC(d.y, d.m - 1, d.d) >= Date.UTC(ty, tm - 1, td)).sort((a, b) => Date.UTC(a.y, a.m - 1, a.d) - Date.UTC(b.y, b.m - 1, b.d))[0];
+      const base = upcoming || all[0].d; sch.y = base.y; sch.m = base.m;
+    }
+    el('schMonth').textContent = new Intl.DateTimeFormat(loc, { month: 'long', year: 'numeric' }).format(new Date(sch.y, sch.m - 1, 1));
+    document.querySelectorAll('#schChips .chip').forEach(c => c.classList.toggle('active', c.dataset.sf === sch.f));
+    const items = schItems(), byDay = {};
+    items.forEach(x => { if (x.d.y === sch.y && x.d.m === sch.m) (byDay[x.d.d] = byDay[x.d.d] || []).push(x.s) });
+    if (!sch.sel || !byDay[sch.sel]) { const first = Object.keys(byDay).map(Number).sort((a, b) => a - b); sch.sel = (sch.y === ty && sch.m === tm && byDay[td]) ? td : (first[0] || null) }
+    const dow = new Intl.DateTimeFormat(loc, { weekday: 'short' });
+    let html = Array.from({ length: 7 }, (_, i) => `<div class="sch-w">${esc2(dow.format(new Date(2023, 0, 1 + i)))}</div>`).join('');
+    const first = new Date(sch.y, sch.m - 1, 1).getDay(), days = new Date(sch.y, sch.m, 0).getDate();
+    for (let i = 0; i < first; i++) html += '<div></div>';
+    for (let d = 1; d <= days; d++) {
+      const list = byDay[d] || [], isT = sch.y === ty && sch.m === tm && d === td;
+      const dots = (list.some(x => x.type !== 'R') ? '<i class="dl"></i>' : '') + (list.some(x => x.type === 'R') ? '<i class="dr"></i>' : '');
+      html += `<button type="button" class="sch-d${list.length ? ' has' : ''}${isT ? ' today' : ''}${sch.sel === d ? ' sel' : ''}" ${list.length ? `data-sch="day" data-d="${d}"` : 'tabindex="-1"'}><span>${d}</span><span class="dots">${dots}</span></button>`;
+    }
+    el('schGrid').innerHTML = html;
+    const sel = byDay[sch.sel] || [];
+    sel.sort((a, b) => String(a.time).localeCompare(String(b.time)));
+    el('schDay').innerHTML = sel.length ? sel.map(s => `<div class="sch-it"><div><b>${esc2(s.name)}</b><span>${esc2(s.time || '')}</span></div><span class="tag ${s.type === 'R' ? 'rerun' : ''}">${s.type === 'R' ? 'RERUN' : 'LIVE'}</span><button type="button" class="join" data-sch="open" data-n="${esc2(s.name)}"><span>${tr('sch.view')}</span>${ic('arrowR', 16)}</button></div>`).join('') : `<div class="empty">${tr('sch.none')}</div>`;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-sch],[data-sf]'); if (!b) return;
+    if (b.dataset.sf) { sch.f = b.dataset.sf; sch.sel = null; schRender(); return }
+    const k = b.dataset.sch;
+    if (k === 'prev' || k === 'next') { const d = new Date(sch.y, sch.m - 1 + (k === 'next' ? 1 : -1), 1); sch.y = d.getFullYear(); sch.m = d.getMonth() + 1; sch.sel = null; schRender() }
+    else if (k === 'day') { sch.sel = Number(b.dataset.d); schRender() }
+    else if (k === 'open') { location.hash = '#/event/' + encodeURIComponent(b.dataset.n) }
+  });
+  annStart();
+
+  /* ===== โหมดปรับปรุงระบบ ===== */
+  let mtnOn = false, mtnTimer = null, mtnOff = false, mtnCountdownTimer = null, mtnLastDigits = ''; 
+  function mtnCountdownSetup(schedule){
+    const box=el('mtnCountdown'), units=el('mtnCountdownUnits'), label=el('mtnCountdownLabel'), date=el('mtnCountdownDate');
+    if(!box||!units)return;
+    clearInterval(mtnCountdownTimer); mtnCountdownTimer=null; mtnLastDigits='';
+    const target=Date.parse(schedule.reopensAt||'');
+    if(!schedule.countdownEnabled || !Number.isFinite(target) || target<=Date.now()) {box.classList.add('hidden');return}
+    box.classList.remove('hidden');box.dataset.animation=['flip','roll','fade','none'].includes(schedule.animation)?schedule.animation:'flip';
+    const labels=TDLLang.get()==='en'?{days:'DAYS',hours:'HOURS',minutes:'MINUTES',seconds:'SECONDS',heading:'WE’LL BE BACK IN'}:{days:'วัน',hours:'ชั่วโมง',minutes:'นาที',seconds:'วินาที',heading:'เว็บไซต์จะกลับมาเปิดใน'};
+    label.textContent=labels.heading;
+    const fmt=(n)=>String(n).padStart(2,'0');
+    function update(){
+      const left=Math.max(0,target-Date.now());
+      const total=Math.floor(left/1000),days=Math.floor(total/86400),hours=Math.floor(total%86400/3600),minutes=Math.floor(total%3600/60),seconds=total%60;
+      const values=[];
+      if(schedule.showDays!==false)values.push([days,labels.days]);
+      values.push([schedule.showDays===false?Math.floor(total/3600):hours,labels.hours],[minutes,labels.minutes]);
+      if(schedule.showSeconds!==false)values.push([seconds,labels.seconds]);
+      const signature=values.map(v=>fmt(v[0])).join(':');
+      units.innerHTML=values.map(([v,l])=>`<div class="mtn-unit"><span class="mtn-digit">${fmt(v)}</span><small>${l}</small></div>`).join('');
+      if(signature!==mtnLastDigits && box.dataset.animation!=='none') units.querySelectorAll('.mtn-digit').forEach(x=>{x.style.animation='none';void x.offsetWidth;x.style.animation=''});
+      mtnLastDigits=signature;
+      if(date){const d=new Date(target);date.textContent=(TDLLang.get()==='en'?'Scheduled reopening: ':'กำหนดเปิดเว็บไซต์: ')+new Intl.DateTimeFormat(TDLLang.get()==='en'?'en-GB':'th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).format(d)+' (UTC+7)'}
+      if(left<=0){clearInterval(mtnCountdownTimer);mtnCountdownTimer=null;maintCheck();}
+    }
+    update();mtnCountdownTimer=setInterval(update,1000);
+  }
+  function maintOn(payload){
+    const box = el('mtnScreen'); if (!box) return;
+    const data = payload && typeof payload === 'object' ? payload : { note: payload };
+    const texts = data.texts || {}, lang = TDLLang.get();
+    const pick = (key, fallback) => String((texts[key] && texts[key][lang]) || '').trim() || fallback;
+    const title = el('mtnScreen').querySelector('[data-t="mtn.title"]');
+    const sub = el('mtnScreen').querySelector('[data-t="mtn.sub"]');
+    if (title) title.textContent = pick('title', tr('mtn.title'));
+    if (sub) sub.textContent = pick('sub', tr('mtn.sub'));
+    const noteText = pick('note', lang === 'th' ? String(data.note || '').trim() : String((texts.note && texts.note.en) || '').trim());
+    const n = el('mtnNote'); n.textContent = noteText; n.classList.toggle('hidden', !noteText);
+    mtnCountdownSetup(data.schedule || {});
+    if (mtnOn) return;
+    mtnOn = true; box.classList.remove('hidden'); document.body.classList.add('mtn-lock');
+    try { stopWatch() } catch {}
+    try { closeLogin() } catch {}
+    try { closeSettings() } catch {}
+    presence(false); stopWait(); annHide();
+  }
+  async function maintCheck(manual){
+    if (mtnOff) return;
+    try {
+      const r = await api('/api/maintenance');
+      const previewExit = el('mtnPreviewExit');
+      if (previewExit) previewExit.classList.toggle('hidden', !(r && r.preview === true));
+      if (r && r.enabled) { maintOn(r); if (manual === true) toast(tr('mtn.still')) }
+      else if (mtnOn) location.reload();
+    } catch (e) { if (e && (e.status === 404 || e.status === 405 || e.status === 501)) { mtnOff = true; clearInterval(mtnTimer) } }
+  }
+  maintCheck(); mtnTimer = setInterval(maintCheck, 30000);
+
+  return { maintOn, maintCheck, sid: () => sid, annPoll, waitFor, skipWait: goNow, waitStop: stopWait, deepLink, playerReady, cycleSpeed, watchStop, toggleEmoji, emojiClose, setSlow, markSent, slowLeft, setViewers, langChanged, presence, annClose, schRender,
+    toast, confetti, shake, ambient, tick, ics, share, moveInd, wake, showNew, hideNew, chatToBottom, toggleTheater, install, showInstall,
+    stateOf: (s, n) => TDLTime.stateOf(s, n), hasWindow: s => !!TDLTime.windowOf(s) && s.type !== 'R' };
+})();
+</script>
+</body>
+</html>

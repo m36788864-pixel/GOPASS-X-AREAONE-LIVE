@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+    <title>เข้าสู่ระบบ | GOPASS</title>
+    <link
+        rel="icon"
+        href="images/gopass-logo.png"
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Kanit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+    <link
+        rel="stylesheet"
+        href="css/app.css?v=20261013"
+    >
+    <script src="/js/maintenance.js?v=20261014"></script>
+</head>
+<body class="login-page">
+    <section class="login-box">
+        <a
+            class="brand"
+            href="index.html"
+        >
+            <img
+                src="images/gopass-logo.png"
+                alt="GOPASS"
+                width="30"
+                height="30"
+            >
+            <span>
+                GOPASS
+                <small>TICKETING</small>
+            </span>
+        </a>
+        <h1>เข้าสู่ระบบ</h1>
+        <p>เข้าสู่ระบบด้วย Discord เพื่อกดบัตร</p>
+        <a
+            class="btn red full discord"
+            href="/api/auth/discord"
+            id="discordLogin"
+        >
+            <i class="fa-brands fa-discord"></i>
+            Login with Discord
+        </a>
+        <small id="discordNote" class="login-note"></small>
+        <a
+            class="back"
+            href="index.html"
+        >
+            <i class="fa-solid fa-arrow-left"></i>
+            กลับหน้าแรก
+        </a>
+    </section>
+    <script>
+        (function () {
+            // ส่งต่อปลายทาง (?next=) ไปให้ OAuth เพื่อเด้งกลับมาหน้าเดิมหลังล็อกอิน
+            var next = new URLSearchParams(location.search).get('next');
+            var link = document.getElementById('discordLogin');
+            if (next && link) link.href = '/api/auth/discord?next=' + encodeURIComponent(next);
+
+            var code = new URLSearchParams(location.search).get('error');
+            if (!code) return;
+            var msgs = {
+                not_configured: 'ยังไม่ได้ตั้งค่า Discord Login บนเซิร์ฟเวอร์',
+                state_mismatch: 'เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+                missing_code: 'Discord ไม่ได้ส่งรหัสกลับมา กรุณาลองใหม่',
+                token_failed: 'เชื่อมต่อกับ Discord ไม่สำเร็จ กรุณาลองใหม่',
+                profile_failed: 'ดึงข้อมูลบัญชี Discord ไม่สำเร็จ',
+                curl_missing: 'เซิร์ฟเวอร์ยังไม่ได้เปิดใช้งาน PHP cURL',
+                storage_failed: 'เซิร์ฟเวอร์เขียนไฟล์ session ไม่ได้ (โฟลเดอร์ data/ ต้องเขียนได้)'
+            };
+            var el = document.getElementById('discordNote');
+            el.textContent = msgs[code] || 'เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่';
+            el.classList.add('is-error');
+        })();
+    </script>
+    <script src="js/vendor/lenis.min.js"></script>
+    <script src="js/app.js?v=20261013"></script>
+    <script src="js/i18n.js?v=20261011"></script>
+</body>
+</html>

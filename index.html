@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+    <title>GOPASS</title>
+    <meta
+        name="description"
+        content="GOPASS กดบัตรคอนเสิร์ตออนไลน์ เลือกงาน กดบัตร และรับหมายเลขคิวได้ทันที"
+    >
+    <link
+        rel="icon"
+        href="images/gopass-logo.png"
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Kanit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+    <link
+        rel="stylesheet"
+        href="css/app.css?v=20261013"
+    >
+    <script src="/js/maintenance.js?v=20261014"></script>
+</head>
+<body>
+    <a
+        class="skip-link"
+        href="#homeEvents"
+    >
+        ข้ามไปยังรายชื่อคอนเสิร์ต
+    </a>
+    <!-- =========================
+         HEADER
+    ========================== -->
+    <header class="site-header">
+        <div class="wrap nav">
+            <a
+                class="brand"
+                href="index.html"
+            >
+                <img
+                    src="images/gopass-logo.png"
+                    alt="GOPASS"
+                    width="30"
+                    height="30"
+                >
+                <span>
+                    GOPASS
+                    <small>TICKETING</small>
+                </span>
+            </a>
+            <nav>
+                <a
+                    class="active"
+                    href="index.html"
+                >
+                    <i class="fa-solid fa-house"></i>
+                    หน้าแรก
+                </a>
+                <a href="/events.html">
+                    <i class="fa-solid fa-ticket"></i>
+                    คอนเสิร์ต
+                </a>
+                <a href="/calendar.html">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    ปฏิทิน. 
+                </a>
+            </nav>
+            <a
+                class="login-btn"
+                href="/login.html"
+            >
+                <i class="fa-brands fa-discord"></i>
+                เข้าสู่ระบบ
+            </a>
+        </div>
+    </header>
+    <!-- =========================
+         MARQUEE (one per page)
+    ========================== -->
+    <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+            <span class="marquee-item">GOPASS</span>
+            <span class="marquee-item">LIVE TICKETING</span>
+            <span class="marquee-item">AREA FEST</span>
+            <span class="marquee-item">ไม่ต้องต่อคิวยาว</span>
+            <span class="marquee-item">รับหมายเลขบัตรทันที</span>
+        </div>
+    </div>
+    <!-- =========================
+         HERO
+    ========================== -->
+    <section class="hero wrap">
+        <div class="hero-copy">
+            <h1>
+                กดบัตรคอนเสิร์ต
+                <br>
+                <b>ง่าย • เร็ว • พร้อมลุย</b>
+            </h1>
+            <p>
+                เลือกงานที่ต้องการ ดูรายละเอียด
+                และเข้าสู่ระบบกดบัตรได้ในไม่กี่ขั้นตอน
+            </p>
+            <a
+                class="btn red"
+                href="/events.html"
+            >
+                ดูคอนเสิร์ต
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="hero-art">
+            <video autoplay loop muted playsinline poster="images/event-banner.png">
+                <source src="images/loop.mp4" type="video/mp4">
+            </video>
+            <span class="regmark regmark--tl"></span>
+            <span class="regmark regmark--tr"></span>
+            <span class="regmark regmark--bl"></span>
+            <span class="regmark regmark--br"></span>
+        </div>
+    </section>
+    <!-- =========================
+         NOW ON SALE
+    ========================== -->
+    <section class="wrap section">
+        <div class="section-head reveal">
+            <div>
+                <span class="kicker">NOW ON SALE</span>
+                <h2>งานที่กำลังเปิดขาย</h2>
+            </div>
+            <a
+                class="text-link"
+                href="/events.html"
+            >
+                ดูทั้งหมด
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+        <div
+            id="homeEvents"
+            class="cards"
+        >
+            <div class="event-card skeleton">
+                <div class="poster"></div>
+                <div class="card-body">
+                    <div class="sk-line w60"></div>
+                    <div class="sk-line w80"></div>
+                    <div class="sk-line w40"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- =========================
+         LEDGER (why GOPASS)
+    ========================== -->
+    <section class="wrap section">
+        <div class="head-stack reveal">
+            <h2>ทำไมคนยังเลือกกดบัตรผ่าน GOPASS</h2>
+            <p>ระบบกดบัตรอัตโนมัติ ไม่ต้องรอคิวยาว และทุกใบผูกกับคิวของคุณเอง</p>
+        </div>
+        <div class="ledger reveal">
+            <div class="ledger-row">
+                <span class="ledger-num">01</span>
+                <div>
+                    <div class="ledger-title">ไม่ต้องต่อคิวยาว</div>
+                    <div class="ledger-sub">ระบบจับคิวให้อัตโนมัติตั้งแต่กดบัตร ไม่ต้องรอหน้าเว็บ</div>
+                </div>
+                <span class="ledger-aside">AUTO QUEUE</span>
+            </div>
+            <div class="ledger-row">
+                <span class="ledger-num">02</span>
+                <div>
+                    <div class="ledger-title">ได้หมายเลขบัตรทันที</div>
+                    <div class="ledger-sub">แสดงเลขบัตรและเลขคิวของคุณทันทีที่กดสำเร็จ</div>
+                </div>
+                <span class="ledger-aside">INSTANT</span>
+            </div>
+            <div class="ledger-row">
+                <span class="ledger-num">03</span>
+                <div>
+                    <div class="ledger-title">ทีมงานเห็นรายการครบทุกใบ</div>
+                    <div class="ledger-sub">แอดมินตรวจสอบผู้ซื้อและยอดรวมได้จากหน้าเดียว</div>
+                </div>
+                <span class="ledger-aside">BACK OFFICE</span>
+            </div>
+            <div class="ledger-row">
+                <span class="ledger-num">04</span>
+                <div>
+                    <div class="ledger-title">เช็คอินที่จุดเข้างานได้เลย</div>
+                    <div class="ledger-sub">สแกนหมายเลขบัตรที่จุดรับเข็ม แล้วเข้างานได้ทันที</div>
+                </div>
+                <span class="ledger-aside">CHECK-IN</span>
+            </div>
+        </div>
+    </section>
+    <!-- =========================
+         PROCESS
+    ========================== -->
+    <section class="contact-section">
+        <div class="wrap section section--tight">
+            <div class="head-stack reveal">
+                <h2>จากเลือกงานถึงเข้างาน ในสามคำสั่ง</h2>
+            </div>
+            <div class="process reveal">
+                <div class="process-item">
+                    <span class="process-n">01</span>
+                    <span class="process-verb">เลือกงาน</span>
+                    <span class="process-desc">ดูวัน เวลา สถานที่ และราคาบัตรของทุกงานที่เปิดขาย</span>
+                </div>
+                <div class="process-item">
+                    <span class="process-n">02</span>
+                    <span class="process-verb">กดบัตร</span>
+                    <span class="process-desc">เลือกประเภทบัตรและจำนวน ระบบจะกดบัตรและจองคิวให้อัตโนมัติ</span>
+                </div>
+                <div class="process-item">
+                    <span class="process-n">03</span>
+                    <span class="process-verb">เข้างาน</span>
+                    <span class="process-desc">รับเลขบัตรและเลขคิวไปยืนยันที่จุดเข้างานได้เลย</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- =========================
+         CONTACT
+    ========================== -->
+    <section class="contact-section">
+        <div class="wrap section section--tight">
+            <div class="contact-title reveal">
+                <span>CONTACT</span>
+                <h2>ช่องทางการติดต่อ</h2>
+                <p>ติดตามข่าวสารและสอบถามข้อมูลเพิ่มเติม</p>
+            </div>
+            <div class="contact-links reveal">
+                <a
+                    class="contact-item"
+                    href="https://www.youtube.com/@areafestth"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fa-brands fa-youtube"></i>
+                    <div>
+                        <strong>YouTube</strong>
+                        <small>@areafestth</small>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+                </a>
+                <a
+                    class="contact-item"
+                    href="https://www.instagram.com/areafestofficial/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fa-brands fa-instagram"></i>
+                    <div>
+                        <strong>Instagram</strong>
+                        <small>areafestofficial</small>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+                </a>
+                <a
+                    class="contact-item"
+                    href="https://www.tiktok.com/@area.fest.th"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fa-brands fa-tiktok"></i>
+                    <div>
+                        <strong>TikTok</strong>
+                        <small>@area.fest.th</small>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+                </a>
+                <a
+                    class="contact-item"
+                    href="https://discord.gg/pUbJpdBtSY"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fa-brands fa-discord"></i>
+                    <div>
+                        <strong>Discord</strong>
+                        <small>AREA FEST COLLECTIVE</small>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer>
+        <div class="wrap footer">
+            <span>© 2026 GOPASS</span>
+            <a href="/admin/events.html">
+                <i class="fa-solid fa-lock"></i>
+                Admin
+            </a>
+        </div>
+    </footer>
+    <script src="js/vendor/lenis.min.js"></script>
+    <script src="js/app.js?v=20261013"></script>
+    <script>
+        renderHome();
+    </script>
+    <script src="js/i18n.js?v=20261011"></script>
+    <!-- mobile floating tab bar -->
+    <nav class="tabbar" aria-label="เมนูหลัก">
+        <a class="active" href="index.html"><i class="fa-solid fa-house"></i><span>หน้าแรก</span></a>
+        <a href="/events.html"><i class="fa-solid fa-ticket"></i><span>คอนเสิร์ต</span></a>
+        <a href="/calendar.html"><i class="fa-solid fa-calendar-days"></i><span>ปฏิทิน</span></a>
+        <a href="/mytickets.html"><i class="fa-solid fa-receipt"></i><span>บัตรของฉัน</span></a>
+        <a href="/login.html"><i class="fa-solid fa-user"></i><span>เข้าสู่ระบบ</span></a>
+    </nav>
+</body>
+</html>

@@ -1,0 +1,24 @@
+# ---- Secrets (NEVER commit) ----
+/.env
+/.env.*
+!/.env.example
+!/.env.production.example
+
+# ---- Live data: kept on the Render persistent disk, not in git ----
+/data/*
+!/data/.gitkeep
+/uploads/*
+!/uploads/.gitkeep
+
+# ---- Local tooling / scratch ----
+/.agent/
+/node_modules/
+*.log
+*.tmp
+*.bak
+*.swp
+
+# ---- OS junk ----
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AREAONE-LIVE | Admin Control Center</title>
+<link rel="icon" href="data:,">
+<!-- ============================================================
+     AREAONE-LIVE ADMIN — ตั้งค่าโลโก้ (แก้ที่นี่ที่เดียว)
+     • ใส่ลิงก์รูปโลโก้แนวนอนในเครื่องหมายคำพูด เช่น LOGO: "https://.../logo.png"
+     • เว้นว่าง "" = ใช้ไอคอน + ข้อความเดิม
+     ============================================================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script id="tdl-admin-config">
+  const TDL_ADMIN = {
+    siteUrl: ""     // ลิงก์หน้าเว็บผู้ชม ใช้สร้างลิงก์/QR ของโค้ด (เว้นว่าง = ใช้โดเมนเดียวกับหน้านี้)
+  };
+  const TDL_IMAGES = {
+    LOGO: "https://i.postimg.cc/3rzqsLgP/BANNER.png",      // โลโก้แนวนอน: หน้าล็อกอิน + เมนูข้าง + favicon
+    FAVICON: "https://i.postimg.cc/WpxyB9GT/SQU.png",   // ไอคอนแท็บเบราว์เซอร์ (เว้นว่าง = ใช้ APP_ICON แล้วค่อย LOGO)
+    APP_ICON: "https://i.postimg.cc/WpxyB9GT/SQU.png"   // ไอคอนแอป: รูปสี่เหลี่ยมจัตุรัส PNG 512×512 (ใช้เป็นไอคอนแท็บ)
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0808;--side:#120b0b;--panel:#191111;--panel2:#211616;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);
+  --text:#f6f1f0;--sub:#a49a9a;--red:#e60000;--red2:#ff3030;--redsoft:rgba(230,0,0,.14);--glow:rgba(230,0,0,.25);
+  --ok:#2ecc71;--oksoft:rgba(46,204,113,.14);--warn:#ffb020;--warnsoft:rgba(255,176,32,.14);
+  --display:"Noto Sans Thai",sans-serif;--mono:"Noto Sans Thai",sans-serif;
+}
+[data-theme=light]{
+  --bg:#f3efee;--side:#fff;--panel:#fff;--panel2:#f6f2f1;--line:rgba(0,0,0,.09);--line2:rgba(0,0,0,.18);
+  --text:#1d1515;--sub:#6d6363;--red:#d00000;--red2:#e61a1a;--redsoft:rgba(208,0,0,.09);--glow:rgba(208,0,0,.16);
+  --ok:#14934a;--oksoft:rgba(20,147,74,.12);--warn:#b87400;--warnsoft:rgba(184,116,0,.12);
+}
+*{box-sizing:border-box;font-family:"Noto Sans Thai",sans-serif}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--red2);outline-offset:2px}
+.hidden{display:none!important}
+svg{flex:none}
+.mono{font-variant-numeric:tabular-nums}
+
+/* ===== controls ===== */
+input,select{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line2);background:var(--panel2);color:var(--text);font-size:14px;outline:0;transition:.15s}
+input:focus,select:focus{border-color:var(--red);box-shadow:0 0 0 3px var(--redsoft)}
+input::placeholder{color:var(--sub);opacity:.7}
+label.f{display:block;font-size:12px;color:var(--sub);font-weight:500;margin-bottom:6px}
+label.f small{opacity:.7;font-weight:400}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:10px 18px;font-weight:600;font-size:14px;color:#fff;background:var(--red);transition:.18s;white-space:nowrap}
+.btn:hover:not(:disabled){background:var(--red2);transform:translateY(-1px);box-shadow:0 8px 22px var(--glow)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line2)}
+.btn.ghost:hover:not(:disabled){background:var(--panel2);box-shadow:none}
+.btn.lg{padding:13px 20px;width:100%}
+.ibtn{width:34px;height:34px;display:inline-grid;place-items:center;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--sub);transition:.15s}
+.ibtn:hover{color:var(--text);border-color:var(--line2);background:var(--panel2)}
+.ibtn.danger:hover{color:var(--red2);border-color:var(--red2);background:var(--redsoft)}
+.ibtn.on{color:var(--warn);border-color:var(--warn);background:var(--warnsoft)}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 9px;border-radius:99px;background:var(--panel2);color:var(--sub);border:1px solid var(--line)}
+.tag.live{background:var(--redsoft);color:var(--red2);border-color:transparent}
+.tag.ok{background:var(--oksoft);color:var(--ok);border-color:transparent}
+.tag.warn{background:var(--warnsoft);color:var(--warn);border-color:transparent}
+.tag i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.switch{position:relative;width:40px;height:22px;flex:none}
+.switch input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:2}
+.switch span{position:absolute;inset:0;border-radius:99px;background:var(--line2);transition:.2s}
+.switch span::after{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
+.switch input:checked+span{background:var(--ok)}
+.switch input:checked+span::after{transform:translateX(18px)}
+.switch input:focus-visible+span{outline:2px solid var(--red2);outline-offset:2px}
+
+/* ===== login ===== */
+#login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.brandpane{position:relative;overflow:hidden;padding:48px;display:flex;flex-direction:column;justify-content:space-between;
+  background:radial-gradient(ellipse 90% 70% at 20% 100%,rgba(230,0,0,.55),transparent 60%),linear-gradient(160deg,#1c0d0d,#080505)}
+.brandpane::after{content:"ADMIN";position:absolute;right:-24px;bottom:-40px;font-weight:800;font-size:200px;line-height:1;color:rgba(255,255,255,.045);letter-spacing:-.05em;pointer-events:none}
+.wordmark{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;letter-spacing:-.01em;color:#fff;line-height:1.2}
+.wordmark b{color:var(--red2);font-weight:400}
+.brandpane h1{font-weight:800;font-size:clamp(40px,5.2vw,76px);line-height:1.15;letter-spacing:-.03em;margin:0;color:#fff}
+.brandpane p{color:rgba(255,255,255,.65);max-width:38ch;line-height:1.7;margin:16px 0 0}
+.formpane{display:grid;place-items:center;padding:30px;background:var(--bg)}
+.lcard{width:min(380px,100%)}
+.lcard h2{margin:0 0 4px;font-size:24px}
+.lcard>p{margin:0 0 24px;color:var(--sub);font-size:14px}
+.lcard .row{margin-bottom:14px}
+.lerr{min-height:20px;color:var(--red2);font-size:13px;margin:4px 0 12px}
+
+/* ===== app shell ===== */
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.side{position:sticky;top:0;height:100vh;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:22px 14px}
+.side .wordmark{color:var(--text);padding:0 8px}
+.side .wordmark small{display:block;font-size:11px;font-weight:500;letter-spacing:.02em;color:var(--sub);margin-top:1px}
+.nav{display:flex;flex-direction:column;gap:4px;margin-top:30px}
+.nav button{display:flex;align-items:center;gap:12px;padding:11px 12px;border:0;border-radius:10px;background:transparent;color:var(--sub);font-size:14px;font-weight:500;text-align:left;transition:.15s;position:relative}
+.nav button:hover{color:var(--text);background:var(--panel2)}
+.nav button.active{color:var(--text);background:var(--redsoft)}
+.nav button.active::before{content:"";position:absolute;left:-14px;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--red)}
+.nav .count{margin-left:auto;font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--sub);background:var(--panel2);padding:1px 8px;border-radius:99px}
+.sidefoot{margin-top:auto;display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:14px}
+.sidefoot button{display:flex;align-items:center;gap:12px;padding:10px 12px;border:0;background:transparent;border-radius:10px;color:var(--sub);font-size:13px;text-align:left}
+.sidefoot button:hover{color:var(--text);background:var(--panel2)}
+.content{min-width:0;padding:0 clamp(16px,3vw,40px) 60px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:26px 0 22px}
+.topbar h1{margin:0;font-weight:800;font-size:28px;letter-spacing:-.02em;line-height:1.3}
+.topbar p{margin:4px 0 0;color:var(--sub);font-size:13px}
+.view{animation:in .35s cubic-bezier(.16,1,.3,1)}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ===== cards ===== */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+.card h3{margin:0 0 14px;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.card h3 small{font-weight:400;color:var(--sub);font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px;position:relative;overflow:hidden}
+.stat .lb{display:flex;align-items:center;gap:10px;color:var(--sub);font-size:13px;font-weight:500}.stat .lb i{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--redsoft);color:var(--red2);font-style:normal}
+.stat .vl{font-weight:800;font-size:44px;line-height:1.15;margin:8px 0 14px;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat .vl small{font-size:20px;font-weight:600;color:var(--sub);letter-spacing:0}
+.meter{height:4px;border-radius:4px;background:var(--line);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--red);border-radius:4px;transition:width .6s}
+.cols{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+.qa{display:flex;gap:10px;flex-wrap:wrap}
+.skeleton{height:100px;border-radius:16px;background:linear-gradient(90deg,var(--panel),var(--panel2),var(--panel));background-size:200% 100%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.empty{text-align:center;color:var(--sub);padding:34px 10px;font-size:14px}
+
+/* mini list */
+.mrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.mrow:last-child{border:0}
+.mrow .th{width:38px;height:50px;border-radius:7px;background:var(--panel2) center/cover;flex:none}
+.mrow .tx{min-width:0;flex:1}
+.mrow .tx b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow .tx span{font-size:12px;color:var(--sub)}
+.crow{padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.crow:last-child{border:0}
+.crow b{color:var(--red2);font-size:12px}
+.crow span{color:var(--sub);font-size:11px;float:right}
+
+/* toolbar */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.search{position:relative;flex:1;min-width:200px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--sub)}
+.search input{padding-left:38px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line2);background:transparent;border-radius:99px;padding:7px 14px;font-size:13px;color:var(--sub);transition:.15s}
+.chip:hover{color:var(--text)}
+.chip.active{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:600}
+.toolbar select{width:auto;min-width:150px}
+
+/* shows grid */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.scard{display:flex;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;transition:.2s}
+.scard:hover{border-color:var(--line2);transform:translateY(-2px)}
+.scard.off{opacity:.62}
+.scard .th{width:84px;height:112px;border-radius:10px;background:var(--panel2) center/cover;flex:none;position:relative;overflow:hidden}
+.scard .th span{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;color:var(--sub);letter-spacing:1px}
+.scard .th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.scard .bd{flex:1;min-width:0;display:flex;flex-direction:column}
+.scard h4{margin:0 0 4px;font-size:15px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.scard .mt{font-size:12px;color:var(--sub);line-height:1.8}.scard .mt svg{vertical-align:-2px}
+.scard .ft{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:10px}
+.scard .ft .l{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub)}
+.addcard{display:grid;place-items:center;gap:6px;min-height:140px;border:1.5px dashed var(--line2);border-radius:16px;background:transparent;color:var(--sub);transition:.2s;font-size:14px}
+.addcard:hover{color:var(--red2);border-color:var(--red2);background:var(--redsoft)}
+
+/* codes */
+.gen{display:grid;grid-template-columns:1.4fr .6fr auto;gap:12px;align-items:end}
+.genout{margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);overflow:hidden}
+.genout header{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid var(--line);font-size:12px;color:var(--sub)}
+.genout pre{margin:0;padding:14px;font-weight:600;letter-spacing:.04em;font-variant-numeric:tabular-nums;font-size:13px;max-height:220px;overflow:auto;line-height:1.8;color:var(--ok)}
+.tbl{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{text-align:left;font-size:12px;letter-spacing:0;color:var(--sub);font-weight:600;padding:13px 16px;background:var(--panel2);position:sticky;top:0}
+td{padding:12px 16px;border-top:1px solid var(--line);font-size:13px;vertical-align:middle}
+tr:hover td{background:color-mix(in srgb,var(--panel2) 55%,transparent)}
+td.code{font-weight:600;letter-spacing:.05em;font-variant-numeric:tabular-nums}
+.acts{display:flex;gap:6px;justify-content:flex-end}
+.more{display:block;margin:14px auto 0}
+
+/* chat */
+.msgs{display:flex;flex-direction:column;gap:10px}
+.msg{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.msg.pinned{border-color:var(--warn);background:linear-gradient(90deg,var(--warnsoft),var(--panel) 40%)}
+.av{width:36px;height:36px;border-radius:50%;background:var(--redsoft);color:var(--red2);display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.msg .bd{flex:1;min-width:0}
+.msg .hd{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--sub);margin-bottom:3px}
+.msg .hd b{color:var(--text);font-size:14px}
+.msg .tx{font-size:14px;line-height:1.55;word-break:break-word}
+.livedot{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--sub)}
+
+/* modal / toast */
+.modal{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.dlg{width:min(640px,100%);max-height:92vh;overflow:auto;background:var(--panel);border:1px solid var(--line2);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.5);animation:in .3s cubic-bezier(.16,1,.3,1)}
+.dlg.sm{width:min(400px,100%)}
+.dlg>header{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line)}
+.dlg>header h3{margin:0;font-size:17px}
+.dlg .bd{padding:22px}
+.dlg>footer{display:flex;justify-content:flex-end;gap:10px;padding:16px 22px;border-top:1px solid var(--line)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fgrid .full{grid-column:1/-1}
+.seg{display:flex;border:1px solid var(--line2);border-radius:10px;overflow:hidden}
+.seg label{flex:1;text-align:center;padding:10px;font-size:13px;cursor:pointer;color:var(--sub);font-weight:600;letter-spacing:1px}
+.seg input{display:none}
+.seg input:checked+span{color:#fff}
+.seg label:has(input:checked){background:var(--red);color:#fff}
+.prev{display:flex;gap:12px;align-items:center}
+.prev .pp{width:60px;height:80px;border-radius:8px;background:var(--panel2);overflow:hidden;flex:none}
+.prev .pp img{width:100%;height:100%;object-fit:cover;display:block}
+.prev .pt{font-size:12px;color:var(--sub);line-height:1.6}
+.togrow{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid var(--line2);border-radius:10px;font-size:14px}
+.toasts{position:fixed;right:20px;bottom:20px;z-index:400;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--text);color:var(--bg);padding:12px 18px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:0 12px 30px rgba(0,0,0,.35);animation:in .3s;display:flex;align-items:center;gap:10px}
+.toast.err{background:var(--red);color:#fff}
+
+/* ===== responsive ===== */
+
+/* ===== modern layer ===== */
+body{line-height:1.6}
+[data-i]{display:inline-flex;align-items:center;justify-content:center;flex:none}
+.mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--red2),#8f0000);color:#fff;box-shadow:0 6px 18px var(--glow)}
+.mark svg{margin-left:2px}
+.wordmark small{display:block}
+.brandpane p{font-size:16px}
+.lcard h2{font-weight:800;letter-spacing:-.02em;font-size:28px}
+input,select{border-radius:12px;padding:12px 14px}
+.btn{border-radius:12px;font-weight:600;letter-spacing:0}
+.ibtn{border-radius:11px}
+.card,.stat,.tbl,.msg,.scard{border-radius:20px}
+.card h3{font-weight:700}
+.side{background:color-mix(in srgb,var(--side) 88%,transparent);backdrop-filter:blur(14px)}
+.nav button{border-radius:12px;font-weight:500}
+.nav button.active{background:linear-gradient(90deg,var(--redsoft),transparent);color:var(--text);font-weight:600}
+.nav button.active svg{color:var(--red2)}
+.topbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);margin:0 calc(-1 * clamp(16px,3vw,40px));padding:20px clamp(16px,3vw,40px) 16px}
+.topbar p{font-size:13px}
+.tag{letter-spacing:.06em;font-weight:600}
+.scard h4{font-weight:700}
+.scard .th{border-radius:12px}
+.chip{border-radius:99px;font-weight:500}
+.chip.active{font-weight:600}
+th{background:var(--panel2)}
+.msg .hd b{font-weight:700}
+.dlg{border-radius:24px}
+.dlg>header h3{font-weight:700}
+.toast{border-radius:14px}
+.mrow .th{border-radius:9px}
+
+/* ===== LOGO (โลโก้แนวนอน แทนที่ไอคอน+ชื่อทั้งชุด) ===== */
+[data-logo].has-img img{display:block;width:auto;object-fit:contain;-webkit-user-drag:none;user-select:none}
+.brandpane .wordmark.has-img img{height:42px;max-width:260px}
+.side .wordmark.has-img img{height:34px;max-width:190px}
+.sidelogo{padding:0 8px}
+.sidelogo .wordmark{padding:0}
+.admtag{display:block;margin-top:6px;font-size:11px;font-weight:500;color:var(--sub)}
+.mlogo{display:none;color:var(--text);margin-bottom:26px}
+.mlogo b{color:var(--red)}
+.mlogo.has-img img{height:38px;max-width:220px}
+@media(max-width:900px){.mlogo{display:flex}.sidelogo{display:none}}
+@media(max-width:900px){
+  #login{grid-template-columns:1fr}.brandpane{display:none}
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;z-index:100;flex-direction:row;padding:6px 8px calc(6px + env(safe-area-inset-bottom));border-right:0;border-top:1px solid var(--line)}
+  .side .wordmark,.sidefoot{display:none}
+  .nav{flex-direction:row;margin:0;width:100%;justify-content:space-around}
+  .nav button{flex-direction:column;gap:3px;font-size:11px;padding:8px 6px;flex:1;align-items:center;text-align:center}
+  .nav button.active::before{left:25%;right:25%;top:0;bottom:auto;width:auto;height:3px;border-radius:0 0 3px 3px}
+  .nav .count{display:none}
+  .content{padding-bottom:100px}
+  .stats{grid-template-columns:1fr}.cols{grid-template-columns:1fr}
+  .gen{grid-template-columns:1fr}.fgrid{grid-template-columns:1fr}
+  .topbar h1{font-size:32px}
+  .toasts{right:12px;left:12px;bottom:84px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== ล้างโค้ดเก่า / เลือกหลายรายการ ===== */
+.chk{width:18px;height:18px;padding:0;accent-color:var(--red);cursor:pointer;vertical-align:middle}
+.clean{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ctile{border:1px solid var(--line);border-radius:16px;padding:14px;background:var(--panel2);display:flex;flex-direction:column;gap:8px}
+.ctile .n{font-weight:800;font-size:30px;letter-spacing:-.02em;line-height:1.2;font-variant-numeric:tabular-nums}
+.ctile .l{font-size:12.5px;color:var(--sub);line-height:1.7;flex:1}
+.ctile .btn{padding:8px 14px}
+.ctile .btn:not(:disabled):hover{background:var(--red);border-color:var(--red);color:#fff}
+.days{display:inline-block;width:64px;padding:4px 8px;margin:0 3px;border-radius:8px;text-align:center;font-size:13px}
+.prog{display:flex;align-items:center;gap:12px;margin-top:14px;font-size:13px;color:var(--sub)}
+.prog .bar{flex:1;height:6px;border-radius:6px;background:var(--line);overflow:hidden}
+.prog .bar i{display:block;height:100%;width:0;background:var(--red);border-radius:6px;transition:width .2s}
+.bulk{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;margin-bottom:12px;border:1px solid var(--red);background:var(--redsoft);border-radius:14px;font-size:14px;font-weight:600}
+.bulk .sp{flex:1}
+.btn.danger{background:var(--red)}
+@media(max-width:900px){.clean{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.clean{grid-template-columns:1fr}}
+
+/* ===== ประกาศ / ตั้งค่าแชต / สถิติสด / QR ===== */
+textarea{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--line2);background:var(--panel2);color:var(--text);font-size:14px;outline:0;resize:vertical;font-family:inherit}
+textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px var(--redsoft)}
+.teamrow{display:grid;grid-template-columns:200px 1fr auto;gap:10px}
+@media(max-width:900px){.teamrow{grid-template-columns:1fr}}
+.annform,.modform{display:flex;flex-direction:column;gap:12px}
+.annrow{display:grid;grid-template-columns:1fr 1.4fr;gap:12px}
+.annrow.end{display:flex;align-items:center;justify-content:space-between}
+.note{margin-top:12px;padding:10px 14px;border-radius:12px;background:var(--warnsoft);color:var(--warn);font-size:12.5px;line-height:1.6}
+.gen2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.gen2 .hint{grid-column:1/-1;font-size:12px;color:var(--sub)}
+.bigv{font-weight:800;font-size:40px;letter-spacing:-.03em;line-height:1.2;margin-bottom:8px}
+.bigv small{font-size:14px;color:var(--sub);font-weight:500;letter-spacing:0}
+.mini{margin-top:14px}
+.mini .mt{font-size:12px;color:var(--sub);margin-bottom:6px}
+.bars{display:flex;align-items:flex-end;gap:3px;height:70px}
+.bars .b{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:2px}
+.bars .b i{display:block;width:100%;background:var(--red);border-radius:3px 3px 0 0;min-height:2px}
+.bars .b span{font-size:9px;color:var(--sub)}
+.banned{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.banned .x{border:0;background:transparent;color:inherit;cursor:pointer;font-size:14px;line-height:1;padding:0 0 0 4px}
+.qrbox{display:inline-block;padding:14px;background:#fff;border-radius:16px;min-height:60px}
+.qrbox img{display:block;margin:0 auto}
+.qrcode{margin-top:12px;font-weight:700;letter-spacing:.05em}
+@media(max-width:900px){.annrow,.gen2{grid-template-columns:1fr}}
+
+/* ===== โหมดปรับปรุงระบบ ===== */
+.mtnform{display:flex;flex-direction:column;gap:14px}
+.mtn-banner{display:flex;align-items:center;gap:10px;margin:14px 0 0;padding:10px 16px;border-radius:14px;background:var(--red);color:#fff;font-size:14px}
+.mtn-banner span{flex:1}
+.mtn-banner .btn{padding:6px 14px;font-size:12px;color:#fff;border-color:rgba(255,255,255,.5)}
+.hint{font-size:12px;color:var(--sub);line-height:1.6;flex:1}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="login">
+  <div class="brandpane">
+    <div class="wordmark" data-logo="LOGO"><span class="mark" data-i="play" data-s="15"></span><span>AREAONE-<b>LIVE</b></span></div>
+    <div>
+      <h1>จัดการทุกไลฟ์<br>ได้ในที่เดียว</h1>
+      <p>จัดการรอบการแสดง Access Code และแชตสด ได้ในที่เดียว</p>
+    </div>
+  </div>
+  <div class="formpane">
+    <div class="lcard">
+      <div class="mlogo wordmark" data-logo="LOGO"><span class="mark" data-i="play" data-s="15"></span><span>AREAONE-<b>LIVE</b></span></div>
+      <h2>เข้าสู่ระบบ</h2>
+      <p>สำหรับผู้ดูแลระบบ AREAONE-LIVE เท่านั้น</p>
+      <div class="row"><label class="f" for="user">Username</label><input id="user" placeholder="admin" autocomplete="username"></div>
+      <div class="row"><label class="f" for="pass">Password</label><input id="pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div id="loginErr" class="lerr"></div>
+      <button id="loginBtn" class="btn lg" onclick="doLogin()">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="dash" class="app hidden">
+  <aside class="side">
+    <div class="sidelogo"><div class="wordmark" data-logo="LOGO"><span class="mark" data-i="play" data-s="15"></span><span>AREAONE-<b>LIVE</b></span></div><small class="admtag">ผู้ดูแลระบบ</small></div>
+    <nav class="nav" id="nav">
+      <button data-act="view" data-id="overview" class="active"><i data-i="grid"></i>ภาพรวม</button>
+      <button data-act="view" data-id="shows"><i data-i="film"></i>รอบการแสดง<span class="count" id="cShows"></span></button>
+      <button data-act="view" data-id="codes"><i data-i="key"></i>Access Codes<span class="count" id="cCodes"></span></button>
+      <button data-act="view" data-id="chat"><i data-i="chat"></i>แชต<span class="count" id="cChat"></span></button>
+      <button data-act="view" data-id="announcements"><i data-i="bell"></i>ตั้งค่าประกาศ</button>
+      <button data-act="view" data-id="maintenance"><i data-i="gear"></i>โหมดปรับปรุง</button>
+      <button data-act="view" data-id="security"><i data-i="shield"></i>Security & Protection</button>
+    </nav>
+    <div class="sidefoot">
+      <button onclick="location.href='/'"><i data-i="ext"></i>ดูหน้าเว็บ</button>
+      <button onclick="toggleTheme()"><i id="themeIcon" data-i="moon"></i><span id="themeLabel">โหมดสว่าง</span></button>
+      <button onclick="doLogout()"><i data-i="out"></i>ออกจากระบบ</button>
+    </div>
+  </aside>
+
+  <div class="content">
+    <div id="mtnBanner" class="mtn-banner hidden"><i data-i="gear" data-s="18"></i><span><b>กำลังอยู่ในโหมดปรับปรุงระบบ</b> — ผู้ชมเข้าเว็บไม่ได้ตอนนี้</span><button class="btn ghost" data-act="mtnGo">จัดการ</button></div>
+    <div class="topbar">
+      <div><h1 id="pageTitle">ภาพรวม</h1><p id="pageSub">ภาพรวมของระบบ</p></div>
+      <div style="display:flex;gap:8px">
+        <button class="ibtn" onclick="loadAll(true)" title="รีเฟรชข้อมูล"><i data-i="refresh"></i></button>
+        <button class="ibtn" onclick="toggleTheme()" title="สลับธีม" id="themeBtnTop"><i data-i="moon"></i></button>
+        <button class="ibtn" onclick="doLogout()" title="ออกจากระบบ"><i data-i="out"></i></button>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section id="v-overview" class="view">
+      <div id="stats" class="stats"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+      <div class="card" id="healthCard" style="margin-bottom:16px"><h3>สถานะระบบ <small id="healthState">กำลังตรวจสอบ...</small></h3><div id="healthBody" class="hint">ตรวจฐานข้อมูล หน่วยความจำ uptime และผู้ชม</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn ghost" data-act="healthRefresh">รีเฟรชสถานะ</button><button class="btn ghost" data-act="reportsDownload">ส่งออกรายงาน CSV</button></div></div>
+      
+      
+      <div class="cols" style="margin-bottom:16px">
+        
+        <div class="card" id="liveCard">
+          <h3>กำลังรับชมตอนนี้ <small id="liveSub"></small></h3>
+          <div id="liveBody"><div class="empty">กำลังโหลด...</div></div>
+        </div>
+      </div>
+      <div class="cols">
+        <div class="card"><h3>รอบที่เปิดอยู่ <small id="ovShowsSub"></small></h3><div id="ovShows"></div></div>
+        <div class="card"><h3>แชตล่าสุด <small>6 ข้อความ</small></h3><div id="ovChat"></div></div>
+      </div>
+    </section>
+
+    <!-- ANNOUNCEMENTS SETTINGS -->
+    <section id="v-announcements" class="view hidden">
+      <div class="card" id="annCard">
+          <h3>ประกาศถึงผู้ชม <small id="annState"></small></h3>
+          <div class="annform" style="border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:18px">
+            <h4 style="margin:0">ประกาศรวม</h4>
+            <p class="hint">แสดงกับทุกหน้าและทุกอีเวนต์ โดยจะอยู่เหนือประกาศเฉพาะอีเวนต์</p>
+            <div><label class="f" for="globalAnnText">ข้อความประกาศรวม</label><input id="globalAnnText" maxlength="200" placeholder="เช่น ยินดีต้อนรับสู่ AREA ONE LIVE"></div>
+            <div class="annrow"><div><label class="f" for="globalAnnLevel">ชนิด</label><select id="globalAnnLevel"><option value="info">ข้อมูลทั่วไป</option><option value="warn">แจ้งเตือน</option></select></div><div><label class="f" for="globalAnnLink">ลิงก์ (ถ้ามี)</label><input id="globalAnnLink" placeholder="https://..."></div></div>
+            <div class="annrow end"><label class="livedot"><span class="switch"><input type="checkbox" id="globalAnnOn"><span></span></span>แสดงประกาศรวม</label><button class="btn" id="globalAnnSave" data-act="globalAnnSave">บันทึกประกาศรวม</button></div>
+          </div>
+          <div class="annform">
+            <h4 style="margin:0">ประกาศเฉพาะอีเวนต์</h4>
+            <p class="hint">เลือกอีเวนต์ที่ต้องการ ประกาศนี้จะแสดงใต้ประกาศรวม และไม่กระทบอีเวนต์อื่น</p>
+            <div><label class="f" for="eventAnnShowId">อีเวนต์</label><select id="eventAnnShowId"><option value="">— เลือกอีเวนต์ —</option></select></div>
+            <div><label class="f" for="eventAnnText">ข้อความประกาศอีเวนต์</label><input id="eventAnnText" maxlength="200" placeholder="เช่น ประตูเปิดเวลา 18:00 น."></div>
+            <div class="annrow"><div><label class="f" for="eventAnnLevel">ชนิด</label><select id="eventAnnLevel"><option value="info">ข้อมูลทั่วไป</option><option value="warn">แจ้งเตือน</option></select></div><div><label class="f" for="eventAnnLink">ลิงก์ (ถ้ามี)</label><input id="eventAnnLink" placeholder="https://..."></div></div>
+            <div class="annrow end"><label class="livedot"><span class="switch"><input type="checkbox" id="eventAnnOn"><span></span></span>แสดงประกาศอีเวนต์นี้</label><button class="btn" id="eventAnnSave" data-act="eventAnnSave">บันทึกประกาศอีเวนต์</button></div>
+          </div>
+          <div id="annNote" class="note hidden"></div>
+        </div>
+    </section>
+
+    <!-- MAINTENANCE SETTINGS -->
+    <section id="v-maintenance" class="view hidden">
+      <div class="card" style="margin-bottom:16px" id="mtnCard">
+        <h3>โหมดปรับปรุงระบบ <small id="mtnState"></small></h3>
+        <div class="mtnform">
+          <label class="livedot"><span class="switch"><input type="checkbox" id="mtnOn"><span></span></span><span id="mtnOnLbl">ปิดเว็บชั่วคราว (ผู้ชมจะเห็นหน้า "เรากำลังปรับปรุงเว็บไซต์ใหม่ โปรดมาอีกครั้งภายหลัง")</span></label>
+          <div class="annform" style="padding:14px;border:1px solid var(--line2);border-radius:14px">
+            <h4 style="margin:0">ข้อความหน้า Maintenance</h4>
+            <p class="hint">กำหนดภาษาไทยและภาษาอังกฤษแยกกันได้ในแต่ละบรรทัด หากเว้นว่าง ระบบจะใช้ข้อความเริ่มต้นเดิม</p>
+            <div><label class="f">บรรทัดที่ 1 — หัวข้อ (ไทย)</label><input id="mtnTitleTh" maxlength="200" placeholder="เรากำลังปรับปรุงเว็บไซต์ใหม่"></div>
+            <div><label class="f">Line 1 — Heading (English)</label><input id="mtnTitleEn" maxlength="200" placeholder="We’re updating the website"></div>
+            <div><label class="f">บรรทัดที่ 2 — ข้อความรอง (ไทย)</label><input id="mtnSubTh" maxlength="300" placeholder="โปรดมาอีกครั้งภายหลัง"></div>
+            <div><label class="f">Line 2 — Supporting text (English)</label><input id="mtnSubEn" maxlength="300" placeholder="Please come back later."></div>
+            <div><label class="f">บรรทัดที่ 3 — ข้อความเพิ่มเติม (ไทย)</label><textarea id="mtnNoteTh" rows="2" maxlength="500" placeholder="เว็บไซต์ขัดข้อง โปรดรอสักครู่"></textarea></div>
+            <div><label class="f">Line 3 — Additional message (English)</label><textarea id="mtnNoteEn" rows="2" maxlength="500" placeholder="The website is temporarily unavailable. Please wait."></textarea></div>
+          </div>
+          <div class="annform" style="padding:14px;border:1px solid var(--line2);border-radius:14px">
+            <h4 style="margin:0">กำหนดเวลา Maintenance & Countdown</h4>
+            <p class="hint">ตั้งเวลาไทย (UTC+7) ให้ระบบเปิด Maintenance ตามกำหนด และเปิดเว็บกลับอัตโนมัติได้</p>
+            <label class="livedot"><span class="switch"><input type="checkbox" id="mtnScheduleOn"><span></span></span><span>เปิดใช้งานตาราง Maintenance อัตโนมัติ</span></label>
+            <div class="cols">
+              <div><label class="f" for="mtnStartsAt">เริ่ม Maintenance วันที่/เวลา (ไทย)</label><input type="datetime-local" id="mtnStartsAt"></div>
+              <div><label class="f" for="mtnReopensAt">เปิดเว็บไซต์ตามปกติ วันที่/เวลา (ไทย)</label><input type="datetime-local" id="mtnReopensAt"></div>
+            </div>
+            <div class="cols">
+              <label class="livedot"><span class="switch"><input type="checkbox" id="mtnCountdownOn" checked><span></span></span><span>แสดง Countdown</span></label>
+              <label class="livedot"><span class="switch"><input type="checkbox" id="mtnAutoOpen" checked><span></span></span><span>เปิดเว็บอัตโนมัติเมื่อหมดเวลา</span></label>
+              <label class="livedot"><span class="switch"><input type="checkbox" id="mtnShowDays" checked><span></span></span><span>แสดงจำนวนวัน</span></label>
+              <label class="livedot"><span class="switch"><input type="checkbox" id="mtnShowSeconds" checked><span></span></span><span>แสดงวินาที</span></label>
+            </div>
+            <div><label class="f" for="mtnAnimation">แอนิเมชัน Countdown</label><select id="mtnAnimation"><option value="flip">Flip Clock — ตัวเลขพลิก</option><option value="roll">Number Roll — ตัวเลขเลื่อน</option><option value="fade">Smooth Fade — ค่อย ๆ เปลี่ยน</option><option value="none">ไม่มีแอนิเมชัน</option></select></div>
+            <p class="hint">หากเปิดตารางเวลา ระบบจะใช้กำหนดการนี้ควบคุมสถานะ Maintenance แทนสวิตช์เปิด/ปิดแบบปกติ ตรวจสอบวันเวลาให้ถูกต้องก่อนบันทึก</p>
+          </div>
+          <div class="annrow end"><span class="hint">การเปลี่ยนสถานะจะมีผลกับผู้ชมทุกคนภายในไม่กี่วินาที</span><button class="btn" id="mtnSave" data-act="mtnSave">บันทึก</button></div>
+        </div>
+        <div id="mtnErr" class="note hidden"></div>
+      </div>
+    </section>
+
+    <!-- SECURITY & PROTECTION -->
+    <section id="v-security" class="view hidden">
+      <div class="card" style="margin-bottom:16px" id="securityCard">
+        <h3>Security & Protection <small id="securityState"></small></h3>
+        <p class="hint">ตรวจจับการเปิด DevTools ในเบราว์เซอร์และบังหน้าเว็บไซต์ด้วย Security Error Overlay เท่านั้น ระบบนี้ไม่สามารถป้องกันการเข้าถึงข้อมูลฝั่งเบราว์เซอร์ได้ 100%</p>
+        <div class="mtnform">
+          <label class="livedot"><span class="switch"><input type="checkbox" id="securityOn"><span></span></span><span>เปิดระบบตรวจจับ DevTools (F12)</span></label>
+          <div class="annform" style="padding:14px;border:1px solid var(--line2);border-radius:14px">
+            <h4 style="margin:0">การทำงาน</h4>
+            <p class="hint">เมื่อเปิดใช้งาน ระบบจะตรวจจับปุ่มลัด DevTools และการเปลี่ยนขนาดหน้าต่างที่อาจเกิดจาก DevTools หากปิดเครื่องมือแล้ว Overlay จะหายไปเอง ไม่บังคับ Fullscreen ของเบราว์เซอร์</p>
+            <p class="hint">การตรวจจับเป็นแบบ best-effort และอาจเกิด false positive ได้ในบางหน้าต่าง/เบราว์เซอร์</p>
+          </div>
+          <div class="annform" style="padding:14px;border:1px solid var(--line2);border-radius:14px">
+            <h4 style="margin:0">ข้ามการป้องกันเฉพาะอุปกรณ์นี้</h4>
+            <p class="hint">ใช้หลังจากผู้ดูแลเข้าสู่ระบบแล้ว เพื่อให้เครื่องนี้ไม่แสดง Overlay โดยไม่เปลี่ยนค่าของผู้ชมคนอื่น</p>
+            <div class="annrow end"><span id="securityLocalState" class="hint">กำลังตรวจสอบสถานะอุปกรณ์...</span><button class="btn ghost" id="securityLocalBtn" data-act="securityLocalToggle">ปิดการบังหน้าจอในอุปกรณ์นี้</button></div>
+          </div>
+          <div class="annrow end"><span class="hint">การตั้งค่านี้มีผลกับผู้ชมทุกคน ยกเว้นอุปกรณ์ที่ตั้งค่า bypass เฉพาะเครื่องไว้</span><button class="btn" id="securitySave" data-act="securitySave">บันทึกการตั้งค่า</button></div>
+        </div>
+        <div id="securityErr" class="note hidden"></div>
+      </div>
+    </section>
+
+    <!-- SHOWS -->
+    <section id="v-shows" class="view hidden">
+      <div class="toolbar">
+        <div class="search"><i data-i="search" data-s="16"></i><input id="showQ" placeholder="ค้นหาชื่อ / ID / วันที่" oninput="renderShows()"></div>
+        <div class="chips" id="showChips">
+          <button class="chip active" data-act="showFilter" data-id="all">ทั้งหมด</button>
+          <button class="chip" data-act="showFilter" data-id="L">LIVE</button>
+          <button class="chip" data-act="showFilter" data-id="R">RERUN</button>
+          <button class="chip" data-act="showFilter" data-id="off">ปิดอยู่</button>
+        </div>
+        <button class="btn" data-act="newShow"><i data-i="plus"></i>เพิ่มรอบ</button>
+      </div>
+      <div id="showsGrid" class="sgrid"></div>
+    </section>
+
+    <!-- CODES -->
+    <section id="v-codes" class="view hidden">
+      <div class="card" style="margin-bottom:16px" id="genCard">
+        <h3>สร้าง Access Code <small>สูงสุด 500 โค้ดต่อครั้ง</small></h3>
+        <div class="gen">
+          <div><label class="f" for="codeShow">รอบการแสดง</label><select id="codeShow"></select></div>
+          <div><label class="f" for="codeCount">จำนวน</label><input id="codeCount" type="number" min="1" max="500" value="1"></div>
+          <button class="btn" onclick="generateCodes()" id="genBtn">สร้างโค้ด</button>
+        </div>
+        <div class="gen2">
+          <div><label class="f" for="genExp">หมดอายุใน (วัน) <small>ว่าง = ไม่หมดอายุ</small></label><input id="genExp" type="number" min="1" placeholder="เช่น 7"></div>
+          <div><label class="f" for="genDev">จำกัดจำนวนเครื่องต่อโค้ด <small>ว่าง = ไม่จำกัด</small></label><input id="genDev" type="number" min="1" placeholder="เช่น 2"></div>
+          <div class="hint">สองช่องนี้ต้องให้หลังบ้านรองรับ (ดู BACKEND_API_SPEC.md) ถ้าเว้นว่างจะสร้างแบบเดิม</div>
+        </div>
+        <div id="genOut" class="genout hidden">
+          <header><span id="genInfo"></span><button class="btn ghost" style="padding:5px 12px;font-size:12px" onclick="copyText($('generated').textContent,'คัดลอกโค้ดทั้งหมดแล้ว')"><i data-i="copy" data-s="14"></i>คัดลอกโค้ด</button> <button class="btn ghost" style="padding:5px 12px;font-size:12px" data-act="copyLinks"><i data-i="ext" data-s="14"></i>คัดลอกลิงก์</button></header>
+          <pre id="generated"></pre>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px" id="cleanCard">
+        <h3>ล้างโค้ดเก่า <small>ลบถาวร กู้คืนไม่ได้</small></h3>
+        <div class="clean">
+          <div class="ctile"><div class="n" id="clSusp">0</div><div class="l">โค้ดที่ถูกระงับ</div><button class="btn ghost" data-act="cleanSusp" id="btnSusp">ลบ</button></div>
+          <div class="ctile"><div class="n" id="clOrph">0</div><div class="l">โค้ดของรอบที่ถูกลบไปแล้ว</div><button class="btn ghost" data-act="cleanOrph" id="btnOrph">ลบ</button></div>
+          <div class="ctile"><div class="n" id="clOld">0</div><div class="l">สร้างมานานกว่า <input id="oldDays" class="days" type="number" min="1" value="30"> วัน</div><button class="btn ghost" data-act="cleanOld" id="btnOld">ลบ</button></div>
+          <div class="ctile hidden" id="tileExp"><div class="n" id="clExp">0</div><div class="l">โค้ดที่หมดอายุแล้ว</div><button class="btn ghost" data-act="cleanExp" id="btnExp">ลบ</button></div>
+          <div class="ctile"><div class="n" id="clFilt">0</div><div class="l">ทั้งหมดที่ตรงกับตัวกรองด้านล่าง</div><button class="btn ghost" data-act="cleanFilt" id="btnFilt">ลบ</button></div>
+        </div>
+        <div id="delProg" class="prog hidden"><div class="bar"><i id="delBar"></i></div><span id="delTxt"></span></div>
+      </div>
+      <div class="toolbar">
+        <div class="search"><i data-i="search" data-s="16"></i><input id="codeQ" placeholder="ค้นหาโค้ด" oninput="codeLimit=100;renderCodes()"></div>
+        <select id="codeShowF" onchange="codeLimit=100;renderCodes()"></select>
+        <div class="chips" id="codeChips">
+          <button class="chip active" data-act="codeFilter" data-id="all">ทั้งหมด</button>
+          <button class="chip" data-act="codeFilter" data-id="ACTIVE">ใช้งานได้</button>
+          <button class="chip" data-act="codeFilter" data-id="SUSPENDED">ถูกระงับ</button>
+        </div>
+        <button class="btn ghost" data-act="exportCsv"><i data-i="download" data-s="16"></i>CSV</button>
+        <button class="btn ghost" data-act="copyShown"><i data-i="copy" data-s="16"></i>คัดลอกที่แสดง</button>
+      </div>
+      <div id="bulkBar" class="bulk hidden"><span id="bulkTxt"></span><span class="sp"></span><button class="btn ghost" data-act="clearSel">ยกเลิกการเลือก</button><button class="btn danger" data-act="deleteSel"><i data-i="trash" data-s="16"></i>ลบที่เลือก</button></div>
+      <div class="tbl"><table>
+        <thead id="codesHead"></thead>
+        <tbody id="codesBody"></tbody>
+      </table></div>
+      <button id="moreCodes" class="btn ghost more hidden" onclick="codeLimit+=100;renderCodes()">แสดงเพิ่ม</button>
+    </section>
+
+    <!-- CHAT -->
+    <section id="v-chat" class="view hidden">
+      <div class="toolbar">
+        <select id="chatFilter" onchange="loadChat()" style="max-width:320px"></select>
+        <button class="btn ghost" onclick="loadChat()"><i data-i="refresh" data-s="16"></i>รีเฟรช</button>
+        <label class="livedot" style="margin-left:auto"><span class="switch"><input type="checkbox" id="autoChat" onchange="setAuto()"><span></span></span>อัปเดตอัตโนมัติ (5 วิ)</label>
+      </div>
+      <div class="card" style="margin-bottom:14px" id="teamCard">
+        <h3>ส่งข้อความในฐานะทีมงาน <small>แสดงป้าย "แอดมิน" ให้ผู้ชมเห็น</small></h3>
+        <div class="teamrow">
+          <select id="teamShow"></select>
+          <input id="teamText" maxlength="300" placeholder="พิมพ์ข้อความถึงผู้ชม..." onkeydown="if(event.key==='Enter')sendTeam()">
+          <button class="btn" data-act="teamSend">ส่ง</button>
+        </div>
+      </div>
+      <div class="card" id="modCard" style="margin-bottom:14px">
+        <h3>ตั้งค่าแชต <small id="modState"></small></h3>
+        <div class="modform">
+          <div><label class="f" for="slowSec">โหมดจำกัดความถี่ (วินาทีต่อข้อความ) <small>0 = ปิด</small></label><input id="slowSec" type="number" min="0" max="300" value="0"></div>
+          <div><label class="f" for="blockWords">คำต้องห้าม <small>คั่นด้วยเครื่องหมายจุลภาคหรือขึ้นบรรทัดใหม่</small></label><textarea id="blockWords" rows="2" placeholder="คำที่ 1, คำที่ 2"></textarea></div>
+          <button class="btn" data-act="modSave" id="modSave">บันทึก</button>
+        </div>
+        <div id="bannedList" class="banned hidden"></div>
+        <div id="modNote" class="note hidden"></div>
+      </div>
+      <div id="chatBulkBar" class="bulk hidden" style="margin-bottom:12px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px"><input type="checkbox" class="chk" id="chatSelAll"> เลือกทั้งหมดในรายการ</label>
+        <span class="sp"></span><span id="chatBulkTxt">เลือกแล้ว 0 ข้อความ</span>
+        <button class="btn ghost" data-act="clearChatSel">ยกเลิกการเลือก</button>
+        <button class="btn danger" data-act="deleteChatSel"><i data-i="trash" data-s="16"></i>ลบที่เลือก</button>
+      </div>
+      <div id="chatList" class="msgs"></div>
+    </section>
+  </div>
+</div>
+
+<!-- ================= SHOW MODAL ================= -->
+<div id="showModal" class="modal hidden" onclick="if(event.target===this)closeShow()">
+  <div class="dlg">
+    <header><h3 id="showModalTitle">เพิ่มรอบการแสดง</h3><button class="ibtn" onclick="closeShow()"><i data-i="plus" style="transform:rotate(45deg);display:inline-flex"></i></button></header>
+    <div class="bd">
+      <div class="fgrid">
+        <div><label class="f" for="sid">รหัสรอบ (ID) <small>(ซ้ำกับของเดิม = แก้ไขรอบนั้น)</small></label><input id="sid" placeholder="เช่น S01"></div>
+        <div><label class="f">ประเภท</label>
+          <div class="seg"><label><input type="radio" name="stype" value="L" checked><span>LIVE</span></label><label><input type="radio" name="stype" value="R"><span>RERUN</span></label></div>
+        </div>
+        <div><label class="f" for="sdate">วันที่</label><input id="sdate" placeholder="เช่น 21 ก.ย. 2026"></div>
+        <div><label class="f" for="stime">เวลา</label><input id="stime" placeholder="เช่น 19:00 น."></div>
+        <div class="full"><label class="f" for="sname">ชื่ออีเว้นต์ <small>(รอบที่ชื่อเดียวกันจะถูกรวมเป็นอีเว้นต์เดียวบนหน้าเว็บ)</small></label><input id="sname" placeholder="ชื่อ"></div>
+        <div class="full"><label class="f" for="sposter">Poster URL</label>
+          <div class="prev"><div class="pp"><img id="posterPrev" alt="" style="display:none"></div><div style="flex:1"><input id="sposter" placeholder="https://..." oninput="updatePrev()"><div class="pt" id="posterHint">ใส่ลิงก์เพื่อดูตัวอย่าง</div></div></div>
+        </div>
+        <div class="full"><label class="f" for="syoutube">YouTube ID หรือ URL</label><input id="syoutube" placeholder="https://youtu.be/..."></div>
+        <div class="full"><label class="f" for="spurchase">ลิงก์ซื้อบัตร (ไม่บังคับ)</label><input id="spurchase" placeholder="https://..."></div>
+        <div><label class="f" for="sstarts">เวลาเริ่ม (ไม่บังคับ)</label><input id="sstarts" type="datetime-local"></div>
+        <div><label class="f" for="sends">เวลาจบ (ไม่บังคับ)</label><input id="sends" type="datetime-local"></div>
+        <div class="full"><div class="togrow"><span>เปลี่ยน LIVE เป็น RERUN อัตโนมัติเมื่อจบรอบ</span><span class="switch"><input type="checkbox" id="sautorun"><span></span></span></div></div>
+        <div class="full"><div class="togrow"><span>เปิดให้ผู้ชมเห็นรอบนี้</span><span class="switch"><input type="checkbox" id="sactive" checked><span></span></span></div></div>
+      </div>
+    </div>
+    <footer><button class="btn ghost" onclick="closeShow()">ยกเลิก</button><button class="btn" id="saveBtn" onclick="saveShow()">บันทึก</button></footer>
+  </div>
+</div>
+
+<!-- ================= CONFIRM ================= -->
+<div id="qrModal" class="modal hidden" onclick="if(event.target===this)closeQr()">
+  <div class="dlg sm">
+    <header><h3>QR / ลิงก์เข้าชม</h3><button class="ibtn" onclick="closeQr()"><i data-i="plus" style="transform:rotate(45deg);display:inline-flex"></i></button></header>
+    <div class="bd" style="text-align:center">
+      <div id="qrBox" class="qrbox"></div>
+      <div id="qrErr" class="note hidden">โหลดไลบรารี QR ไม่สำเร็จ (ต้องออนไลน์) — ใช้ลิงก์ด้านล่างแทนได้</div>
+      <div id="qrCode" class="qrcode"></div>
+      <input id="qrLink" readonly style="margin-top:10px;font-size:12px">
+    </div>
+    <footer><button class="btn ghost" data-act="qrCopy"><i data-i="copy" data-s="16"></i>คัดลอกลิงก์</button><button class="btn" data-act="qrDown"><i data-i="download" data-s="16"></i>ดาวน์โหลด PNG</button></footer>
+  </div>
+</div>
+
+<div id="confirmModal" class="modal hidden">
+  <div class="dlg sm">
+    <div class="bd"><h3 id="cfTitle" style="margin:0 0 8px"></h3><div id="cfText" style="color:var(--sub);font-size:14px;line-height:1.6"></div><input id="cfInput" class="hidden" style="margin-top:14px" autocomplete="off"></div>
+    <footer><button class="btn ghost" id="cfNo">ยกเลิก</button><button class="btn" id="cfYes">ยืนยัน</button></footer>
+  </div>
+</div>
+
+<div id="toasts" class="toasts"></div>
+
+<script>
+/* ===== TDL ADMIN LOGO (ระบบใส่โลโก้ — แยกจากระบบหลัก) ===== */
+const TDLLogo = (() => {
+  const imgs = (typeof TDL_IMAGES !== 'undefined') ? TDL_IMAGES : {};
+  const ok = u => typeof u === 'string' && u.trim() !== '' && !/^https?:\/\/$/i.test(u.trim());
+  const pick = key => ok(imgs[key]) ? imgs[key].trim() : (ok(imgs.LOGO) ? imgs.LOGO.trim() : '');
+  function apply(root = document){
+    root.querySelectorAll('[data-logo]').forEach(el => {
+      if (el.classList.contains('has-img')) return;
+      const url = pick(el.dataset.logo); if (!url) return;
+      const img = new Image(); img.alt = 'AREAONE-LIVE'; img.draggable = false;
+      img.onload = () => { el.classList.add('has-img'); el.replaceChildren(img) };
+      img.src = url;
+    });
+  }
+  function favicon(){
+    const u = ok(imgs.FAVICON) ? imgs.FAVICON.trim() : (ok(imgs.APP_ICON) ? imgs.APP_ICON.trim() : pick('LOGO'));
+    const l = document.querySelector('link[rel~="icon"]');
+    if (u && l) l.href = u;
+  }
+  return { apply, favicon };
+})();
+TDLLogo.favicon();
+TDLLogo.apply();
+</script>
+<script>
+/* ================= STATE ================= */
+let token = sessionStorage.getItem('tdlAdminToken') || '';
+let shows = [], codes = [], chat = [], stats = {};
+let selectedChat = new Set();
+let showFilter = 'all', codeFilter = 'all', codeLimit = 100, currentView = 'overview', autoTimer = null;
+const $ = id => document.getElementById(id);
+
+/* ================= ICONS ================= */
+const I = {
+  grid:'<path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>',
+  shield:'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/><path d="m9 12 2 2 4-4"/>',
+  shield:'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/><path d="m9 12 2 2 4-4"/>',
+  film:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 3v18M17 3v18M3 8h4M3 16h4M17 8h4M17 16h4"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3M16 7l3 3M14 9l2 2"/>',
+  chat:'<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.2A8 8 0 1 1 21 12z"/>',
+  ext:'<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
+  edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/>',
+  refresh:'<path d="M21 12a9 9 0 0 1-15.5 6.3L3 16M3 12a9 9 0 0 1 15.5-6.3L21 8M21 3v5h-5M3 21v-5h5"/>',
+  pin:'<path d="M12 17v5M9 3h6l-1 7 3 3v2H7v-2l3-3z"/>',
+  ban:'<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/>',
+  download:'<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+  pause:'<path d="M8 5v14M16 5v14"/>',
+  play:'<path d="M7 4.5v15a.5.5 0 0 0 .77.42l12-7.5a.5.5 0 0 0 0-.84l-12-7.5A.5.5 0 0 0 7 4.5z" fill="currentColor" stroke="none"/>',
+  cal:'<rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/>'
+};
+const ic = (n, s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${I[n]}</svg>`;
+function paintIcons(root = document){ root.querySelectorAll('[data-i]').forEach(el => { el.innerHTML = ic(el.dataset.i, el.dataset.s || 18); el.style.display = el.style.display || 'inline-flex' }) }
+paintIcons();
+
+/* ================= HELPERS ================= */
+function esc(v){ return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) }
+const showById = id => shows.find(s => String(s.id) === String(id));
+const showName = id => (showById(id)?.name) || id;
+function toast(msg, type = '', ms = 2400){
+  const el = document.createElement('div');
+  el.className = 'toast ' + type; el.textContent = msg;
+  $('toasts').appendChild(el);
+  setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300) }, ms);
+}
+async function copyText(text, okMsg = 'คัดลอกแล้ว'){
+  try { await navigator.clipboard.writeText(text) }
+  catch { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy') } catch {} t.remove() }
+  toast(okMsg);
+}
+function ask(title, text, okLabel = 'ยืนยัน', opts = null){
+  return new Promise(res => {
+    $('cfTitle').textContent = title; $('cfText').textContent = text; $('cfYes').textContent = okLabel;
+    const inp = $('cfInput'), yes = $('cfYes');
+    if (opts && opts.type) {
+      inp.classList.remove('hidden'); inp.value = ''; inp.placeholder = `พิมพ์ "${opts.type}" เพื่อยืนยัน`;
+      yes.disabled = true; inp.oninput = () => { yes.disabled = inp.value.trim() !== opts.type };
+      setTimeout(() => inp.focus(), 60);
+    } else { inp.classList.add('hidden'); inp.oninput = null; yes.disabled = false }
+    const m = $('confirmModal'); m.classList.remove('hidden');
+    const done = v => { m.classList.add('hidden'); yes.onclick = $('cfNo').onclick = null; inp.oninput = null; yes.disabled = false; res(v) };
+    yes.onclick = () => done(true); $('cfNo').onclick = () => done(false);
+  });
+}
+function extractYoutubeId(value){
+  if (!value) return '';
+  const s = String(value).trim();
+  if (/^[a-zA-Z0-9_-]{11}$/.test(s)) return s;
+  const m = s.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|live\/))([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
+
+/* ================= API ================= */
+async function api(url, options = {}){
+  const config = { method: options.method || 'GET', headers: {
+    ...(options.body !== undefined ? {'Content-Type':'application/json'} : {}),
+    ...(token ? {Authorization:'Bearer ' + token} : {}),
+    ...(options.headers || {}) } };
+  if (options.body !== undefined) config.body = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+  const res = await fetch(url, config);
+  let data = {};
+  try { data = await res.json() } catch {}
+  if (res.status === 401) { sessionStorage.removeItem('tdlAdminToken'); token = ''; showLogin(); throw new Error(data.message || 'Session หมดอายุ') }
+  if (!res.ok) { const err = new Error(data.message || `Request failed (${res.status})`); err.status = res.status; throw err }
+  return data;
+}
+
+/* ================= THEME ================= */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  const dark = t === 'dark';
+  $('themeIcon').innerHTML = ic(dark ? 'moon' : 'sun'); $('themeLabel').textContent = dark ? 'โหมดสว่าง' : 'โหมดมืด';
+  $('themeBtnTop').innerHTML = ic(dark ? 'moon' : 'sun');
+}
+function toggleTheme(){ const n = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; localStorage.setItem('adminTheme', n); applyTheme(n) }
+applyTheme(localStorage.getItem('adminTheme') || 'dark');
+
+/* ================= AUTH ================= */
+function showLogin(){ $('login').classList.remove('hidden'); $('dash').classList.add('hidden'); stopAuto() }
+function showDash(){ $('login').classList.add('hidden'); $('dash').classList.remove('hidden'); setView(location.hash.slice(1) || 'overview'); loadAll() }
+async function doLogin(){
+  const btn = $('loginBtn'), username = $('user').value.trim(), password = $('pass').value;
+  $('loginErr').textContent = '';
+  if (!username || !password) { $('loginErr').textContent = 'กรุณากรอก Username และ Password'; return }
+  btn.disabled = true; btn.textContent = 'กำลังเข้าสู่ระบบ...';
+  try {
+    const r = await api('/api/admin/login', {method:'POST', body:{username, password}});
+    if (!r.token) throw new Error('Server ไม่ได้ส่ง Login Token กลับมา');
+    token = r.token; sessionStorage.setItem('tdlAdminToken', token); $('pass').value = ''; showDash();
+  } catch (e) { $('loginErr').textContent = e.message || 'เข้าสู่ระบบไม่สำเร็จ' }
+  finally { btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ' }
+}
+async function doLogout(){
+  try { await api('/api/admin/logout', {method:'POST'}) } catch {}
+  sessionStorage.removeItem('tdlAdminToken'); token = ''; showLogin();
+}
+
+/* ================= NAVIGATION ================= */
+const TITLES = {
+  overview:['ภาพรวม','สรุปผลการทำงานและกิจกรรมล่าสุด'], shows:['รอบการแสดง','จัดการรอบการแสดงและอีเว้นต์'],
+  codes:['Access Codes','สร้างและควบคุมรหัสเข้าชม'], chat:['แชตสด','ดูแลข้อความจากผู้ชม'],
+  announcements:['ตั้งค่าประกาศ','จัดการประกาศรวมและประกาศเฉพาะอีเวนต์'], maintenance:['โหมดปรับปรุงระบบ','ตั้งค่าข้อความ Maintenance และ Scheduled Countdown'], security:['Security & Protection','ควบคุมการตรวจจับ DevTools และ Security Overlay']
+};
+function setView(v){
+  if (!TITLES[v]) v = 'overview';
+  currentView = v;
+  document.querySelectorAll('.view').forEach(el => el.classList.toggle('hidden', el.id !== 'v-' + v));
+  document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('active', b.dataset.id === v));
+  $('pageTitle').textContent = TITLES[v][0]; $('pageSub').textContent = TITLES[v][1];
+  history.replaceState(null, '', '#' + v);
+  window.scrollTo(0, 0);
+  if (v === 'chat' && $('autoChat').checked) startAuto(); else stopAuto();
+}
+
+/* ================= LOAD ================= */
+async function loadAll(manual = false){
+  try {
+    await Promise.all([loadStats(), loadShows(), loadCodes(), loadHealth()]);
+    await loadChat();
+    loadMaint(); loadAnn(); loadMod(); loadSecurity(); if (manual === true) { liveOff = false }
+    startLive();
+    if (manual === true) toast('รีเฟรชข้อมูลแล้ว');
+  } catch (e) { toast(e.message, 'err') }
+}
+
+async function loadHealth(){
+  try { const h=await api('/api/admin/healthz'); const fmt=n=>`${(Number(n||0)/1024/1024).toFixed(1)} MB`; $('healthState').textContent=h.database==='ok'?'ปกติ':'มีปัญหา'; $('healthBody').innerHTML=`ฐานข้อมูล: <b>${esc(h.database)}</b> · เปิดมา ${Math.floor(h.uptimeSeconds/3600)} ชม. ${Math.floor((h.uptimeSeconds%3600)/60)} นาที · RAM ${fmt(h.memory?.rss)} · Heap ${fmt(h.memory?.heapUsed)} · ผู้ชม ${Number(h.viewers||0)} คน${h.lastError?`<div style="margin-top:8px;color:var(--warn)">Error ล่าสุด: ${esc(h.lastError.message)} (${esc(h.lastError.at)})</div>`:''}`; }
+  catch(e){$('healthState').textContent='ตรวจสอบไม่ได้';$('healthBody').textContent=e.message||'ไม่สามารถโหลดสถานะระบบได้'}
+}
+async function downloadReports(){try{const r=await fetch('/api/admin/reports.csv',{headers:{Authorization:'Bearer '+token}});if(!r.ok)throw new Error('ส่งออกรายงานไม่สำเร็จ');const blob=await r.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='areaone-live-reports.csv';a.click();URL.revokeObjectURL(url);toast('ส่งออกรายงานแล้ว')}catch(e){toast(e.message,'err')}}
+async function cloneShow(id){const s=showById(id);if(!s)return;const next=prompt('กำหนด ID สำหรับรอบที่คัดลอก',s.id+'-COPY');if(!next)return;try{await api('/api/admin/shows/'+encodeURIComponent(id)+'/clone',{method:'POST',body:{id:next.trim()}});toast('คัดลอกรอบแล้ว');await Promise.all([loadShows(),loadStats()])}catch(e){toast(e.message,'err')}}
+async function endShow(id){const s=showById(id);if(!s||!await ask('จบรอบการแสดง?',`ระบบจะบันทึกรายงานและตั้งเวลาลบแชตหลังจบรอบ${s.autoRerun?' พร้อมเปลี่ยนเป็น RERUN':''}`,'จบรอบ'))return;try{await api('/api/admin/shows/'+encodeURIComponent(id)+'/end',{method:'POST'});toast('จบรอบและบันทึกรายงานแล้ว');await Promise.all([loadShows(),loadStats(),loadHealth()])}catch(e){toast(e.message,'err')}}
+
+/* ---- stats ---- */
+async function loadStats(){
+  stats = await api('/api/admin/stats');
+  const card = (label, icon, a, b) => {
+    const pct = b ? Math.round((a / b) * 100) : 0;
+    return `<div class="stat"><div class="lb"><i>${ic(icon,16)}</i>${label}</div><div class="vl">${a}${b !== undefined ? ` <small>/ ${b}</small>` : ''}</div><div class="meter"><i style="width:${b !== undefined ? pct : 100}%"></i></div></div>`;
+  };
+  $('stats').innerHTML =
+    card('รอบที่เปิดอยู่','film', stats.activeShows || 0, stats.totalShows || 0) +
+    card('โค้ดที่ใช้งานได้','key', stats.activeCodes || 0, stats.totalCodes || 0) +
+    card('ข้อความแชตทั้งหมด','chat', stats.totalChatMessages || 0);
+}
+
+/* ---- shows ---- */
+async function loadShows(){
+  const data = await api('/api/admin/shows');
+  shows = data.shows || [];
+  $('cShows').textContent = shows.length || '';
+  renderShows(); renderOverviewShows(); fillShowSelects();
+}
+function posterThumb(url){
+  return `<div class="th"><span>NO IMG</span>${url ? `<img src="${esc(url)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</div>`;
+}
+function renderShows(){
+  const q = ($('showQ').value || '').trim().toLowerCase();
+  const list = shows.filter(s => {
+    if (showFilter === 'L' && s.type === 'R') return false;
+    if (showFilter === 'R' && s.type !== 'R') return false;
+    if (showFilter === 'off' && s.active === 'YES') return false;
+    return !q || [s.id, s.name, s.date, s.time].join(' ').toLowerCase().includes(q);
+  });
+  const add = `<button class="addcard" data-act="newShow">${ic('plus',26)}เพิ่มรอบการแสดง</button>`;
+  $('showsGrid').innerHTML = list.map(s => {
+    const re = s.type === 'R', on = s.active === 'YES', yt = extractYoutubeId(s.youtube);
+    return `<div class="scard ${on ? '' : 'off'}">
+      ${posterThumb(s.poster)}
+      <div class="bd">
+        <div style="margin-bottom:6px"><span class="tag ${re ? '' : 'live'}">${re ? 'RERUN' : '<i></i>LIVE'}</span></div>
+        <h4>${esc(s.name || '(ไม่มีชื่อ)')}</h4>
+        <div class="mt">${ic('cal',13)} ${esc(s.date)} · ${esc(s.time)}<br><span class="mono">ID ${esc(s.id)}</span>${yt ? '' : ' · <span style="color:var(--warn)">ยังไม่มีวิดีโอ</span>'}</div>
+        <div class="ft">
+          <div class="l"><label class="switch" title="เปิด/ปิดรอบนี้"><input type="checkbox" ${on ? 'checked' : ''} data-act="toggleShow" data-id="${esc(s.id)}"><span></span></label>${on ? 'เปิดอยู่' : 'ปิดอยู่'}</div>
+          <div class="acts"><button class="ibtn" data-act="editShow" data-id="${esc(s.id)}" title="แก้ไข">${ic('edit',16)}</button><button class="ibtn" data-act="cloneShow" data-id="${esc(s.id)}" title="คัดลอกรอบ">${ic('copy',16)}</button>${on ? `<button class="ibtn" data-act="endShow" data-id="${esc(s.id)}" title="จบรอบ">${ic('check',16)}</button>` : ''}<button class="ibtn danger" data-act="deleteShow" data-id="${esc(s.id)}" title="ลบ">${ic('trash',16)}</button></div>
+        </div>
+      </div></div>`;
+  }).join('') + add;
+  if (!list.length && shows.length) $('showsGrid').insertAdjacentHTML('afterbegin', '<div class="empty" style="grid-column:1/-1">ไม่พบรอบที่ตรงกับตัวกรอง</div>');
+}
+function renderOverviewShows(){
+  const act = shows.filter(s => s.active === 'YES');
+  $('ovShowsSub').textContent = act.length ? act.length + ' รอบ' : '';
+  $('ovShows').innerHTML = act.length ? act.slice(0, 5).map(s => `
+    <div class="mrow"><div class="th" style="background-image:url('${esc(s.poster || '')}')"></div>
+    <div class="tx"><b>${esc(s.name)}</b><span>${esc(s.date)} ${esc(s.time)}</span></div>
+    <span class="tag ${s.type === 'R' ? '' : 'live'}">${s.type === 'R' ? 'RERUN' : 'LIVE'}</span></div>`).join('')
+    : '<div class="empty">ยังไม่มีรอบที่เปิดอยู่</div>';
+}
+function fillShowSelects(){
+  const opts = shows.map(s => `<option value="${esc(s.id)}">${esc(s.name)} — ${esc(s.date)} ${esc(s.time)} (${esc(s.id)})</option>`).join('');
+  const cur = $('codeShow').value;
+  $('codeShow').innerHTML = '<option value="ALL">ทุกรอบ (ALL)</option>' + opts;
+  if (cur) $('codeShow').value = cur;
+  const cf = $('codeShowF').value;
+  $('codeShowF').innerHTML = '<option value="">ทุกรอบ</option>' + opts;
+  if (cf) $('codeShowF').value = cf;
+  const tm = $('teamShow').value;
+  $('teamShow').innerHTML = opts;
+  if (tm) $('teamShow').value = tm;
+  const ch = $('chatFilter').value;
+  $('chatFilter').innerHTML = '<option value="">แชตทุกรอบ</option>' + opts;
+  if (ch) $('chatFilter').value = ch;
+}
+
+/* ---- show modal ---- */
+function updatePrev(){
+  const url = $('sposter').value.trim(), img = $('posterPrev');
+  if (!url) { img.style.display = 'none'; $('posterHint').textContent = 'ใส่ลิงก์เพื่อดูตัวอย่าง'; return }
+  img.onload = () => { img.style.display = 'block'; $('posterHint').textContent = 'โหลดโปสเตอร์ได้' };
+  img.onerror = () => { img.style.display = 'none'; $('posterHint').textContent = 'โหลดรูปไม่ได้ ตรวจสอบลิงก์อีกครั้ง' };
+  img.src = url;
+}
+function openShow(s){
+  const edit = !!s;
+  $('showModalTitle').textContent = edit ? 'แก้ไขรอบการแสดง' : 'เพิ่มรอบการแสดง';
+  $('sid').value = s?.id || ''; $('sdate').value = s?.date || ''; $('stime').value = s?.time || '';
+  $('sname').value = s?.name || ''; $('sposter').value = s?.poster || ''; $('syoutube').value = s?.youtube || ''; $('spurchase').value = s?.purchaseUrl || ''; $('sstarts').value = s?.startsAt ? new Date(s.startsAt).toISOString().slice(0,16) : ''; $('sends').value = s?.endsAt ? new Date(s.endsAt).toISOString().slice(0,16) : ''; $('sautorun').checked = !!s?.autoRerun;
+  document.querySelector(`input[name=stype][value=${s?.type === 'R' ? 'R' : 'L'}]`).checked = true;
+  $('sactive').checked = s ? s.active === 'YES' : true;
+  updatePrev();
+  $('showModal').classList.remove('hidden');
+  setTimeout(() => $((edit ? 'sname' : 'sid')).focus(), 50);
+}
+function closeShow(){ $('showModal').classList.add('hidden') }
+function payloadFromForm(){
+  return {
+    id: $('sid').value.trim(), date: $('sdate').value.trim(), time: $('stime').value.trim(),
+    type: document.querySelector('input[name=stype]:checked').value, name: $('sname').value.trim(),
+    poster: $('sposter').value.trim(), youtube: $('syoutube').value.trim(), purchaseUrl: $('spurchase').value.trim(), startsAt: $('sstarts').value ? new Date($('sstarts').value).toISOString() : null, endsAt: $('sends').value ? new Date($('sends').value).toISOString() : null, autoRerun: $('sautorun').checked, active: $('sactive').checked ? 'YES' : 'NO'
+  };
+}
+async function saveShow(){
+  const body = payloadFromForm();
+  if (!body.id || !body.name) { toast('กรุณากรอก SHOW ID และชื่ออีเว้นต์', 'err'); return }
+  const btn = $('saveBtn'); btn.disabled = true;
+  try {
+    await api('/api/admin/shows', {method:'POST', body});
+    toast('บันทึกแล้ว'); closeShow(); await Promise.all([loadShows(), loadStats()]);
+  } catch (e) { toast(e.message, 'err') }
+  finally { btn.disabled = false }
+}
+async function toggleShow(id, box){
+  const s = showById(id); if (!s) return;
+  try {
+    await api('/api/admin/shows', {method:'POST', body:{id:s.id, date:s.date, time:s.time, type:s.type, name:s.name, poster:s.poster, youtube:s.youtube, active: s.active === 'YES' ? 'NO' : 'YES'}});
+    toast('อัปเดตแล้ว'); await Promise.all([loadShows(), loadStats()]);
+  } catch (e) { if (box) box.checked = s.active === 'YES'; toast(e.message, 'err') }
+}
+async function deleteShow(id){
+  const s = showById(id); if (!s) return;
+  if (!await ask('ลบรอบนี้?', `"${s.name}" (${s.date} ${s.time}) จะถูกลบถาวร`, 'ลบ')) return;
+  try { await api('/api/admin/shows/' + encodeURIComponent(s.id), {method:'DELETE'}); toast('ลบแล้ว'); await Promise.all([loadShows(), loadStats()]) }
+  catch (e) { toast(e.message, 'err') }
+}
+
+/* ---- codes ---- */
+async function loadCodes(){
+  const data = await api('/api/admin/codes');
+  codes = data.codes || [];
+  const ids = new Set(codes.map(c => String(c.id))); selected.forEach(id => { if (!ids.has(id)) selected.delete(id) });
+  $('cCodes').textContent = codes.length || '';
+  renderCodes();
+}
+const unsup = e => e && (e.status === 404 || e.status === 405 || e.status === 501);
+const siteBase = () => { const u = (typeof TDL_ADMIN !== 'undefined' && TDL_ADMIN.siteUrl || '').trim(); return u ? u.replace(/\/?$/, '/') : location.origin + '/' };
+const codeLink = c => siteBase() + '?code=' + encodeURIComponent(c.code) + (c.showId && c.showId !== 'ALL' ? '&show=' + encodeURIComponent(c.showId) : '');
+let selected = new Set();
+function filteredCodes(){
+  const q = ($('codeQ').value || '').trim().toLowerCase(), sf = $('codeShowF').value;
+  return codes.filter(c =>
+    (codeFilter === 'all' || c.status === codeFilter) &&
+    (!sf || String(c.showId) === sf) &&
+    (!q || String(c.code).toLowerCase().includes(q)));
+}
+function createdMs(c){
+  if (!c) return null;
+  if (c.createdAtIso) { const t = Date.parse(c.createdAtIso); if (!isNaN(t)) return t }
+  const v = c.createdAt; if (!v) return null;
+  const m = String(v).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/);   // DD/MM/YYYY HH:mm (เวลาไทย)
+  if (m) return Date.UTC(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0)) - 7 * 3600000;
+  let t = Date.parse(v); if (isNaN(t)) t = Date.parse(String(v).replace(' ', 'T'));
+  return isNaN(t) ? null : t;
+}
+function cleanupSets(){
+  const days = Math.max(1, Number($('oldDays').value) || 30), cut = Date.now() - days * 86400000;
+  return {
+    days,
+    susp: codes.filter(c => c.status !== 'ACTIVE'),
+    orph: codes.filter(c => c.showId !== 'ALL' && !showById(c.showId)),
+    old: codes.filter(c => { const t = createdMs(c); return t !== null && t < cut }),
+    exp: codes.filter(isExpired),
+    filt: filteredCodes()
+  };
+}
+function updateCleanup(){
+  const x = cleanupSets();
+  [['clSusp','btnSusp',x.susp],['clOrph','btnOrph',x.orph],['clOld','btnOld',x.old],['clExp','btnExp',x.exp],['clFilt','btnFilt',x.filt]].forEach(([n,b,l]) => { $(n).textContent = l.length; $(b).disabled = !l.length });
+  $('tileExp').classList.toggle('hidden', !codeCols().exp);
+}
+function updateBulk(){
+  const bar = $('bulkBar'), n = selected.size;
+  bar.classList.toggle('hidden', n === 0);
+  $('bulkTxt').textContent = `เลือกแล้ว ${n} โค้ด`;
+  const list = filteredCodes(), all = $('selAll'), inSel = list.filter(c => selected.has(String(c.id))).length;
+  all.checked = list.length > 0 && inSel === list.length; all.indeterminate = inSel > 0 && inSel < list.length;
+}
+function codeCols(){
+  const has = k => codes.some(c => c[k] !== undefined && c[k] !== null && c[k] !== '');
+  return { exp: has('expiresAt'), use: codes.some(c => c.maxDevices || Number(devCount(c)) > 0), last: has('lastUsedAt') };
+}
+function fmtDt(v){
+  if (!v) return '—';
+  const t = Date.parse(v); if (isNaN(t)) return String(v);
+  try { return new Intl.DateTimeFormat('th-TH-u-ca-gregory', { timeZone: 'Asia/Bangkok', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date(t)).replace(',', '') } catch { return String(v) }
+}
+const isExpired = c => { if (!c.expiresAt) return false; const t = Date.parse(c.expiresAt); return !isNaN(t) && t < Date.now() };
+const devCount = c => Array.isArray(c.devices) ? c.devices.length : (c.devices ?? c.usedCount ?? 0);
+function renderCodes(){
+  const list = filteredCodes(), cols = codeCols(), view = list.slice(0, codeLimit);
+  $('codesHead').innerHTML = `<tr><th style="width:44px"><input type="checkbox" class="chk" id="selAll" title="เลือกทั้งหมดที่ตรงกับตัวกรอง"></th><th>โค้ด</th><th>รอบ</th><th>สถานะ</th><th>สร้างเมื่อ</th>${cols.exp ? '<th>หมดอายุ</th>' : ''}${cols.use ? '<th>ใช้งาน</th>' : ''}${cols.last ? '<th>ใช้ล่าสุด</th>' : ''}<th></th></tr>`;
+  const span = 6 + (cols.exp ? 1 : 0) + (cols.use ? 1 : 0) + (cols.last ? 1 : 0);
+  $('codesBody').innerHTML = view.length ? view.map(c => {
+    const exp = isExpired(c), on = c.status === 'ACTIVE' && !exp, id = esc(c.id);
+    const label = exp ? 'หมดอายุ' : (c.status === 'ACTIVE' ? 'ใช้งานได้' : 'ถูกระงับ');
+    const dev = c.maxDevices ? `${devCount(c)}/${c.maxDevices} เครื่อง` : `${devCount(c)} เครื่อง`;
+    return `<tr>
+      <td><input type="checkbox" class="chk rowchk" data-id="${id}" ${selected.has(String(c.id)) ? 'checked' : ''}></td>
+      <td class="code">${esc(c.code)}</td>
+      <td>${c.showId === 'ALL' ? '<span class="tag">ทุกรอบ</span>' : esc(showName(c.showId))}</td>
+      <td><span class="tag ${on ? 'ok' : 'warn'}"><i></i>${label}</span></td>
+      <td class="mono" style="color:var(--sub);font-size:12px">${esc(c.createdAt)}</td>
+      ${cols.exp ? `<td class="mono" style="color:var(--sub);font-size:12px">${esc(fmtDt(c.expiresAt))}</td>` : ''}
+      ${cols.use ? `<td style="font-size:12px;color:var(--sub)">${esc(dev)}</td>` : ''}
+      ${cols.last ? `<td class="mono" style="color:var(--sub);font-size:12px">${esc(fmtDt(c.lastUsedAt))}</td>` : ''}
+      <td><div class="acts">
+        <button class="ibtn" data-act="copyCode" data-id="${esc(c.code)}" title="คัดลอกโค้ด">${ic('copy',16)}</button>
+        <button class="ibtn" data-act="qrCode" data-id="${id}" title="QR / ลิงก์">${ic('ext',16)}</button>
+        ${c.maxDevices ? `<button class="ibtn" data-act="resetDev" data-id="${id}" title="รีเซ็ตเครื่องของโค้ดนี้">${ic('refresh',16)}</button>` : ''}
+        <button class="ibtn ${c.status === 'ACTIVE' ? '' : 'on'}" data-act="toggleCode" data-id="${id}" title="${c.status === 'ACTIVE' ? 'ระงับ' : 'เปิดใช้'}">${ic(c.status === 'ACTIVE' ? 'pause' : 'play',16)}</button>
+        <button class="ibtn danger" data-act="deleteCode" data-id="${id}" title="ลบโค้ดนี้">${ic('trash',16)}</button>
+      </div></td></tr>`;
+  }).join('') : `<tr><td colspan="${span}"><div class="empty">ไม่พบโค้ด</div></td></tr>`;
+  $('moreCodes').classList.toggle('hidden', list.length <= codeLimit);
+  $('moreCodes').textContent = `แสดงเพิ่ม (เหลือ ${list.length - codeLimit})`;
+  updateBulk(); updateCleanup();
+}
+/* ---- ลบโค้ด (ใช้ DELETE /api/admin/codes/:id ทีละรายการ) ---- */
+function setProg(done, total, text){
+  const box = $('delProg'); box.classList.remove('hidden');
+  $('delBar').style.width = (total ? Math.round(done / total * 100) : 0) + '%';
+  $('delTxt').textContent = text || `กำลังลบ ${done}/${total}`;
+}
+let deleting = false;
+async function deleteCodes(list, label){
+  if (deleting) return;
+  if (!list.length) { toast('ไม่มีโค้ดให้ลบ'); return }
+  const ok = await ask(`ลบโค้ด ${list.length} รายการ?`, `${label} — ลบถาวร กู้คืนไม่ได้`, 'ลบ', list.length >= 20 ? { type: 'ลบ' } : null);
+  if (!ok) return;
+  deleting = true;
+  const queue = [...list], total = list.length;
+  let done = 0, fail = 0, aborted = false, unsupported = false, lastErr = '';
+  setProg(0, total);
+  const worker = async () => {
+    while (queue.length && !aborted) {
+      const c = queue.shift();
+      try { await api('/api/admin/codes/' + encodeURIComponent(c.id), { method: 'DELETE' }); done++; selected.delete(String(c.id)) }
+      catch (e) {
+        fail++; lastErr = e.message;
+        if (e.status === 405 || (e.status === 404 && done === 0 && fail >= Math.min(2, total))) { aborted = true; unsupported = true }
+      }
+      setProg(done + fail, total);
+    }
+  };
+  await Promise.all([worker(), worker(), worker(), worker()]);
+  deleting = false;
+  setTimeout(() => $('delProg').classList.add('hidden'), 1800);
+  try { await Promise.all([loadCodes(), loadStats()]) } catch {}
+  if (unsupported) toast('ลบไม่สำเร็จ (404) — หลังบ้านยังไม่มี route DELETE /api/admin/codes/:id (หรือไม่พบโค้ดนี้) ต้องเพิ่มที่เซิร์ฟเวอร์', 'err', 9000);
+  else if (fail) toast(`ลบแล้ว ${done} · ล้มเหลว ${fail}${lastErr ? ' (' + lastErr + ')' : ''}`, 'err', 6000);
+  else toast(`ลบแล้ว ${done} โค้ด`);
+}
+let lastGen = { showId: '', codes: [] };
+async function generateCodes(){
+  const showId = $('codeShow').value.trim(), count = Number($('codeCount').value);
+  if (!showId) { toast('กรุณาเลือกรอบการแสดง', 'err'); return }
+  if (!Number.isInteger(count) || count < 1 || count > 500) { toast('จำนวนโค้ดต้องอยู่ระหว่าง 1-500', 'err'); return }
+  const btn = $('genBtn'); btn.disabled = true;
+  try {
+    const body = {showId, count};
+    const expDays = Number($('genExp').value), maxDev = Number($('genDev').value);
+    if (expDays > 0) body.expiresInDays = Math.floor(expDays);
+    if (maxDev > 0) body.maxDevices = Math.floor(maxDev);
+    const data = await api('/api/admin/codes/generate', {method:'POST', body});
+    lastGen = { showId, codes: data.codes || [] };
+    const list = data.codes || [];
+    $('generated').textContent = list.join('\n');
+    $('genInfo').textContent = `สร้างแล้ว ${list.length} โค้ด · ${showId === 'ALL' ? 'ทุกรอบ' : showName(showId)}`;
+    $('genOut').classList.remove('hidden');
+    toast('สร้างโค้ดแล้ว'); await Promise.all([loadCodes(), loadStats()]);
+  } catch (e) { toast(e.message, 'err') }
+  finally { btn.disabled = false }
+}
+async function toggleCode(id){
+  const c = codes.find(x => String(x.id) === String(id)); if (!c) return;
+  try {
+    await api('/api/admin/codes/' + encodeURIComponent(c.id) + '/status', {method:'PATCH', body:{status: c.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE'}});
+    await Promise.all([loadCodes(), loadStats()]);
+  } catch (e) { toast(e.message, 'err') }
+}
+
+/* ---- chat ---- */
+async function loadChat(){
+  const showId = $('chatFilter').value.trim();
+  try {
+    const data = await api('/api/admin/chat' + (showId ? '?showId=' + encodeURIComponent(showId) : ''));
+    chat = data.messages || [];
+    const availableChatIds = new Set(chat.map(m => String(m.id)));
+    selectedChat.forEach(id => { if (!availableChatIds.has(id)) selectedChat.delete(id) });
+    $('cChat').textContent = chat.length || '';
+    renderChat(); renderOverviewChat();
+  } catch (e) { if (currentView === 'chat') toast(e.message, 'err') }
+}
+function renderChat(){
+  $('chatList').innerHTML = chat.length ? chat.map(m => `
+    <div class="msg ${m.pinned ? 'pinned' : ''}">
+      <input type="checkbox" class="chk chat-rowchk" data-id="${esc(m.id)}" aria-label="เลือกข้อความจาก ${esc(m.user)}" ${selectedChat.has(String(m.id)) ? 'checked' : ''} style="margin-top:10px;flex:none">
+      <div class="av">${esc((m.user || '?').trim().charAt(0).toUpperCase())}</div>
+      <div class="bd">
+        <div class="hd"><b>${esc(m.user)}</b><span class="tag">${esc(showName(m.showId))}</span><span class="mono">${esc(m.time)}</span>${m.isAdmin ? '<span class="tag live">ทีมงาน</span>' : ''}${m.pinned ? '<span class="tag warn">ปักหมุด</span>' : ''}</div>
+        <div class="tx">${esc(m.text)}</div>
+      </div>
+      <div class="acts">
+        <button class="ibtn ${m.pinned ? 'on' : ''}" data-act="pinChat" data-id="${esc(m.id)}" title="${m.pinned ? 'ยกเลิกปักหมุด' : 'ปักหมุด'}">${ic('pin',16)}</button>
+        <button class="ibtn" data-act="banUser" data-id="${esc(m.id)}" title="แบนผู้ใช้นี้">${ic('ban',16)}</button>
+        <button class="ibtn danger" data-act="deleteChat" data-id="${esc(m.id)}" title="ลบ">${ic('trash',16)}</button>
+      </div></div>`).join('') : '<div class="empty">ยังไม่มีข้อความ</div>';
+  updateChatBulk();
+}
+function updateChatBulk(){
+  const bar = $('chatBulkBar');
+  if (!bar) return;
+  const n = selectedChat.size;
+  bar.classList.toggle('hidden', n === 0);
+  $('chatBulkTxt').textContent = `เลือกแล้ว ${n} ข้อความ`;
+  const all = $('chatSelAll');
+  if (all) {
+    const inSel = chat.filter(m => selectedChat.has(String(m.id))).length;
+    all.checked = chat.length > 0 && inSel === chat.length;
+    all.indeterminate = inSel > 0 && inSel < chat.length;
+  }
+}
+function renderOverviewChat(){
+  const last = chat.slice(-6).reverse();
+  $('ovChat').innerHTML = last.length ? last.map(m => `<div class="crow"><span>${esc(m.time)}</span><b>${esc(m.user)}</b><div style="margin-top:2px">${esc(m.text)}</div></div>`).join('') : '<div class="empty">ยังไม่มีข้อความ</div>';
+}
+async function pinChat(id){
+  try { await api('/api/admin/chat/' + encodeURIComponent(id) + '/pin', {method:'PATCH'}); await loadChat() }
+  catch (e) { toast(e.message, 'err') }
+}
+async function deleteChat(id){
+  const m = chat.find(x => String(x.id) === String(id));
+  if (!await ask('ลบข้อความนี้?', m ? `${m.user}: ${m.text}` : '', 'ลบ')) return;
+  try { await api('/api/admin/chat/' + encodeURIComponent(id), {method:'DELETE'}); await Promise.all([loadChat(), loadStats()]) }
+  catch (e) { toast(e.message, 'err') }
+}
+async function deleteSelectedChat(){
+  const ids = [...selectedChat];
+  if (!ids.length) { toast('เลือกข้อความที่ต้องการลบก่อน'); return }
+  const ok = await ask(`ลบข้อความ ${ids.length} รายการ?`, 'ข้อความที่เลือกจะถูกลบถาวรและกู้คืนไม่ได้', 'ลบ', ids.length >= 20 ? {type:'ลบ'} : null);
+  if (!ok) return;
+  try {
+    const result = await api('/api/admin/chat/bulk', {method:'DELETE', body:{ids}});
+    selectedChat.clear();
+    await Promise.all([loadChat(), loadStats()]);
+    toast(`ลบข้อความแล้ว ${Number(result.deleted ?? ids.length)} รายการ`);
+  } catch (e) { toast(e.message, 'err') }
+}
+function startAuto(){ stopAuto(); autoTimer = setInterval(loadChat, 5000) }
+function stopAuto(){ if (autoTimer) { clearInterval(autoTimer); autoTimer = null } }
+function setAuto(){ if ($('autoChat').checked && currentView === 'chat') startAuto(); else stopAuto() }
+
+
+/* ---- ส่งออก CSV / คัดลอก ---- */
+function exportCsv(){
+  const list = filteredCodes(); if (!list.length) { toast('ไม่มีโค้ดให้ส่งออก'); return }
+  const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  const head = ['code','show_id','show_name','status','created_at','expires_at','link'];
+  const rows = list.map(c => [c.code, c.showId, c.showId === 'ALL' ? 'ทุกรอบ' : showName(c.showId), isExpired(c) ? 'EXPIRED' : c.status, c.createdAt, c.expiresAt || '', codeLink(c)].map(q).join(','));
+  const blob = new Blob(['\ufeff' + [head.join(','), ...rows].join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'access-codes-' + new Date().toISOString().slice(0, 10) + '.csv';
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove() }, 500);
+  toast(`ส่งออก ${list.length} โค้ดแล้ว`);
+}
+/* ---- QR / ลิงก์ ---- */
+let qrCur = null;
+function showQr(c){
+  qrCur = c; const link = codeLink(c);
+  $('qrCode').textContent = c.code; $('qrLink').value = link;
+  const box = $('qrBox'); box.innerHTML = ''; $('qrErr').classList.add('hidden');
+  try {
+    if (typeof QRCode === 'undefined') throw new Error('no qr');
+    new QRCode(box, { text: link, width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M });
+  } catch { $('qrErr').classList.remove('hidden') }
+  $('qrModal').classList.remove('hidden');
+}
+function closeQr(){ $('qrModal').classList.add('hidden') }
+function qrDownload(){
+  const cv = $('qrBox').querySelector('canvas'), im = $('qrBox').querySelector('img');
+  const url = cv ? cv.toDataURL('image/png') : (im && im.src);
+  if (!url) { toast('ยังไม่มีภาพ QR ให้ดาวน์โหลด', 'err'); return }
+  const a = document.createElement('a'); a.href = url; a.download = (qrCur ? qrCur.code : 'qr') + '.png'; document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* ---- โหมดปรับปรุงระบบ ---- */
+let mtnCur = false;
+function paintMtn(on){
+  mtnCur = on;
+  $('mtnState').textContent = on ? 'กำลังปิดเว็บอยู่' : 'เว็บเปิดตามปกติ';
+  $('mtnState').style.color = on ? 'var(--red2)' : '';
+  $('mtnBanner').classList.toggle('hidden', !on);
+}
+async function loadMaint(){
+  try {
+    const r = await api('/api/admin/maintenance');
+    $('mtnOn').checked = !!r.enabled;
+    const tx = r.texts || {};
+    $('mtnTitleTh').value = tx.title?.th || ''; $('mtnTitleEn').value = tx.title?.en || '';
+    $('mtnSubTh').value = tx.sub?.th || ''; $('mtnSubEn').value = tx.sub?.en || '';
+    $('mtnNoteTh').value = tx.note?.th || r.note || ''; $('mtnNoteEn').value = tx.note?.en || '';
+    const sc = r.schedule || {};
+    $('mtnScheduleOn').checked = !!sc.enabled;
+    $('mtnStartsAt').value = isoToThaiInput(sc.startsAt || ''); $('mtnReopensAt').value = isoToThaiInput(sc.reopensAt || '');
+    $('mtnCountdownOn').checked = sc.countdownEnabled !== false; $('mtnAutoOpen').checked = sc.autoOpen !== false;
+    $('mtnShowDays').checked = sc.showDays !== false; $('mtnShowSeconds').checked = sc.showSeconds !== false;
+    $('mtnAnimation').value = ['flip','roll','fade','none'].includes(sc.animation) ? sc.animation : 'flip';
+    paintMtn(!!r.enabled); $('mtnErr').classList.add('hidden');
+    ['mtnOn','mtnTitleTh','mtnTitleEn','mtnSubTh','mtnSubEn','mtnNoteTh','mtnNoteEn','mtnScheduleOn','mtnStartsAt','mtnReopensAt','mtnCountdownOn','mtnAutoOpen','mtnShowDays','mtnShowSeconds','mtnAnimation','mtnSave'].forEach(i => $(i).disabled = false);
+  } catch (e) {
+    if (unsup(e)) { $('mtnErr').textContent = 'เซิร์ฟเวอร์ยังไม่รองรับโหมดปรับปรุงระบบ (ต้องอัปเดต server/index.js — ดู BACKEND_API_SPEC.md)'; $('mtnErr').classList.remove('hidden'); ['mtnOn','mtnTitleTh','mtnTitleEn','mtnSubTh','mtnSubEn','mtnNoteTh','mtnNoteEn','mtnScheduleOn','mtnStartsAt','mtnReopensAt','mtnCountdownOn','mtnAutoOpen','mtnShowDays','mtnShowSeconds','mtnAnimation','mtnSave'].forEach(i => $(i).disabled = true) }
+  }
+}
+function isoToThaiInput(value){
+  if(!value)return '';
+  const d=new Date(value); if(Number.isNaN(d.getTime()))return '';
+  const p=n=>String(n).padStart(2,'0');
+  const t=new Date(d.getTime()+7*60*60*1000);
+  return `${t.getUTCFullYear()}-${p(t.getUTCMonth()+1)}-${p(t.getUTCDate())}T${p(t.getUTCHours())}:${p(t.getUTCMinutes())}`;
+}
+function thaiInputToIso(value){
+  if(!value)return '';
+  const m=value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/); if(!m)return '';
+  return new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4]-7,+m[5])).toISOString();
+}
+async function saveMaint(){
+  const enabled = $('mtnOn').checked;
+  const texts = { title: { th: $('mtnTitleTh').value.trim(), en: $('mtnTitleEn').value.trim() }, sub: { th: $('mtnSubTh').value.trim(), en: $('mtnSubEn').value.trim() }, note: { th: $('mtnNoteTh').value.trim(), en: $('mtnNoteEn').value.trim() } };
+  const note = texts.note.th || texts.note.en || '';
+  const schedule = {
+    enabled: $('mtnScheduleOn').checked,
+    startsAt: thaiInputToIso($('mtnStartsAt').value),
+    reopensAt: thaiInputToIso($('mtnReopensAt').value),
+    countdownEnabled: $('mtnCountdownOn').checked,
+    autoOpen: $('mtnAutoOpen').checked,
+    showDays: $('mtnShowDays').checked,
+    showSeconds: $('mtnShowSeconds').checked,
+    animation: $('mtnAnimation').value
+  };
+  if(schedule.enabled && !schedule.startsAt){toast('กรุณากำหนดเวลาเริ่ม Maintenance','err');return}
+  if(schedule.enabled && schedule.autoOpen && !schedule.reopensAt){toast('กรุณากำหนดเวลาเปิดเว็บไซต์กลับด้วย','err');return}
+  if(schedule.enabled && schedule.autoOpen && schedule.reopensAt && Date.parse(schedule.reopensAt) <= Date.parse(schedule.startsAt)){toast('เวลาเปิดเว็บต้องอยู่หลังเวลาเริ่ม Maintenance','err');return}
+  if (enabled && !mtnCur && !await ask('เปิดโหมดปรับปรุงระบบ?', 'ผู้ชมทุกคน (รวมคนที่กำลังดูไลฟ์อยู่) จะเข้าเว็บไม่ได้จนกว่าจะปิดโหมดนี้', 'เปิดโหมดปรับปรุง')) { $('mtnOn').checked = false; return }
+  try { await api('/api/admin/maintenance', { method: 'PUT', body: { enabled, note, texts, schedule } }); paintMtn(enabled); toast(enabled ? 'เปิดโหมดปรับปรุงระบบแล้ว' : 'ปิดโหมดปรับปรุงแล้ว เว็บกลับมาเปิดตามปกติ') }
+  catch (e) { toast(unsup(e) ? 'เซิร์ฟเวอร์ยังไม่รองรับโหมดปรับปรุงระบบ' : e.message, 'err') }
+}
+
+/* ---- Security & Protection ---- */
+const SECURITY_BYPASS_KEY = 'aolSecurityLocalBypass';
+function paintSecurityLocal(){
+  const bypass = localStorage.getItem(SECURITY_BYPASS_KEY) === '1';
+  if ($('securityLocalState')) $('securityLocalState').textContent = bypass ? 'ข้ามการป้องกันบนอุปกรณ์นี้อยู่' : 'อุปกรณ์นี้ใช้การตั้งค่ากลาง';
+  if ($('securityLocalBtn')) $('securityLocalBtn').textContent = bypass ? 'เปิดการป้องกันบนอุปกรณ์นี้' : 'ปิดการบังหน้าจอในอุปกรณ์นี้';
+}
+async function loadSecurity(){
+  try { const r = await api('/api/admin/security'); $('securityOn').checked = !!r.enabled; $('securityState').textContent = r.enabled ? 'เปิดใช้งาน' : 'ปิดใช้งาน'; $('securityState').style.color = r.enabled ? 'var(--red2)' : ''; $('securityErr').classList.add('hidden'); paintSecurityLocal(); }
+  catch(e) { $('securityErr').textContent = e.message || 'โหลดการตั้งค่า Security ไม่สำเร็จ'; $('securityErr').classList.remove('hidden'); }
+}
+async function saveSecurity(){
+  try { const r = await api('/api/admin/security', { method:'PUT', body:{ enabled:$('securityOn').checked } }); $('securityState').textContent = r.enabled ? 'เปิดใช้งาน' : 'ปิดใช้งาน'; $('securityState').style.color = r.enabled ? 'var(--red2)' : ''; toast(r.enabled ? 'เปิดระบบตรวจจับ DevTools แล้ว' : 'ปิดระบบตรวจจับ DevTools แล้ว'); }
+  catch(e) { toast(unsup(e) ? 'เซิร์ฟเวอร์ยังไม่รองรับ Security & Protection' : e.message, 'err'); }
+}
+function toggleSecurityLocal(){
+  const next = localStorage.getItem(SECURITY_BYPASS_KEY) !== '1';
+  if (next) localStorage.setItem(SECURITY_BYPASS_KEY, '1'); else localStorage.removeItem(SECURITY_BYPASS_KEY);
+  paintSecurityLocal();
+  toast(next ? 'ปิดการบังหน้าจอเฉพาะอุปกรณ์นี้แล้ว' : 'เปิดการป้องกันบนอุปกรณ์นี้แล้ว');
+}
+
+/* ---- ประกาศรวม + ประกาศเฉพาะอีเวนต์ ---- */
+let announcementEvents = {};
+function populateEventAnnouncementSelect(selected=''){
+  const sel=$('eventAnnShowId'); if(!sel)return;
+  const old=selected||sel.value;
+  sel.innerHTML='<option value="">— เลือกอีเวนต์ —</option>'+shows.map(s=>`<option value="${esc(s.id)}">${esc(s.name||s.id)} (${esc(s.id)})</option>`).join('');
+  if(old&&[...sel.options].some(o=>o.value===String(old)))sel.value=String(old);
+}
+function fillEventAnnouncement(){
+  const id=$('eventAnnShowId').value, v=announcementEvents[id]||{};
+  $('eventAnnText').value=v.text||'';$('eventAnnLevel').value=v.level==='warn'?'warn':'info';$('eventAnnLink').value=v.link||'';$('eventAnnOn').checked=!!v.enabled&&!!v.text;
+}
+async function loadAnn(){
+  try{
+    const r=await api('/api/admin/announcements');
+    const g=r.global||{};announcementEvents=r.events||{};
+    $('globalAnnText').value=g.text||'';$('globalAnnLevel').value=g.level==='warn'?'warn':'info';$('globalAnnLink').value=g.link||'';$('globalAnnOn').checked=!!g.enabled&&!!g.text;
+    populateEventAnnouncementSelect($('eventAnnShowId').value);
+    fillEventAnnouncement();
+    const activeGlobal=$('globalAnnOn').checked, activeEvents=Object.values(announcementEvents).some(v=>v&&v.enabled&&v.text);
+    $('annState').textContent=activeGlobal&&activeEvents?'ประกาศรวมและประกาศอีเวนต์ทำงานอยู่':activeGlobal?'ประกาศรวมกำลังแสดง':activeEvents?'มีประกาศเฉพาะอีเวนต์':'ปิดประกาศอยู่';
+    $('annNote').classList.add('hidden');
+    ['globalAnnText','globalAnnLevel','globalAnnLink','globalAnnOn','globalAnnSave','eventAnnShowId','eventAnnText','eventAnnLevel','eventAnnLink','eventAnnOn','eventAnnSave'].forEach(i=>$(i).disabled=false);
+  }catch(e){
+    $('annNote').textContent=unsup(e)?'เซิร์ฟเวอร์ยังไม่รองรับระบบประกาศแยกประเภท กรุณาอัปเดต server/index.js':'โหลดประกาศไม่สำเร็จ: '+e.message;
+    $('annNote').classList.remove('hidden');
+  }
+}
+async function saveGlobalAnn(){
+  const body={text:$('globalAnnText').value.trim(),level:$('globalAnnLevel').value,link:$('globalAnnLink').value.trim(),enabled:$('globalAnnOn').checked};
+  if(body.enabled&&!body.text){toast('กรุณากรอกข้อความประกาศรวม','err');return}
+  if(body.link&&!/^https?:\/\//i.test(body.link)){toast('ลิงก์ต้องขึ้นต้นด้วย http:// หรือ https://','err');return}
+  try{await api('/api/admin/announcements/global',{method:'PUT',body});toast(body.enabled?'บันทึกและแสดงประกาศรวมแล้ว':'บันทึกประกาศรวมแล้ว');await loadAnn()}
+  catch(e){toast(e.message,'err')}
+}
+async function saveEventAnn(){
+  const body={showId:$('eventAnnShowId').value,text:$('eventAnnText').value.trim(),level:$('eventAnnLevel').value,link:$('eventAnnLink').value.trim(),enabled:$('eventAnnOn').checked};
+  if(!body.showId){toast('กรุณาเลือกอีเวนต์ก่อน','err');return}
+  if(body.enabled&&!body.text){toast('กรุณากรอกข้อความประกาศอีเวนต์','err');return}
+  if(body.link&&!/^https?:\/\//i.test(body.link)){toast('ลิงก์ต้องขึ้นต้นด้วย http:// หรือ https://','err');return}
+  try{await api('/api/admin/announcements/event',{method:'PUT',body});toast(body.enabled?'บันทึกประกาศอีเวนต์แล้ว':'บันทึกประกาศอีเวนต์แล้ว');await loadAnn()}
+  catch(e){toast(e.message,'err')}
+}
+$('eventAnnShowId')?.addEventListener('change',fillEventAnnouncement);
+
+/* ---- ตั้งค่าแชต / แบน ---- */
+let modOk = true;
+async function loadMod(){
+  try {
+    const r = await api('/api/admin/chat/settings');
+    $('slowSec').value = Number(r.slowModeSec) || 0; $('blockWords').value = (r.blockedWords || []).join(', ');
+    $('modState').textContent = Number(r.slowModeSec) > 0 ? `จำกัด ${r.slowModeSec} วิ/ข้อความ` : 'ปกติ'; $('modNote').classList.add('hidden');
+    ['slowSec','blockWords','modSave'].forEach(i => $(i).disabled = false); modOk = true;
+    const bl = $('bannedList'), banned = r.banned || [];
+    bl.classList.toggle('hidden', !banned.length);
+    bl.innerHTML = banned.length ? '<span class="f">ผู้ใช้ที่ถูกแบน:</span> ' + banned.map(b => { const u = typeof b === 'string' ? b : b.user; return `<span class="tag warn">${esc(u)} <button class="x" data-act="unban" data-id="${esc(u)}" title="เลิกแบน">×</button></span>` }).join(' ') : '';
+  } catch (e) {
+    if (unsup(e)) { modOk = false; $('modNote').textContent = 'เซิร์ฟเวอร์ยังไม่รองรับการตั้งค่าแชต/แบน (ต้องเพิ่ม /api/admin/chat/settings และ /api/admin/chat/ban — ดู BACKEND_API_SPEC.md)'; $('modNote').classList.remove('hidden'); ['slowSec','blockWords','modSave'].forEach(i => $(i).disabled = true) }
+  }
+}
+async function saveMod(){
+  const body = { slowModeSec: Math.max(0, Math.min(300, Number($('slowSec').value) || 0)), blockedWords: $('blockWords').value.split(/[,\n]/).map(x => x.trim()).filter(Boolean) };
+  try { await api('/api/admin/chat/settings', { method: 'PUT', body }); toast('บันทึกการตั้งค่าแชตแล้ว'); loadMod() }
+  catch (e) { toast(unsup(e) ? 'เซิร์ฟเวอร์ยังไม่รองรับการตั้งค่าแชต' : e.message, 'err') }
+}
+async function sendTeam(){
+  const showId = $('teamShow').value, text = $('teamText').value.trim();
+  if (!showId || !text) { toast('เลือกรอบและพิมพ์ข้อความก่อน', 'err'); return }
+  try { await api('/api/admin/chat', { method: 'POST', body: { showId, text } }); $('teamText').value = ''; toast('ส่งข้อความแล้ว'); loadChat() }
+  catch (e) { toast(e.message, 'err') }
+}
+async function banUser(id){
+  const m = chat.find(x => String(x.id) === String(id)); if (!m) return;
+  if (!await ask(`แบน "${m.user}"?`, 'ผู้ใช้นี้จะส่งแชตไม่ได้อีก (เลิกแบนได้ในส่วนตั้งค่าแชต)', 'แบน')) return;
+  try { await api('/api/admin/chat/ban', { method: 'POST', body: { user: m.user, showId: m.showId } }); toast(`แบน ${m.user} แล้ว`); loadMod() }
+  catch (e) { toast(unsup(e) ? 'เซิร์ฟเวอร์ยังไม่รองรับการแบน (ต้องเพิ่ม POST /api/admin/chat/ban)' : e.message, 'err', 5000) }
+}
+async function unban(user){
+  try { await api('/api/admin/chat/unban', { method: 'POST', body: { user } }); toast(`เลิกแบน ${user} แล้ว`); loadMod() }
+  catch (e) { toast(unsup(e) ? 'เซิร์ฟเวอร์ยังไม่รองรับการเลิกแบน' : e.message, 'err') }
+}
+
+/* ---- สถิติผู้ชมสด ---- */
+let liveTimer = null, liveOff = false;
+async function loadLive(){
+  if (liveOff) return;
+  try {
+    const r = await api('/api/admin/live-stats');
+    const per = r.viewers && typeof r.viewers === 'object' ? r.viewers : {};
+    const total = r.total ?? Object.values(per).reduce((a, b) => a + (Number(b) || 0), 0);
+    $('liveSub').textContent = r.peak !== undefined ? `สูงสุด ${r.peak}` : '';
+    const rows = Object.entries(per).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]).map(([id, n]) => `<div class="mrow"><div class="tx"><b>${esc(showName(id))}</b><span>${esc(id)}</span></div><span class="tag live"><i></i>${n} คน</span></div>`).join('');
+    const hours = Array.isArray(r.chatPerHour) ? r.chatPerHour : [];
+    const max = Math.max(1, ...hours.map(h => Number(h.count) || 0));
+    const chart = hours.length ? `<div class="mini"><div class="mt">ข้อความแชตต่อชั่วโมง</div><div class="bars">${hours.slice(-24).map(h => `<div class="b" title="${esc(h.hour)}: ${Number(h.count) || 0}"><i style="height:${Math.round((Number(h.count) || 0) / max * 100)}%"></i><span>${esc(String(h.hour).slice(0, 2))}</span></div>`).join('')}</div></div>` : '';
+    $('liveBody').innerHTML = `<div class="bigv">${total}<small> คนกำลังดู</small></div>${rows}${chart}` || '<div class="empty">ไม่มีผู้ชม</div>';
+  } catch (e) {
+    if (unsup(e)) { liveOff = true; clearInterval(liveTimer); $('liveBody').innerHTML = '<div class="note">ยังไม่เปิดใช้ — ต้องเพิ่ม GET /api/admin/live-stats และ POST /api/presence ที่หลังบ้าน (ดู BACKEND_API_SPEC.md)</div>' }
+  }
+}
+function startLive(){ clearInterval(liveTimer); if (liveOff) return; loadLive(); liveTimer = setInterval(() => { if (currentView === 'overview') loadLive() }, 10000) }
+
+/* ================= EVENT DELEGATION ================= */
+const actions = {
+  view: id => setView(id),
+  newShow: () => openShow(null),
+  editShow: id => openShow(showById(id)),
+  toggleShow: (id, el) => toggleShow(id, el),
+  deleteShow: id => deleteShow(id),
+  showFilter: (id, el) => { showFilter = id; document.querySelectorAll('#showChips .chip').forEach(c => c.classList.toggle('active', c === el)); renderShows() },
+  codeFilter: (id, el) => { codeFilter = id; codeLimit = 100; document.querySelectorAll('#codeChips .chip').forEach(c => c.classList.toggle('active', c === el)); renderCodes() },
+  goGen: () => { setView('codes'); $('genCard').scrollIntoView({behavior:'smooth'}); $('codeCount').focus() },
+  copyCode: id => copyText(id, 'คัดลอกโค้ดแล้ว'),
+  toggleCode: id => toggleCode(id),
+  exportCsv: () => exportCsv(),
+  copyShown: () => { const l = filteredCodes(); if (!l.length) { toast('ไม่มีโค้ด'); return } copyText(l.map(c => c.code).join('\n'), `คัดลอก ${l.length} โค้ดแล้ว`) },
+  copyLinks: () => { if (!lastGen.codes.length) return; copyText(lastGen.codes.map(code => codeLink({ code, showId: lastGen.showId })).join('\n'), 'คัดลอกลิงก์ทั้งหมดแล้ว') },
+  qrCode: id => { const c = codes.find(x => String(x.id) === String(id)); if (c) showQr(c) },
+  resetDev: async id => {
+    const c = codes.find(x => String(x.id) === String(id)); if (!c) return;
+    if (!await ask('รีเซ็ตเครื่องของโค้ดนี้?', `${c.code} จะลงทะเบียนเครื่องใหม่ได้อีก ${c.maxDevices} เครื่อง`, 'รีเซ็ต')) return;
+    try { await api('/api/admin/codes/' + encodeURIComponent(c.id) + '/reset-devices', { method: 'POST' }); toast('รีเซ็ตเครื่องแล้ว'); await loadCodes() }
+    catch (e) { toast(unsup(e) ? 'เซิร์ฟเวอร์ยังไม่รองรับการรีเซ็ตเครื่อง' : e.message, 'err') }
+  },
+  teamSend: () => sendTeam(),
+  mtnSave: () => saveMaint(),
+  securitySave: () => saveSecurity(),
+  securityLocalToggle: () => toggleSecurityLocal(),
+  mtnGo: () => { setView('maintenance'); $('mtnCard').scrollIntoView({behavior:'smooth'}) },
+  qrCopy: () => { if (qrCur) copyText(codeLink(qrCur), 'คัดลอกลิงก์แล้ว') },
+  qrDown: () => qrDownload(),
+  cleanExp: () => deleteCodes(cleanupSets().exp, 'โค้ดที่หมดอายุแล้ว'),
+  globalAnnSave: () => saveGlobalAnn(),
+  eventAnnSave: () => saveEventAnn(),
+  modSave: () => saveMod(),
+  banUser: id => banUser(id),
+  unban: id => unban(id),
+  deleteCode: id => { const c = codes.find(x => String(x.id) === String(id)); if (c) deleteCodes([c], `โค้ด ${c.code}`) },
+  deleteSel: () => deleteCodes(codes.filter(c => selected.has(String(c.id))), 'โค้ดที่เลือกไว้'),
+  clearSel: () => { selected.clear(); renderCodes() },
+  cleanSusp: () => deleteCodes(cleanupSets().susp, 'โค้ดที่ถูกระงับทั้งหมด'),
+  cleanOrph: () => deleteCodes(cleanupSets().orph, 'โค้ดของรอบที่ถูกลบไปแล้ว'),
+  cleanOld: () => { const x = cleanupSets(); deleteCodes(x.old, `โค้ดที่สร้างมานานกว่า ${x.days} วัน`) },
+  cleanFilt: () => deleteCodes(cleanupSets().filt, 'โค้ดทั้งหมดที่ตรงกับตัวกรองตอนนี้'),
+  pinChat: id => pinChat(id),
+  deleteChat: id => deleteChat(id),
+  deleteChatSel: () => deleteSelectedChat(),
+  healthRefresh: () => loadHealth(), reportsDownload: () => downloadReports(), cloneShow: id => cloneShow(id), endShow: id => endShow(id),
+  clearChatSel: () => { selectedChat.clear(); renderChat() }
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (!el || el.tagName === 'INPUT') return;
+  actions[el.dataset.act]?.(el.dataset.id, el);
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.tagName === 'INPUT' && el.dataset.act === 'toggleShow') actions.toggleShow(el.dataset.id, el);
+  else if (el.classList && el.classList.contains('rowchk')) { el.checked ? selected.add(String(el.dataset.id)) : selected.delete(String(el.dataset.id)); updateBulk() }
+  else if (el.classList && el.classList.contains('chat-rowchk')) { el.checked ? selectedChat.add(String(el.dataset.id)) : selectedChat.delete(String(el.dataset.id)); updateChatBulk() }
+  else if (el.id === 'chatSelAll') { chat.forEach(m => el.checked ? selectedChat.add(String(m.id)) : selectedChat.delete(String(m.id))); renderChat() }
+  else if (el.id === 'selAll') { filteredCodes().forEach(c => el.checked ? selected.add(String(c.id)) : selected.delete(String(c.id))); renderCodes() }
+});
+document.addEventListener('input', e => { if (e.target.id === 'oldDays') updateCleanup() });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeShow(); closeQr(); $('cfNo').onclick?.() } });
+
+/* ================= SESSION ================= */
+(async function(){
+  if (!token) { showLogin(); return }
+  try { await api('/api/admin/session'); showDash() } catch { showLogin() }
+})();
+</script>
+</body>
+</html>

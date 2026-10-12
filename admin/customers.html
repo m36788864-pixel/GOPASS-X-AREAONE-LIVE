@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+    <title>ลูกค้า | GOPASS ADMIN</title>
+    <link
+        rel="icon"
+        href="/images/gopass-logo.png"
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Kanit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+    <link
+        rel="stylesheet"
+        href="/css/app.css?v=20261013"
+    >
+</head>
+<body class="admin">
+    <aside class="sidebar">
+        <a
+            class="brand"
+            href="../index.html"
+        >
+            <img
+                src="/images/gopass-logo.png"
+                alt="GOPASS"
+                width="30"
+                height="30"
+            >
+            <span>
+                GOPASS
+                <small>ADMIN</small>
+            </span>
+        </a>
+        <span class="side-heading kicker">CONSOLE</span>
+        <a href="dashboard.html">
+            <i class="fa-solid fa-chart-line"></i>
+            แดชบอร์ด
+        </a>
+        <a href="sales.html">
+            <i class="fa-solid fa-chart-column"></i>
+            ยอดขาย
+        </a>
+        <a href="events.html">
+            <i class="fa-solid fa-calendar-days"></i>
+            งาน
+        </a>
+        <a href="orders.html">
+            <i class="fa-solid fa-ticket"></i>
+            คำสั่งซื้อ
+        </a>
+        <a
+            class="side-active"
+            href="customers.html"
+        >
+            <i class="fa-solid fa-users"></i>
+            ลูกค้า
+        </a>
+        <a href="checkin.html">
+            <i class="fa-solid fa-qrcode"></i>
+            เช็คอิน
+        </a>
+        <a href="settings.html">
+            <i class="fa-solid fa-gear"></i>
+            ตั้งค่า
+        </a>
+        <div class="side-bottom">
+            <div class="admin-user">
+                <i class="fa-solid fa-circle-user"></i>
+                <span
+                    class="admin-user-chip"
+                    id="adminUsername"
+                >-</span>
+            </div>
+            <a onclick="adminLogout()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                ออกจากระบบ
+            </a>
+        </div>
+    </aside>
+    <main class="admin-main">
+        <div class="admin-head">
+            <div>
+                <span class="kicker">CUSTOMERS</span>
+                <h1>ลูกค้า</h1>
+                <p>รายชื่อผู้ซื้อที่มีคำสั่งซื้อกับ GOPASS</p>
+            </div>
+        </div>
+        <div class="admin-card">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ชื่อ / เบอร์โทร</th>
+                            <th>อีเมล</th>
+                            <th>Discord</th>
+                            <th>Roblox</th>
+                            <th>คำสั่งซื้อ</th>
+                            <th>บัตร</th>
+                            <th>ยอดรวม</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerRows">
+                        <tr>
+                            <td
+                                colspan="7"
+                                class="table-loading"
+                            >
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                                กำลังโหลด...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script src="/js/vendor/lenis.min.js"></script>
+    <script src="/js/app.js?v=20261013"></script>
+    <script>
+        initCustomers();
+    </script>
+    <script src="/js/i18n.js?v=20261011"></script>
+</body>
+</html>

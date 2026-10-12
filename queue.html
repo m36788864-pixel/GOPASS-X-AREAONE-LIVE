@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>รอคิว | GOPASS</title>
+    <link rel="icon" href="images/gopass-logo.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Kanit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/app.css?v=20261013">
+    <script src="js/auth-guard.js"></script>
+    <script src="/js/maintenance.js?v=20261014"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrap nav">
+            <a class="brand" href="index.html">
+                <img src="images/gopass-logo.png" alt="GOPASS" width="30" height="30">
+                <span>
+                    GOPASS
+                    <small>TICKETING</small>
+                </span>
+            </a>
+            <nav>
+                <a href="index.html">
+                    <i class="fa-solid fa-house"></i>
+                    หน้าแรก
+                </a>
+                <a class="active" href="/events.html">
+                    <i class="fa-solid fa-ticket"></i>
+                    คอนเสิร์ต
+                </a>
+                <a href="/calendar.html">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    ปฏิทิน
+                </a>
+            </nav>
+        </div>
+    </header>
+    <main class="wrap page narrow">
+        <section class="queue-box queue-premium">
+            <div class="queue-icon">
+                <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+            <span class="kicker">SECURE WAITING ROOM</span>
+            <h1>กำลังจัดคิวให้คุณ</h1>
+            <p>ระบบออกหมายเลขคิวจริงให้แล้ว กรุณารอจนถึงขั้นตอนเลือกบัตร</p>
+            <strong id="queueNo">#----</strong>
+            <div class="queue-stats">
+                <div>
+                    <i class="fa-solid fa-users"></i>
+                    <small>คิวก่อนหน้า</small>
+                    <b id="ahead">--</b>
+                </div>
+                <div>
+                    <i class="fa-solid fa-clock"></i>
+                    <small>สถานะ</small>
+                    <b id="wait">กำลังโหลด</b>
+                </div>
+            </div>
+            <div class="progress">
+                <div id="bar"></div>
+            </div>
+            <p id="queueStatus">กำลังเชื่อมต่อระบบคิว...</p>
+        </section>
+    </main>
+    <script>
+        const eventId = new URLSearchParams(location.search).get("id");
+        let p = 0;
+        async function start() {
+            if (!(await gopassRequireLogin())) return;
+            try {
+                const old = sessionStorage.getItem("gopass_queue_token") || "";
+                const r = await fetch("/api/queue/" + encodeURIComponent(eventId) + "?token=" + encodeURIComponent(old));
+                const d = await r.json();
+                if (!r.ok) throw new Error(d.message || "ไม่สามารถเข้าคิวได้");
+                sessionStorage.setItem("gopass_queue_token", d.token);
+                sessionStorage.setItem("gopass_queue_code", d.queueCode);
+                document.getElementById("queueNo").textContent = d.queueCode;
+                document.getElementById("ahead").textContent = Number(d.ahead).toLocaleString("th-TH");
+                document.getElementById("wait").textContent = "พร้อมเข้าระบบ";
+                document.getElementById("queueStatus").textContent = "ระบบกำลังพาคุณไปยังหน้าเลือกบัตร";
+                const t = setInterval(() => {
+                    p += 4;
+                    document.getElementById("bar").style.width = Math.min(100, p) + "%";
+                    if (p >= 100) {
+                        clearInterval(t);
+                        location.href = "seat.html?id=" + encodeURIComponent(eventId);
+                    }
+                }, 120);
+            } catch (e) {
+                document.getElementById("queueStatus").textContent = e.message;
+                document.getElementById("wait").textContent = "ไม่สำเร็จ";
+            }
+        }
+        start();
+    </script>
+    <script src="js/vendor/lenis.min.js"></script>
+    <script src="js/app.js?v=20261013"></script>
+    <script src="js/i18n.js?v=20261011"></script>
+    <!-- mobile floating tab bar -->
+    <nav class="tabbar" aria-label="เมนูหลัก">
+        <a href="index.html"><i class="fa-solid fa-house"></i><span>หน้าแรก</span></a>
+        <a class="active" href="/events.html"><i class="fa-solid fa-ticket"></i><span>คอนเสิร์ต</span></a>
+        <a href="/calendar.html"><i class="fa-solid fa-calendar-days"></i><span>ปฏิทิน</span></a>
+        <a href="/mytickets.html"><i class="fa-solid fa-receipt"></i><span>บัตรของฉัน</span></a>
+        <a href="/login.html"><i class="fa-solid fa-user"></i><span>เข้าสู่ระบบ</span></a>
+    </nav>
+</body>
+</html>

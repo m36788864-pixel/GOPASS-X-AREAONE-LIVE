@@ -1,0 +1,3 @@
+This package is for PHP/Apache/cPanel hosting.
+The Node/Express server is not required.
+API is handled by /api/index.php and .htaccess.

@@ -1,0 +1,32 @@
+DirectoryIndex index.html
+Options -Indexes
+RewriteEngine On
+
+# Preserve Authorization header on Apache/cPanel
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# GOPASS API -> PHP router
+RewriteRule ^api/?$ api/index.php?route=/ [QSA,L]
+RewriteRule ^api/(.*)$ api/index.php?route=/$1 [QSA,L]
+
+# Block direct access to private data/config files
+<FilesMatch "^(admin\.json|sessions\.json|user_sessions\.json|events\.json|orders\.json|queues\.json|config\.php|config\.php\.example|\.env.*|server\.js|package\.json|package-lock\.json)$">
+  Require all denied
+</FilesMatch>
+
+# Disable directory listing for upload/data folders
+RewriteRule ^(data|uploads)/$ - [F,L]
+
+# Stale assets are the #1 cause of "the fix deployed but the browser still runs
+# the old code". HTML revalidates on every visit, and JS/CSS/HTML refuse to be
+# served from a stale cache without asking the server first.
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-cache, must-revalidate" env=REDIRECT_STATUS
+  <FilesMatch "\.(html|js|css)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  # Fingerprinted vendor libraries never change: let them live in cache.
+  <FilesMatch "vendor">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>

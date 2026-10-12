@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+    <title>ตั้งค่า | GOPASS ADMIN</title>
+    <link
+        rel="icon"
+        href="/images/gopass-logo.png"
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Kanit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+    <link
+        rel="stylesheet"
+        href="/css/app.css?v=20261013"
+    >
+</head>
+<body class="admin">
+    <aside class="sidebar">
+        <a
+            class="brand"
+            href="../index.html"
+        >
+            <img
+                src="/images/gopass-logo.png"
+                alt="GOPASS"
+                width="30"
+                height="30"
+            >
+            <span>
+                GOPASS
+                <small>ADMIN</small>
+            </span>
+        </a>
+        <span class="side-heading kicker">CONSOLE</span>
+        <a href="dashboard.html">
+            <i class="fa-solid fa-chart-line"></i>
+            แดชบอร์ด
+        </a>
+        <a href="sales.html">
+            <i class="fa-solid fa-chart-column"></i>
+            ยอดขาย
+        </a>
+        <a href="events.html">
+            <i class="fa-solid fa-calendar-days"></i>
+            งาน
+        </a>
+        <a href="orders.html">
+            <i class="fa-solid fa-ticket"></i>
+            คำสั่งซื้อ
+        </a>
+        <a href="customers.html">
+            <i class="fa-solid fa-users"></i>
+            ลูกค้า
+        </a>
+        <a href="checkin.html">
+            <i class="fa-solid fa-qrcode"></i>
+            เช็คอิน
+        </a>
+        <a
+            class="side-active"
+            href="settings.html"
+        >
+            <i class="fa-solid fa-gear"></i>
+            ตั้งค่า
+        </a>
+        <div class="side-bottom">
+            <div class="admin-user">
+                <i class="fa-solid fa-circle-user"></i>
+                <span
+                    class="admin-user-chip"
+                    id="adminUsername"
+                >-</span>
+            </div>
+            <a onclick="adminLogout()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                ออกจากระบบ
+            </a>
+        </div>
+    </aside>
+    <main class="admin-main">
+        <div class="admin-head">
+            <div>
+                <span class="kicker">SETTINGS</span>
+                <h1>ตั้งค่า</h1>
+                <p>ตั้งค่าโหมดปิดปรับปรุงของเว็บไซต์ — ข้อความ และวันเวลาเปิดให้บริการ</p>
+            </div>
+            <div class="admin-sales-actions">
+                <span
+                    class="mnt-badge"
+                    id="mntBadge"
+                ></span>
+            </div>
+        </div>
+        <div class="admin-card">
+            <header>
+                <h2>โหมดปิดปรับปรุง (Maintenance)</h2>
+                <a
+                    class="btn outline"
+                    href="/maintenance.html"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    <i class="fa-solid fa-up-right-from-square"></i>
+                    ดูตัวอย่างหน้า
+                </a>
+            </header>
+            <form
+                id="settingsForm"
+                class="settings-form"
+                novalidate
+            >
+                <label class="switch-field">
+                    <input
+                        type="checkbox"
+                        name="enabled"
+                    >
+                    <span class="switch-track"><span class="switch-dot"></span></span>
+                    <span class="switch-copy">
+                        <b>เปิดโหมดปิดปรับปรุง</b>
+                        <small>ผู้ใช้ทั่วไปจะถูกพาไปหน้าแจ้งปิดปรับปรุง จนถึงเวลาที่กำหนด (แอดมินยังเข้าใช้งานได้)</small>
+                    </span>
+                </label>
+
+                <div class="settings-grid">
+                    <label>
+                        เปิดให้บริการอีกครั้ง (เวลาไทย)
+                        <input
+                            type="datetime-local"
+                            name="until"
+                        >
+                        <small class="field-note">ใช้เวลาไทย (UTC+7) — ถึงเวลานี้เว็บจะเปิดให้บริการอัตโนมัติ</small>
+                    </label>
+                    <label>
+                        หัวข้อหน้าเว็บ
+                        <input
+                            name="title"
+                            maxlength="120"
+                            placeholder="เว็บไซต์กำลังปิดปรับปรุง"
+                        >
+                    </label>
+                </div>
+
+                <label>
+                    ข้อความ
+                    <textarea
+                        name="message"
+                        rows="3"
+                        maxlength="1000"
+                        placeholder="เรากำลังอัปเกรดระบบให้ดียิ่งขึ้น"
+                    ></textarea>
+                    <small class="field-note">ขึ้นบรรทัดใหม่ได้ (กด Enter)</small>
+                </label>
+
+                <div class="settings-grid">
+                    <label>
+                        หมายเหตุ
+                        <input
+                            name="note"
+                            maxlength="200"
+                            placeholder="ขออภัยในความไม่สะดวก 🙏"
+                        >
+                    </label>
+                    <label class="switch-field switch-inline">
+                        <input
+                            type="checkbox"
+                            name="showCountdown"
+                        >
+                        <span class="switch-track"><span class="switch-dot"></span></span>
+                        <span class="switch-copy">
+                            <b>แสดงเวลานับถอยหลัง</b>
+                            <small>โชว์วัน / ชั่วโมง / นาที / วินาที บนหน้าเว็บ</small>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="settings-actions">
+                    <button
+                        class="btn red"
+                        type="submit"
+                    >
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        บันทึกการตั้งค่า
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script src="/js/vendor/lenis.min.js"></script>
+    <script src="/js/app.js?v=20261013"></script>
+    <script>
+        initSettings();
+    </script>
+    <script src="/js/i18n.js?v=20261013"></script>
+</body>
+</html>

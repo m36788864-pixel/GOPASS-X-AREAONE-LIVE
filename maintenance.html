@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>ปิดปรับปรุงชั่วคราว | GOPASS</title>
+    <link rel="icon" href="images/gopass-logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --red: #e11d48; --ink: #0b0b0f; --fg: #f5f5f4; --muted: #a1a1aa; }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; min-height: 100%; }
+        body {
+            font-family: "Kanit", system-ui, -apple-system, sans-serif;
+            color: var(--fg);
+            background:
+                radial-gradient(1100px 620px at 50% -10%, rgba(225, 29, 72, .22), transparent 60%),
+                radial-gradient(900px 520px at 100% 110%, rgba(56, 189, 248, .12), transparent 60%),
+                #07070a;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            padding: 32px 20px;
+            text-align: center;
+        }
+        .mnt { max-width: 640px; width: 100%; }
+        .mnt-logo {
+            width: 66px; height: 66px; border-radius: 18px;
+            box-shadow: 0 18px 40px -16px rgba(225, 29, 72, .7);
+            background: #16161c; padding: 6px;
+        }
+        .mnt-kicker {
+            display: block; margin: 18px 0 6px;
+            font-family: "IBM Plex Mono", monospace; font-size: 12px;
+            letter-spacing: .42em; text-transform: uppercase; color: var(--red);
+        }
+        h1 { font-size: clamp(26px, 5vw, 40px); font-weight: 700; margin: 6px 0 10px; }
+        .mnt-sub { color: var(--muted); font-size: 15px; line-height: 1.7; margin: 0 0 26px; white-space: pre-line; }
+        .mnt-open {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 10px 18px; border-radius: 999px;
+            background: rgba(225, 29, 72, .12); border: 1px solid rgba(225, 29, 72, .4);
+            color: #fecdd3; font-weight: 600; font-size: 15px; margin-bottom: 22px;
+        }
+        .mnt-count { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 26px; }
+        .mnt-cell {
+            min-width: 78px; padding: 14px 10px; border-radius: 16px;
+            background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .1);
+            backdrop-filter: blur(6px);
+        }
+        .mnt-cell b { display: block; font-family: "IBM Plex Mono", monospace; font-size: 30px; font-weight: 600; line-height: 1; }
+        .mnt-cell small { display: block; margin-top: 8px; font-size: 11px; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+        .mnt-note { color: var(--muted); font-size: 14px; margin: 0 0 26px; white-space: pre-line; }
+        .mnt-done { display: none; }
+        body.is-open .mnt-count, body.is-open .mnt-note { display: none; }
+        body.is-open .mnt-done { display: block; color: #86efac; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <main class="mnt">
+        <img class="mnt-logo" src="images/gopass-logo.png" alt="GOPASS" width="66" height="66">
+        <span class="mnt-kicker">GOPASS</span>
+        <h1 id="mntTitle">เว็บไซต์กำลังปิดปรับปรุง</h1>
+        <p class="mnt-sub" id="mntMessage">เรากำลังอัปเกรดระบบให้ดียิ่งขึ้น
+แล้วพบกันใหม่เร็ว ๆ นี้</p>
+        <div class="mnt-open" id="mntOpen"><span aria-hidden="true">&#9200;</span> <span id="mntOpenText">เปิดให้บริการเร็ว ๆ นี้</span></div>
+        <div class="mnt-count" id="mntCount" aria-label="เวลานับถอยหลังถึงเปิดให้บริการ">
+            <div class="mnt-cell"><b id="cdDays">--</b><small>วัน</small></div>
+            <div class="mnt-cell"><b id="cdHours">--</b><small>ชั่วโมง</small></div>
+            <div class="mnt-cell"><b id="cdMins">--</b><small>นาที</small></div>
+            <div class="mnt-cell"><b id="cdSecs">--</b><small>วินาที</small></div>
+        </div>
+        <p class="mnt-done" id="mntDone">เปิดให้บริการแล้ว! กำลังพากลับหน้าแรก…</p>
+        <p class="mnt-note" id="mntNote">ขออภัยในความไม่สะดวก 🙏</p>
+    </main>
+    <script>
+        (function () {
+            var DEFAULTS = {
+                enabled: true,
+                until: "2026-10-13T00:00:00+07:00",
+                title: "เว็บไซต์กำลังปิดปรับปรุง",
+                message: "เรากำลังอัปเกรดระบบให้ดียิ่งขึ้น\nแล้วพบกันใหม่เร็ว ๆ นี้",
+                note: "ขออภัยในความไม่สะดวก 🙏",
+                showCountdown: true
+            };
+            var TH_MONTHS = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+            var el = {
+                title: document.getElementById("mntTitle"),
+                msg: document.getElementById("mntMessage"),
+                openText: document.getElementById("mntOpenText"),
+                note: document.getElementById("mntNote"),
+                count: document.getElementById("mntCount"),
+                days: document.getElementById("cdDays"),
+                hours: document.getElementById("cdHours"),
+                mins: document.getElementById("cdMins"),
+                secs: document.getElementById("cdSecs")
+            };
+            var cfg = DEFAULTS, timer = null;
+            function pad(n) { return String(n).padStart(2, "0"); }
+            function fmtUntil(iso) {
+                var d = new Date(iso); if (isNaN(d)) return "";
+                var t = new Date(d.getTime() + 7 * 3600 * 1000); // แสดงเป็นเวลาไทย (UTC+7)
+                return t.getUTCDate() + " " + TH_MONTHS[t.getUTCMonth()] + " " + t.getUTCFullYear() +
+                    " เวลา " + pad(t.getUTCHours()) + ":" + pad(t.getUTCMinutes()) + " น.";
+            }
+            function tick() {
+                var until = Date.parse(cfg.until);
+                var diff = until - Date.now();
+                if (!isFinite(until) || diff <= 0) {
+                    document.body.classList.add("is-open");
+                    if (timer) clearInterval(timer);
+                    setTimeout(function () { location.replace("/index.html"); }, 2500);
+                    return;
+                }
+                var s = Math.floor(diff / 1000);
+                el.days.textContent = String(Math.floor(s / 86400));
+                el.hours.textContent = pad(Math.floor((s % 86400) / 3600));
+                el.mins.textContent = pad(Math.floor((s % 3600) / 60));
+                el.secs.textContent = pad(s % 60);
+            }
+            function apply(m) {
+                cfg = Object.assign({}, DEFAULTS, m || {});
+                el.title.textContent = cfg.title;
+                el.msg.textContent = cfg.message;
+                el.note.textContent = cfg.note;
+                var readable = fmtUntil(cfg.until);
+                el.openText.textContent = readable ? ("เปิดให้บริการ " + readable) : "เปิดให้บริการเร็ว ๆ นี้";
+                el.count.style.display = cfg.showCountdown ? "" : "none";
+                if (timer) clearInterval(timer);
+                tick();
+                timer = setInterval(tick, 1000);
+            }
+            fetch("/api/settings", { cache: "no-store" })
+                .then(function (r) { return r.ok ? r.json() : null; })
+                .then(function (d) { apply(d && d.maintenance ? d.maintenance : DEFAULTS); })
+                .catch(function () { apply(DEFAULTS); });
+        })();
+    </script>
+</body>
+</html>

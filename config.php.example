@@ -1,0 +1,32 @@
+<?php
+// Rename this file to config.php before production use.
+// Keep config.php private; .htaccess blocks direct web access.
+return [
+    'admin_user' => 'admin',
+    'admin_pass' => 'DELEF#GOPASS2026!',
+
+    // Optional Google Apps Script Web App
+    'google_sheet_webhook_url' => '',
+    'google_sheet_secret' => '',
+
+    // Optional Discord webhook
+    'discord_webhook_url' => '',
+
+    // ---- เชื่อมกับเว็บดูไลฟ์ AREAONE-LIVE (ออกโค้ดให้บัตร LIVE อัตโนมัติ) ----
+    // LIVE_API_URL = ที่อยู่เว็บไลฟ์ (เช่น https://live.example.com)
+    // LIVE_API_SECRET = ค่าเดียวกับ INTEGRATION_SECRET ใน .env ของเว็บไลฟ์
+    // LIVE_SITE_URL = ลิงก์หน้าเว็บไลฟ์ที่ให้ผู้ซื้อกดไปกรอกโค้ด
+    'live_api_url' => '',
+    'live_api_secret' => '',
+    'live_site_url' => '',
+    'live_code_prefix' => 'AOL',
+
+    // บอท Discord สำหรับส่งโค้ดดูไลฟ์ให้ผู้ซื้อทาง DM (ใช้แอปเดียวกับ Discord Login ได้)
+    'discord_bot_token' => '',
+
+    // Optional Discord Login (OAuth2). Env vars of the same name win over these.
+    // The redirect URI must be registered verbatim in the Discord Developer Portal.
+    'discord_client_id' => '',
+    'discord_client_secret' => '',
+    'discord_redirect_uri' => 'https://YOUR-SITE/api/auth/discord/callback',
+];

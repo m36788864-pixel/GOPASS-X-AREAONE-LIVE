@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+    <title>จัดการคอนเสิร์ต | GOPASS ADMIN</title>
+    <link
+        rel="icon"
+        href="/images/gopass-logo.png"
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Kanit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+    <link
+        rel="stylesheet"
+        href="/css/app.css?v=20261013"
+    >
+</head>
+<body class="admin">
+    <aside class="sidebar">
+        <a
+            class="brand"
+            href="../index.html"
+        >
+            <img
+                src="/images/gopass-logo.png"
+                alt="GOPASS"
+                width="30"
+                height="30"
+            >
+            <span>
+                GOPASS
+                <small>ADMIN</small>
+            </span>
+        </a>
+        <span class="side-heading kicker">CONSOLE</span>
+        <a href="dashboard.html">
+            <i class="fa-solid fa-chart-line"></i>
+            แดชบอร์ด
+        </a>
+        <a href="sales.html">
+            <i class="fa-solid fa-chart-column"></i>
+            ยอดขาย
+        </a>
+        <a
+            class="side-active"
+            href="events.html"
+        >
+            <i class="fa-solid fa-calendar-days"></i>
+            คอนเสิร์ต
+        </a>
+        <a href="orders.html">
+            <i class="fa-solid fa-ticket"></i>
+            คำสั่งซื้อ
+        </a>
+        <a href="customers.html">
+            <i class="fa-solid fa-users"></i>
+            ลูกค้า
+        </a>
+        <a href="checkin.html">
+            <i class="fa-solid fa-qrcode"></i>
+            เช็คอิน
+        </a>
+        <a href="settings.html">
+            <i class="fa-solid fa-gear"></i>
+            ตั้งค่า
+        </a>
+        <div class="side-bottom">
+            <div class="admin-user">
+                <i class="fa-solid fa-circle-user"></i>
+                <span
+                    class="admin-user-chip"
+                    id="adminUsername"
+                >-</span>
+            </div>
+            <a onclick="adminLogout()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                ออกจากระบบ
+            </a>
+        </div>
+    </aside>
+    <main class="admin-main">
+        <div class="admin-head">
+            <div>
+                <span class="kicker">CONTENT &amp; TICKETS</span>
+                <h1>จัดการคอนเสิร์ต</h1>
+                <p>สร้างงาน กำหนดประเภทบัตร ราคา และจำนวนสูงสุดต่อคำสั่งซื้อ</p>
+            </div>
+            <button
+                class="btn red"
+                type="button"
+                onclick="openForm()"
+            >
+                <i class="fa-solid fa-plus"></i>
+                เพิ่มคอนเสิร์ต
+            </button>
+        </div>
+        <div class="admin-card">
+            <div class="table-head">
+                <div>
+                    <h2 class="section-title">รายการคอนเสิร์ต</h2>
+                    <small>ข้อมูลที่บันทึกจะขึ้นหน้าเว็บทันที</small>
+                </div>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Poster</th>
+                            <th>งาน</th>
+                            <th>ประเภท</th>
+                            <th>ราคา</th>
+                            <th>สถานะ</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rows">
+                        <tr>
+                            <td
+                                colspan="6"
+                                class="table-loading"
+                            >
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                                กำลังโหลด...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <div
+        id="modal"
+        class="modal hide"
+    >
+        <div class="modal-box modal-premium">
+            <button
+                class="x"
+                type="button"
+                aria-label="ปิด"
+                onclick="closeForm()"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <span class="kicker">CONCERT SETUP</span>
+            <h2 id="formTitle">เพิ่มคอนเสิร์ต</h2>
+            <p class="modal-sub">กำหนดข้อมูลหน้างานและประเภทบัตรให้ครบก่อนเปิดขาย</p>
+            <form id="form" novalidate>
+                <label>
+                    ชื่อคอนเสิร์ต
+                    <input
+                        name="name"
+                        required
+                        placeholder="GOPASS 2026"
+                    >
+                </label>
+                <div class="two-fields">
+                    <label>
+                        วันที่
+                        <input
+                            name="date"
+                            type="date"
+                            required
+                        >
+                    </label>
+                    <label>
+                        เวลา
+                        <input
+                            name="time"
+                            type="time"
+                            required
+                            value="18:00"
+                        >
+                    </label>
+                </div>
+                <label>
+                    สถานที่
+                    <input
+                        name="venue"
+                        required
+                        placeholder="IMPACT ARENA"
+                    >
+                </label>
+                <div class="form-section">
+                    <div class="form-section-head">
+                        <div>
+                            <b>รูปแบบการกดบัตร</b>
+                            <small>เลือกว่าผู้ซื้อจะกดบัตรยืน หรือเลือกที่นั่งจากผัง (ออกแบบผังเองได้)</small>
+                        </div>
+                    </div>
+                    <div class="mode-choice">
+                        <label class="mode-card">
+                            <input type="radio" name="ticketMode" value="standing" checked>
+                            <span>
+                                <i class="fa-solid fa-people-group"></i>
+                                <b>บัตรยืน</b>
+                                <small>เลือกประเภทบัตรและจำนวน</small>
+                            </span>
+                        </label>
+                        <label class="mode-card">
+                            <input type="radio" name="ticketMode" value="seatmap">
+                            <span>
+                                <i class="fa-solid fa-chair"></i>
+                                <b>ผังที่นั่ง</b>
+                                <small>เลือกที่นั่งจากผัง · กำหนดโซน/ราคาเอง</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div id="seatmapSection" class="hide">
+                    <div class="form-section">
+                        <div class="form-section-head">
+                            <div>
+                                <b>ออกแบบผังที่นั่ง</b>
+                                <small>กำหนดจำนวนแถว/คอลัมน์ วาดรูปทรงผัง แบ่งโซนและตั้งราคาแต่ละโซน</small>
+                            </div>
+                        </div>
+                        <div id="seatEditor"></div>
+                    </div>
+                </div>
+                <div id="standingSection">
+                <div class="form-section">
+                    <div class="form-section-head">
+                        <div>
+                            <b>ประเภทบัตร</b>
+                            <small>เพิ่มได้หลายประเภท และตั้งราคา 0 บาทเป็นบัตรฟรีได้</small>
+                        </div>
+                        <button
+                            class="btn light"
+                            type="button"
+                            id="addTicketType"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                            เพิ่มประเภท
+                        </button>
+                    </div>
+                    <div id="ticketTypeList"></div>
+                </div>
+                </div>
+                <label>
+                    จำกัดการกดต่อคำสั่งซื้อ
+                    <input
+                        name="limitPerOrder"
+                        type="number"
+                        min="1"
+                        max="100"
+                        value="10"
+                        required
+                    >
+                    <small>ผู้ซื้อ 1 คำสั่งซื้อเลือกได้สูงสุดกี่ใบ</small>
+                </label>
+                <label>
+                    สถานะ
+                    <select name="status">
+                        <option>เปิดขาย</option>
+                        <option>เร็ว ๆ นี้</option>
+                        <option>ปิดการขาย</option>
+                    </select>
+                </label>
+                <label>
+                    Poster / รูปงาน
+                    <input
+                        id="imageFile"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                    >
+                    <small>JPG, PNG, WEBP, GIF ขนาดไม่เกิน 5MB</small>
+                </label>
+                <img
+                    id="preview"
+                    class="preview hide"
+                    alt="Poster Preview"
+                >
+                <button
+                    class="btn red full"
+                    type="submit"
+                >
+                    บันทึกคอนเสิร์ต
+                </button>
+            </form>
+        </div>
+    </div>
+    <script src="/js/vendor/lenis.min.js"></script>
+    <script src="/js/app.js?v=20261013"></script>
+    <script src="/js/seatmap.js?v=5"></script>
+    <script>
+        initAdmin();
+    </script>
+    <script src="/js/i18n.js?v=20261011"></script>
+</body>
+</html>
